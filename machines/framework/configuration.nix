@@ -56,6 +56,7 @@
       kitty
       fish
       vscodium-fhs
+      discord
     ];
   };
 
