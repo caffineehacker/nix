@@ -19,10 +19,10 @@
         system = "x86_64-linux";
         modules = [
           lanzaboote.nixosModules.lanzaboote
-          ./configuration.nix
-          ./system/secureboot.nix
+          ./machines/framework
+          ./system
         ];
       };
     };
-  };
+  }; 
 }

@@ -1,15 +1,6 @@
-# Edit this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page, on
-# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
 { config, lib, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
-
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = ''
@@ -19,23 +10,11 @@
 
   system.secure-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 5;
-  boot.loader.systemd-boot.memtest86.enable = true; 
+  boot.loader.systemd-boot.memtest86.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.systemd.enable = true;
-  boot.initrd.kernelModules = [ "tpm_tis" ];
-
-  # TPM for unlocking LUKS
-  #
-  # TPM kernel module must be enabled for initrd. Device driver is viewable via the command:
-  # sudo systemd-cryptenroll --tpm2-device=list
-  # And added to a device's configuration:
-  # boot.initrd.kernelModules = [ "tpm_tis" ];
-  #
-  # Must be enabled by hand - e.g.
-  # sudo systemd-cryptenroll --wipe-slot=tpm2 /dev/nvme0n1p3 --tpm2-device=auto --tpm2-pcrs=0+2+7
-  #
-  security.tpm2.enable = true;
-  security.tpm2.tctiEnvironment.enable = true;
+  
+  system.tpm-unlock.enable = true;
 
   nixpkgs.config.allowUnfree = true;
 
