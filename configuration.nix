@@ -17,14 +17,9 @@
     '';
   };
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = false;
-  boot.lanzaboote = {
-    enable = true;
-    pkiBundle = "/etc/secureboot";
-  };
+  system.secure-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 5;
-  boot.loader.systemd-boot.memtest86.enable = true;
+  boot.loader.systemd-boot.memtest86.enable = true; 
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.systemd.enable = true;
   boot.initrd.kernelModules = [ "tpm_tis" ];
@@ -96,16 +91,17 @@
       tree
       kitty
       fish
+      vscodium-fhs
     ];
   };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    sbctl
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     tpm2-tss
+    git
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -146,6 +142,5 @@
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "unstable"; # Did you read the comment?
-
 }
 
