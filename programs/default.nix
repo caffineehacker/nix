@@ -1,5 +1,5 @@
 {...}: {
   imports = [
     ./games.nix
-  ]
+  ];
 }

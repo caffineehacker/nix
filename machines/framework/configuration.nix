@@ -17,6 +17,7 @@
   boot.loader.systemd-boot.memtest86.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.systemd.enable = true;
+  boot.kernelPackages = pkgs.linuxPackages_zen;
   
   system.tpm-unlock.enable = true;
 
@@ -67,6 +68,9 @@
     # Necessary for Gnome to use the ambient light sensor
     # TODO: Move to a gnome module
     iio-sensor-proxy
+    # Framework specific bits
+    framework-tool
+    linuxKernel.packages.linux_zen.framework-laptop-kmod
   ];
 
   programs.games.enable = true;
