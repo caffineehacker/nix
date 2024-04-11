@@ -21,6 +21,7 @@
           lanzaboote.nixosModules.lanzaboote
           ./machines/framework
           ./system
+          ./programs
         ];
       };
     };
