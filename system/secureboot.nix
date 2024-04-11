@@ -21,9 +21,10 @@ in {
   config = lib.mkIf cfg.enable {
     boot.bootspec.enable = true;
 
-    environment.systemPackages = [
+    environment.systemPackages = with pkgs; [
       # For debugging and troubleshooting Secure Boot.
-      pkgs.sbctl
+      sbctl
+      sbsigntool
     ];
 
     # Lanzaboote currently replaces the systemd-boot module.

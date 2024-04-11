@@ -31,6 +31,11 @@ in {
   config = lib.mkIf cfg.enable {
     boot.initrd.kernelModules = [ "tpm_tis" ];
 
+    environment.systemPackages = with pkgs; [
+      # For debugging and troubleshooting Secure Boot.
+      tpm2-tss
+    ];
+
     security.tpm2.enable = true;
     security.tpm2.tctiEnvironment.enable = true;
   };
