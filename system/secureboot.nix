@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.system.secure-boot;
+  cfg = config.tw.system.secure-boot;
 in {
   options = {
-    system.secure-boot.enable = lib.mkOption {
+    tw.system.secure-boot.enable = lib.mkOption {
       default = false;
       example = true;
       description = ''

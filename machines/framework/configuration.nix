@@ -12,14 +12,14 @@
     ../common.nix
   ];
 
-  system.secure-boot.enable = true;
+  tw.system.secure-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.systemd-boot.memtest86.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.systemd.enable = true;
   boot.kernelPackages = pkgs.linuxPackages_zen;
   
-  system.tpm-unlock.enable = true;
+  tw.system.tpm-unlock.enable = true;
 
   networking.hostName = "framework";
 
@@ -74,7 +74,8 @@
     linuxKernel.packages.linux_zen.framework-laptop-kmod
   ];
 
-  programs.games.enable = true;
+  tw.programs.games.enable = true;
+  tw.programs.hyprland.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

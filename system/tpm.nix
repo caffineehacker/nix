@@ -15,10 +15,10 @@
   ...
 }:
 let
-  cfg = config.system.tpm-unlock;
+  cfg = config.tw.system.tpm-unlock;
 in {
   options = {
-    system.tpm-unlock.enable = lib.mkOption {
+    tw.system.tpm-unlock.enable = lib.mkOption {
       default = false;
       example = true;
       description = ''

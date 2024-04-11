@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.programs.games;
+  cfg = config.tw.programs.games;
 in {
   options = {
-    programs.games.enable = lib.mkOption {
+    tw.programs.games.enable = lib.mkOption {
       default = false;
       example = true;
       description = ''
