@@ -21,29 +21,26 @@
     };
   };
 
-  outputs = { self, nixpkgs, lanzaboote, home-manager, ... }: {
+  outputs = { self, nixpkgs, lanzaboote, home-manager, ... }@inputs: 
+  let
+    system = "x86_64-linux";
+    pkgs = import nixpkgs {
+      inherit system;
+      config = {
+        allowUnfree = true;
+      };
+    };
+  in
+  {
     nixosConfigurations = {
       framework = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+        specialArgs = { inherit inputs system; };
         modules = [
           lanzaboote.nixosModules.lanzaboote
           ./machines/framework
           ./system
           ./programs
           ./users/tim
-
-          # make home-manager as a module of nixos
-          # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-
-            # TODO replace ryan with your own username
-            # home-manager.users.ryan = import ./home.nix;
-
-            # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
-          }
         ];
       };
     };
