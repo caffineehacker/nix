@@ -20,5 +20,5 @@ in {
 
   config = lib.mkIf cfg.enable {
     programs.hyprland.enable = true;
-  }
+  };
 }
