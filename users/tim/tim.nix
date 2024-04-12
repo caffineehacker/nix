@@ -26,7 +26,6 @@ in {
         firefox
         tree
         kitty
-        fish
         vscodium-fhs
         discord
       ];
