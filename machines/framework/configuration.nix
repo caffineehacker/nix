@@ -98,6 +98,6 @@
 
   services.fwupd.enable = true;
 
-  system.stateVersion = "unstable";
+  system.stateVersion = "23.11";
 }
 
