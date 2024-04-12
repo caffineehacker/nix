@@ -45,6 +45,8 @@ in {
           userEmail = "tim@timwaterhouse.com";
         };
 
+        programs.fish.enable = true;
+
         programs.home-manager.enable = true;
       };
     };
