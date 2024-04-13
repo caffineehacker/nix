@@ -102,6 +102,11 @@
   # Enable non-root access to QMK firmware
   hardware.keyboard.qmk.enable = true;
 
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+
+  services.blueman.enable = true;
+
   system.stateVersion = "23.11";
 }
 

@@ -48,7 +48,6 @@ in {
           swww
           mako
           waybar
-          blueman
           swaylock
           pamixer
           cliphist
