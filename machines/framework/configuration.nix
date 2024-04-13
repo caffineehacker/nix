@@ -99,6 +99,9 @@
   # Trim ssd for longer life and better storage
   services.fstrim.enable = true;
 
+  # Enable non-root access to QMK firmware
+  hardware.keyboard.qmk.enable = true;
+
   system.stateVersion = "23.11";
 }
 
