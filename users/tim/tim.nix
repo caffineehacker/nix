@@ -111,6 +111,7 @@ in {
             "$mod, E, exec, $fileManager"
             "$mod, F, togglefloating,"
             "$mod, R, exec, $menu"
+            "$mod SHIFT, F, fullscreen"
 
             "$mod, left, movefocus, l"
             "$mod, right, movefocus, r"
