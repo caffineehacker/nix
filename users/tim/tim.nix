@@ -30,6 +30,14 @@ in {
       nerdfonts
     ];
 
+    security.pam.services.swaylock = lib.mkIf config.tw.programs.hyprland.enable {
+      text = ''
+        auth include login
+        auth sufficient pam_unix.so try_first_pass likeauth nullok
+        auth sufficient pam_fprintd.so 
+      '';
+    };
+
     home-manager = {
       users.tim = {
         home.username = "tim";
