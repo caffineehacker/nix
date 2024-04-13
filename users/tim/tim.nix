@@ -9,7 +9,6 @@ let
 in {
   imports = [
     ../home-manager.nix
-    ../../programs/hyprland.nix
   ];
 
   options = {
@@ -26,6 +25,17 @@ in {
   config = lib.mkIf cfg.enable {
     tw.users.home-manager.enable = true;
 
+    environment.systemPackages = with pkgs; lib.mkIf config.tw.programs.hyprland.enable [
+      networkmanagerapplet
+      wl-clipboard
+      swww
+      mako
+      waybar
+      blueman
+      swaylock
+      pamixer
+    ];
+
     home-manager = {
       users.tim = {
         home.username = "tim";
@@ -40,6 +50,11 @@ in {
           discord
         ];
 
+        xdg.configFile."hyprv4/scripts" = lib.mkIf config.tw.programs.hyprland.enable {
+          recursive = true;
+          source = ./hyprv4/scripts;
+        };
+
         wayland.windowManager.hyprland.enable = lib.mkIf config.tw.programs.hyprland.enable true;
         wayland.windowManager.hyprland.settings = lib.mkIf config.tw.programs.hyprland.enable {
           monitor = ",preferred,auto,1,vrr,1";
@@ -47,6 +62,9 @@ in {
           env = [
             "XCURSOR_SIZE,24"
             "QT_QPA_PLATFORMTHEME,qt6ct"
+            "XDG_CURRENT_DESKTOP,Hyprland"
+            "XDG_SESSION_TYPE,wayland"
+            "XDG_SESSION_DESKTOP,Hyprland"
           ];
           input = {
             kb_layout = "us";
@@ -57,19 +75,21 @@ in {
           };
           general = {
             gaps_in = 5;
-            gaps_out = 20;
+            gaps_out = 10;
             border_size = 2;
-            "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
+            "col.active_border" = "rgb(cdd6f4)";
             "col.inactive_border" = "rgba(595959aa)";
             layout = "dwindle";
           };
           decoration = {
-            rounding = 10;
+            rounding = 5;
             blur = {
               enabled = true;
-              size = 3;
-              passes = 1;
+              size = 7;
+              passes = 4;
+              new_optimizations = true;
             };
+            blurls = "lockscreen";
 
             drop_shadow = true;
             shadow_range = 4;
@@ -78,13 +98,12 @@ in {
           };
           animations = {
             enabled = true;
-            bezier = "myBezier, 0.05, 0.9, 0.1, 1.05";
+            bezier = "myBezier, 0.10, 0.9, 0.1, 1.05";
 
             animation = [
-              "windows, 1, 7, myBezier"
-              "windowsOut, 1, 7, default, popin 80%"
+              "windows, 1, 7, myBezier, slide"
+              "windowsOut, 1, 7, myBezier, slide"
               "border, 1, 10, default"
-              "borderangle, 1, 8, default"
               "fade, 1, 7, default"
               "workspaces, 1, 6, default"
             ];
@@ -99,6 +118,10 @@ in {
           gestures = {
             workspace_swipe = true;
           };
+          windowrule = [
+            "float, ^(pavucontrol)$"
+            "float, ^(thunar)$"
+          ];
           misc = {
             force_default_wallpaper = -1;
           };
@@ -108,6 +131,7 @@ in {
             "$mod, Return, exec, $terminal"
             "$mod, F4, killactive,"
             "$mod, Q, exit,"
+            "$mod, L, exec, swaylock"
             "$mod, E, exec, $fileManager"
             "$mod, F, togglefloating,"
             "$mod, R, exec, $menu"
@@ -117,6 +141,17 @@ in {
             "$mod, right, movefocus, r"
             "$mod, up, movefocus, u"
             "$mod, down, movefocus, d"
+
+            # Media key binds
+            ", xf86audioraisevolume, exec, ~/.config/hyprv4/scripts/volume --inc"
+            ", xf86audiolowervolume, exec, ~/.config/hyprv4/scripts/volume --dec"
+            ", xf86AudioMicMute, exec, ~/.config/hyprv4/scripts/volume --toggle-mic"
+            ", xf86audioMute, exec, ~/.config/hyprv4/scripts/volume --toggle"
+
+            ", xf86KbdBrightnessDown, exec, ~/.config/hyprv4/scripts/kb-brightness --dec"
+            ", xf86KbdBrightnessUp, exec, ~/.config/hyprv4/scripts/kb-brightness --inc"
+            ", xf86MonBrightnessDown, exec, ~/.config/hyprv4/scripts/brightness --dec"
+            ", xf86MonBrightnessUp, exec, ~/.config/hyprv4/scripts/brightness --inc"
           ] ++ (
             # workspaces
             # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}
@@ -136,6 +171,16 @@ in {
             "$mod, mouse:272, movewindow"
             "$mod, mouse:273, resizewindow"
             "$mod SHIFT, mouse:272, resizewindow"
+          ]; 
+
+          exec-once = [
+            "firefox"
+            "swww init"
+            "mako"
+            "blueman-applet"
+            "nm-applet --indicator"
+            "wl-paste --watch cliphist store"
+            "waybar"
           ];
         };
 
