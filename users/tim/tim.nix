@@ -25,18 +25,9 @@ in {
   config = lib.mkIf cfg.enable {
     tw.users.home-manager.enable = true;
 
-    environment.systemPackages = with pkgs; lib.mkIf config.tw.programs.hyprland.enable [
-      networkmanagerapplet
-      wl-clipboard
-      swww
-      mako
-      waybar
-      blueman
-      swaylock
-      pamixer
-      cliphist
-      wofi
-      xfce.thunar
+    fonts.packages = with pkgs; [
+      noto-fonts-emoji
+      nerdfonts
     ];
 
     home-manager = {
@@ -51,7 +42,19 @@ in {
           kitty
           vscodium-fhs
           discord
-        ];
+        ] ++ (if config.tw.programs.hyprland.enable then [
+          networkmanagerapplet
+          wl-clipboard
+          swww
+          mako
+          waybar
+          blueman
+          swaylock
+          pamixer
+          cliphist
+          wofi
+          xfce.thunar
+        ] else []);
 
         xdg.configFile."hyprv4/scripts" = lib.mkIf config.tw.programs.hyprland.enable {
           recursive = true;
