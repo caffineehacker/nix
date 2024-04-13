@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 get_pwr() {
     PWR=$(asusctl profile -p | sed s:'Active profile is'::)
