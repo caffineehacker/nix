@@ -30,13 +30,7 @@ in {
       nerdfonts
     ];
 
-    security.pam.services.swaylock = lib.mkIf config.tw.programs.hyprland.enable {
-      text = ''
-        auth include login
-        auth sufficient pam_unix.so try_first_pass likeauth nullok
-        auth sufficient pam_fprintd.so 
-      '';
-    };
+    security.pam.services.swaylock = lib.mkIf config.tw.programs.hyprland.enable {};
 
     home-manager = {
       users.tim = {
@@ -199,6 +193,10 @@ in {
             "$mod, mouse:273, resizewindow"
             "$mod SHIFT, mouse:272, resizewindow"
           ]; 
+
+          bindl = [
+            ",switch:[Lid Switch],exec,swaylock"
+          ];
 
           exec-once = [
             "firefox"
