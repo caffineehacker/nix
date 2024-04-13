@@ -34,6 +34,9 @@ in {
       blueman
       swaylock
       pamixer
+      cliphist
+      wofi
+      xfce.thunar
     ];
 
     home-manager = {
@@ -119,8 +122,20 @@ in {
             workspace_swipe = true;
           };
           windowrule = [
+            "float,^(blueman-manager)$"
+            "float,^(nm-connection-editor)$"
             "float, ^(pavucontrol)$"
             "float, ^(thunar)$"
+          ];
+          windowrulev2 = [
+            "opacity 0.8 0.8,class:^(kitty)$"
+            "animation popin,class:^(kitty)$,title:^(update-sys)$"
+            "animation popin,class:^(thunar)$"
+            "opacity 0.8 0.8,class:^(thunar)$"
+            "opacity 0.8 0.8,class:^(VSCodium)$"
+            "move cursor -3% -105%,class:^(wofi)$"
+            "noanim,class:^(wofi)$"
+            "opacity 0.8 0.6,class:^(wofi)$"
           ];
           misc = {
             force_default_wallpaper = -1;
@@ -134,8 +149,10 @@ in {
             "$mod, L, exec, swaylock"
             "$mod, E, exec, $fileManager"
             "$mod, F, togglefloating,"
-            "$mod, R, exec, $menu"
+            "$mod, SPACE, exec, wofi"
             "$mod SHIFT, F, fullscreen"
+            # clipboard manager
+            "ALT, V, exec, cliphist list | wofi -dmenu | cliphist decode | wl-copy"
 
             "$mod, left, movefocus, l"
             "$mod, right, movefocus, r"
@@ -182,6 +199,28 @@ in {
             "wl-paste --watch cliphist store"
             "waybar"
           ];
+        };
+
+        programs.wofi = lib.mkIf config.tw.programs.hyprland.enable {
+          enable = true;
+          settings = {
+            width = 600;
+            height = 300;
+            location = "center";
+            show = "drun";
+            prompt = "Search...";
+            filter_rate = 100;
+            allow_markup = true;
+            no_actions = true;
+            halign = "fill";
+            orientation = "vertical";
+            content_haligh = "fill";
+            insensitive = true;
+            allow_images = true;
+            image_size = 40;
+            gtk_dark = true;
+            dynamic_lines = true;
+          };
         };
 
         programs.git = {
