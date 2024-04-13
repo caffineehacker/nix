@@ -179,10 +179,10 @@ in {
             builtins.concatLists (builtins.genList (
                 x: let
                   ws = builtins.toString (x + 1);
-                  key = builtins.toString (if x < 10 then x + 1 else 0);
+                  key = builtins.toString (if x < 9 then x + 1 else 0);
                 in [
-                  "$mod, ${ws}, workspace, ${ws}"
-                  "$mod SHIFT, ${ws}, movetoworkspace, ${ws}"
+                  "$mod, ${key}, workspace, ${ws}"
+                  "$mod SHIFT, ${key}, movetoworkspace, ${ws}"
                 ]
               )
               10)
@@ -206,6 +206,7 @@ in {
             "nm-applet --indicator"
             "wl-paste --watch cliphist store"
             "waybar"
+            "steam"
           ];
         };
 
@@ -350,6 +351,102 @@ window {
             fade-in = 0.2;
             ignore-empty-password = true;
           };
+        };
+
+        programs.waybar = lib.mkIf config.tw.programs.hyprland.enable {
+          enable = true;
+          settings = {
+            topBar = {
+              layer = "top";
+              position = "top";
+              mod = "dock";
+              exclusive = true;
+              passthrough = false;
+              gtk-layer-shell = true;
+              height = 20;
+              modules-left = [
+                "custom/launch_wofi"
+                "custom/power_btn"
+                "custom/lock_screen"
+                "wlr/workspaces"
+                "wlr/taskbar"
+              ];
+              modules-right = [
+                "cpu"
+                "memory"
+                "disk"
+                "temperature"
+                "custom/power_profile"
+                "battery"
+                "pulseaudio"
+                "pulseaudio#microphone"
+                "backlight"
+                "tray"
+                "custom/weather"
+                "custom/updates"
+                "clock"
+              ];
+
+              "custom/launch_wofi" = {
+                format = "";
+                on-click = "pkill wofi || wofi";
+                tooltip = false;
+              };
+
+              "custom/power_btn" = {
+                # TODO make this a menu of options
+                format = "";
+                on-click = "sh -c '(sleep 0.5s; wlogout --protocol layer-shell)' & disown";
+                tooltip = false;
+              };
+
+              "custom/lock_screen" = {
+                format = "";
+                on-click = "sh -c '(sleep 0.5s; swaylock)' & disown";
+                tooltip = false;
+              };
+
+              "wlr/workspaces" = {
+                disable-scroll = true;
+                all-outputs = true;
+                on-click = "activate";
+                persistent_workspaces = {
+                  "1" = [];
+                  "2" = [];
+                  "3" = [];
+                  "4" = [];
+                  "5" = [];
+                  "6" = [];
+                  "7" = [];
+                  "8" = [];
+                  "9" = [];
+                  "10" = [];
+                };
+              };
+
+              "wlr/taskbar" = {
+                format = "{icon}{name}";
+                icon-size = 16;
+                all-outputs = true;
+                tooltip-format = "{title}";
+                on-click = "activate";
+                on-click-middle = "close";
+                ignore-list = [
+                  "wofi"
+                ];
+              };
+
+              cpu = {
+                interval = 10;
+                format = "";
+                max-length = 10;
+                format-alt-click = "click-right";
+                format-alf = " {usage}%";
+                on-click = "kitty --start-as=fullscreen --title btop sh -c 'btop'";
+              };
+            };
+          };
+          style = '''';
         };
 
         programs.git = {
