@@ -386,6 +386,7 @@ in {
         };
 
         programs.fish.enable = true;
+        programs.btop.enable = true;
 
         programs.home-manager.enable = true;
       };
