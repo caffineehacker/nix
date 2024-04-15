@@ -2,6 +2,7 @@
   lib,
   pkgs,
   config,
+  inputs,
   ...
 }:
 let
@@ -226,6 +227,10 @@ in {
           general = {
             no_cursor_warps = true;
           };
+
+          plugins = [
+            inputs.split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces
+          ];
         };
 
         programs.wofi = lib.mkIf config.tw.programs.hyprland.enable {
