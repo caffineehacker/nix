@@ -22,11 +22,15 @@
     hyprland.url = "github:hyprwm/Hyprland";
     split-monitor-workspaces = {
       url = "github:Duckonaut/split-monitor-workspaces";
-      inputs.hyprland.follows = "hyprland"; # <- make sure this line is present for the plugin to work as intended
+      inputs.hyprland.follows = "hyprland";
+    };
+    hyprland-plugins = {
+      url = "github:hyprwm/hyprland-plugins";
+      inputs.hyprland.follows = "hyprland";
     };
   };
 
-  outputs = { self, nixpkgs, lanzaboote, home-manager, split-monitor-workspaces, ... }@inputs: 
+  outputs = { self, nixpkgs, lanzaboote, home-manager, hyprland, ... }@inputs: 
   let
     system = "x86_64-linux";
     pkgs = import nixpkgs {
@@ -42,6 +46,7 @@
         specialArgs = { inherit inputs system; };
         modules = [
           lanzaboote.nixosModules.lanzaboote
+          hyprland.nixosModules.default
           ./machines/framework
           ./system
           ./programs
