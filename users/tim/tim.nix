@@ -55,11 +55,17 @@ in {
           cliphist
           xfce.thunar
           brightnessctl
+          swayidle
         ] else []);
 
         xdg.configFile."hyprv4/scripts" = lib.mkIf config.tw.programs.hyprland.enable {
           recursive = true;
           source = ./hyprv4/scripts;
+        };
+
+        xdg.configFile."hyprv4/backgrounds" = lib.mkIf config.tw.programs.hyprland.enable {
+          recursive = true;
+          source = ./hyprv4/backgrounds;
         };
 
         wayland.windowManager.hyprland.enable = lib.mkIf config.tw.programs.hyprland.enable true;
@@ -200,13 +206,19 @@ in {
 
           exec-once = [
             "firefox"
-            "swww init"
+            "swww-daemon"
             "mako"
             "blueman-applet"
             "nm-applet --indicator"
             "wl-paste --watch cliphist store"
             "waybar"
             "steam"
+            # Enable sway lock when the system sleeps
+            "swayidle -w before-sleep \"swaylock -f\""
+          ];
+
+          exec = [
+            "swww img ~/.config/hyprv4/backgrounds/v1-background-dark.jpg"
           ];
 
           # Temporary fix for https://github.com/Alexays/Waybar/issues/2666
@@ -244,7 +256,6 @@ in {
           settings = {
             daemonize = true;
             show-failed-attempts = true;
-            clock = true;
             screenshot = true;
             effect-blur = "9x5";
             effect-vignette = "0.5:0.5";
@@ -373,6 +384,68 @@ in {
                 format-alt-click = "click-right";
                 format-alf = " {usage}%";
                 on-click = "kitty --start-as=fullscreen --title btop sh -c 'btop'";
+              };
+
+              memory = {
+                interval = 30;
+                format = "";
+                format-alt-click = "click-right";
+                format-alt = " {}%";
+                max-length = 10;
+                tooltip = true;
+                tooltip-format = "Memory - {used:0.1f}GB used";
+                on-click = "kitty --start-as=fullscreen --title btop sh -c 'btop'";
+              };
+
+              disk = {
+                interval = 30;
+                format = "󰋊";
+                path = "/";
+                format-alt-click = "click-right";
+                format-alt = "󰋊 {percentage_used}%";
+                on-click = "kitty --start-as=fullscreen --title btop sh -c 'btop'";
+              };
+
+              battery = {
+                states = {
+                  good = 80;
+                  warning = 30;
+                  critical = 20;
+                };
+                format = "{icon}";
+                format-charging = " {capacity}%";
+                format-plugged = " {capacity}%";
+                format-alt-click = "click-right";
+                format-alt = "{icon} {capacity}%";
+                format-icons = ["󰂎" "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹"];
+              };
+
+              pulseaudio = {
+                format = "{icon}";
+                format-muted = "";
+                on-click = "~/.config/hyprv4/scripts/volume --toggle";
+                on-click-right = "pavucontrol";
+                on-scroll-up = "~/.config/hyprv4/scripts/volume --inc";
+                on-scroll-down = "~/.config/hyprv4/scripts/volume --dec";
+                scroll-step = 5;
+                format-icons = {
+                  headphone = "";
+                  hands-free = "";
+                  headset = "";
+                  phone = "";
+                  portable = "";
+                  car = "";
+                  default = ["" "" ""];
+                };
+                tooltip = true;
+                tooltip-format = "{icon} at {volume}%";
+              };
+
+              # TODO: microphone and backlight
+
+              tray = {
+                icon-size = 16;
+                spacing = 10;
               };
             };
           };
