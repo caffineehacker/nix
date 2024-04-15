@@ -309,7 +309,7 @@ in {
                 "custom/launch_wofi"
                 "custom/power_btn"
                 "custom/lock_screen"
-                "wlr/workspaces"
+                "hyprland/workspaces"
                 "wlr/taskbar"
               ];
               modules-right = [
@@ -347,7 +347,7 @@ in {
                 tooltip = false;
               };
 
-              "wlr/workspaces" = {
+              "hyprland/workspaces" = {
                 disable-scroll = true;
                 all-outputs = true;
                 on-click = "activate";
