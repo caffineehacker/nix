@@ -48,6 +48,7 @@ in {
           tree
           vscodium-fhs
           discord
+          nix-your-shell
         ] ++ (if config.tw.programs.hyprland.enable then [
           networkmanagerapplet
           wl-clipboard
@@ -490,7 +491,13 @@ in {
           userEmail = "tim@timwaterhouse.com";
         };
 
-        programs.fish.enable = true;
+        programs.fish = {
+          enable = true;
+          # This makes it so nix-shell will use fish
+          interactiveShellInit = ''
+            nix-your-shell fish | source
+          '';
+        };
         programs.btop.enable = true;
 
         programs.home-manager.enable = true;
