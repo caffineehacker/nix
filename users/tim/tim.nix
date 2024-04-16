@@ -172,6 +172,8 @@ in {
               "$mod, up, movefocus, u"
               "$mod, down, movefocus, d"
 
+              "$mod, grave, hyprexpo:expo, toggle"
+
               # Media key binds
               ", xf86audioraisevolume, exec, ~/.config/hyprv4/scripts/volume --inc"
               ", xf86audiolowervolume, exec, ~/.config/hyprv4/scripts/volume --dec"
@@ -234,12 +236,22 @@ in {
               split-monitor-workspaces = {
                 count = 10;
               };
+              hyprexpo = {
+                columns = 3;
+                gap_size = 5;
+                bg_col = "rgb(111111)";
+                workspace_method = "center current";
+                enable_gesture = true;
+                gesture_distance = 300;
+                gesture_positive = true;
+              };
             };
           };
 
           plugins = [
             inputs.split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces
             inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars
+            inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
           ];
         };
 
@@ -455,6 +467,12 @@ in {
             };
           };
           style = ./hyprv4/waybar/style/v4-style-dark.css;
+        };
+
+        services.wlsunset = lib.mkIf config.tw.programs.hyprland.enable {
+          enable = true;
+          latitude = "47.7";
+          longitude = "-122.4";
         };
 
         programs.git = {
