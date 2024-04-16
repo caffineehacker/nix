@@ -10,6 +10,7 @@ let
 in {
   imports = [
     ../home-manager.nix
+    inputs.nix-colors.homeManagerModules.default
   ];
 
   options = {
@@ -31,6 +32,8 @@ in {
       nerdfonts
     ];
 
+    colorScheme = inputs.nix-colors.colorSchemes.nord;
+
     # Enable swaylock to authenticate with pam
     security.pam.services.swaylock = lib.mkIf config.tw.programs.hyprland.enable {};
 
@@ -43,7 +46,6 @@ in {
         home.packages = with pkgs; [
           firefox
           tree
-          kitty
           vscodium-fhs
           discord
         ] ++ (if config.tw.programs.hyprland.enable then [
@@ -67,6 +69,14 @@ in {
         xdg.configFile."hyprv4/backgrounds" = lib.mkIf config.tw.programs.hyprland.enable {
           recursive = true;
           source = ./hyprv4/backgrounds;
+        };
+
+        programs.kitty = {
+          enable = true;
+          settings = {
+            foreground = "#${config.colorScheme.palette.base05}";
+            background = "#${config.colorScheme.palette.base00}";
+          };
         };
 
         wayland.windowManager.hyprland = lib.mkIf config.tw.programs.hyprland.enable {
