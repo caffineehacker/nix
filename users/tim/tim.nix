@@ -53,7 +53,6 @@ in {
           wl-clipboard
           swww
           mako
-          swaylock
           pamixer
           cliphist
           xfce.thunar
