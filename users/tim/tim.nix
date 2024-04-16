@@ -59,6 +59,7 @@ in {
           xfce.thunar
           brightnessctl
           swayidle
+          wluma
         ] else []);
 
         xdg.configFile."hyprv4/scripts" = lib.mkIf config.tw.programs.hyprland.enable {
@@ -181,7 +182,7 @@ in {
               "$mod, up, movefocus, u"
               "$mod, down, movefocus, d"
 
-              "$mod, grave, hyprexpo:expo, toggle"
+              "ALT, TAB, overview:toggle"
 
               # Media key binds
               ", xf86audioraisevolume, exec, ~/.config/hyprv4/scripts/volume --inc"
@@ -229,6 +230,8 @@ in {
               "steam"
               # Enable sway lock when the system sleeps
               "swayidle -w before-sleep \"swaylock -f\""
+              # Automatic brightness control
+              "wluma"
             ];
 
             exec = [
@@ -260,7 +263,7 @@ in {
           plugins = [
             inputs.split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces
             inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars
-            inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
+            inputs.Hyprspace.packages.${pkgs.system}.Hyprspace
           ];
         };
 
