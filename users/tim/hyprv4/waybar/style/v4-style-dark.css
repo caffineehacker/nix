@@ -25,6 +25,10 @@ tooltip label{
     color: #cdd6f4;
 }
 
+#taskbar button {
+    color: #f6f7fc;
+}
+
 #workspaces button {
     padding: 5px;
     color: #f6f7fc;

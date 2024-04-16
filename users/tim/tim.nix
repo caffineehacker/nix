@@ -32,7 +32,7 @@ in {
       nerdfonts
     ];
 
-    colorScheme = inputs.nix-colors.colorSchemes.nord;
+    colorScheme = inputs.nix-colors.colorSchemes.solarized-dark;
 
     # Enable swaylock to authenticate with pam
     security.pam.services.swaylock = lib.mkIf config.tw.programs.hyprland.enable {};
