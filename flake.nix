@@ -38,19 +38,17 @@
   outputs = { self, nixpkgs, lanzaboote, home-manager, hyprland, ... }@inputs: 
   let
     system = "x86_64-linux";
-    pkgs = import nixpkgs {
-      inherit system;
-      config = {
-        allowUnfree = true;
-      };
-      overlays = [(self: super: { hyprland = super.hyprland.override { package = hyprland.packages.${system}.hyprland; }; })];
-    };
   in
   {
     nixosConfigurations = {
       framework = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs system; };
         modules = [
+          ({ config, pkgs, ... }: {
+            nixpkgs.overlays = [
+              hyprland.overlays.default
+            ];
+          })
           lanzaboote.nixosModules.lanzaboote
           hyprland.nixosModules.default
           ./machines/framework
