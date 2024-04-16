@@ -146,13 +146,13 @@ in {
               "float,^(blueman-manager)$"
               "float,^(nm-connection-editor)$"
               "float, ^(pavucontrol)$"
-              "float, ^(thunar)$"
+              "float, ^([t|T]hunar)$"
             ];
             windowrulev2 = [
               "opacity 0.8 0.8,class:^(kitty)$"
               "animation popin,class:^(kitty)$,title:^(update-sys)$"
-              "animation popin,class:^(thunar)$"
-              "opacity 0.8 0.8,class:^(thunar)$"
+              "animation popin,class:^([t|T]hunar)$"
+              "opacity 0.8 0.8,class:^([t|T]hunar)$"
               "opacity 0.8 0.8,class:^(VSCodium)$"
               "move cursor -3% -105%,class:^(wofi)$"
               "noanim,class:^(wofi)$"
@@ -355,11 +355,9 @@ in {
                 "custom/power_profile"
                 "battery"
                 "pulseaudio"
-                "pulseaudio#microphone"
                 "backlight"
                 "tray"
                 "custom/weather"
-                "custom/updates"
                 "clock"
               ];
 
@@ -411,9 +409,7 @@ in {
 
               memory = {
                 interval = 30;
-                format = "";
-                format-alt-click = "click-right";
-                format-alt = " {}%";
+                format = " {}%";
                 max-length = 10;
                 tooltip = true;
                 tooltip-format = "Memory - {used:0.1f}GB used";
@@ -422,10 +418,8 @@ in {
 
               disk = {
                 interval = 30;
-                format = "󰋊";
+                format = "󰋊 {percentage_used}%";
                 path = "/";
-                format-alt-click = "click-right";
-                format-alt = "󰋊 {percentage_used}%";
                 on-click = "kitty --start-as=fullscreen --title btop sh -c 'btop'";
               };
 
@@ -444,7 +438,7 @@ in {
               };
 
               pulseaudio = {
-                format = "{icon}";
+                format = "{icon} {volume}%";
                 format-muted = "";
                 on-click = "~/.config/hyprv4/scripts/volume --toggle";
                 on-click-right = "pavucontrol";
@@ -468,7 +462,12 @@ in {
                 format = " {:%I:%M %p   %m/%d/%Y}";
               };
 
-              # TODO: microphone and backlight
+              backlight = {
+                format = "{icon} {percent}%";
+                format-icons = ["󰃞" "󰃟" "󰃠"];
+                on-scroll-up = "~/.config/HyprV/waybar/scripts/brightness --inc";
+                on-scroll-down = "~/.config/HyprV/waybar/scripts/brightness --dec";
+              };
 
               tray = {
                 icon-size = 16;
@@ -500,7 +499,12 @@ in {
 
     users.users.tim = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "networkmanager" ];
+      extraGroups = [
+        "wheel"
+        "networkmanager"
+        # Allows serial port access
+        "dialout"
+      ];
     };
 
 
