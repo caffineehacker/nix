@@ -1,12 +1,12 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
+{ lib
+, pkgs
+, config
+, ...
 }:
 let
   cfg = config.tw.programs.games;
-in {
+in
+{
   options = {
     tw.programs.games.enable = lib.mkOption {
       default = false;

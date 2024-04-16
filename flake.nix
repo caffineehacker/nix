@@ -35,28 +35,28 @@
     nix-colors.url = "github:misterio77/nix-colors";
   };
 
-  outputs = { self, nixpkgs, lanzaboote, home-manager, hyprland, ... }@inputs: 
-  let
-    system = "x86_64-linux";
-  in
-  {
-    nixosConfigurations = {
-      framework = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs system; };
-        modules = [
-          ({ config, pkgs, ... }: {
-            nixpkgs.overlays = [
-              hyprland.overlays.default
-            ];
-          })
-          lanzaboote.nixosModules.lanzaboote
-          hyprland.nixosModules.default
-          ./machines/framework
-          ./system
-          ./programs
-          ./users/tim
-        ];
+  outputs = { self, nixpkgs, lanzaboote, home-manager, hyprland, ... }@inputs:
+    let
+      system = "x86_64-linux";
+    in
+    {
+      nixosConfigurations = {
+        framework = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs system; };
+          modules = [
+            ({ config, pkgs, ... }: {
+              nixpkgs.overlays = [
+                hyprland.overlays.default
+              ];
+            })
+            lanzaboote.nixosModules.lanzaboote
+            hyprland.nixosModules.default
+            ./machines/framework
+            ./system
+            ./programs
+            ./users/tim
+          ];
+        };
       };
     };
-  }; 
 }

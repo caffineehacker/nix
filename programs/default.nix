@@ -1,4 +1,4 @@
-{...}: {
+{ ... }: {
   imports = [
     ./fish.nix
     ./games.nix

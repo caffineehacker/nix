@@ -1,13 +1,13 @@
-{
-  lib,
-  pkgs,
-  config,
-  inputs,
-  ...
+{ lib
+, pkgs
+, config
+, inputs
+, ...
 }:
 let
   cfg = config.tw.programs.hyprland;
-in {
+in
+{
   options = {
     tw.programs.hyprland.enable = lib.mkOption {
       default = false;

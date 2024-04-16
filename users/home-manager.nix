@@ -1,7 +1,8 @@
-{lib, inputs, config, ...}:
+{ lib, inputs, config, ... }:
 let
   cfg = config.tw.users.home-manager;
-in {
+in
+{
   options = {
     tw.users.home-manager.enable = lib.mkOption {
       default = true;

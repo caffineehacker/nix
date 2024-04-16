@@ -1,13 +1,13 @@
-{
-  lib,
-  pkgs,
-  config,
-  inputs,
-  ...
+{ lib
+, pkgs
+, config
+, inputs
+, ...
 }:
 let
   cfg = config.tw.users.tim;
-in {
+in
+{
   imports = [
     ../home-manager.nix
     inputs.nix-colors.homeManagerModules.default
@@ -35,7 +35,7 @@ in {
     colorScheme = inputs.nix-colors.colorSchemes.solarized-dark;
 
     # Enable swaylock to authenticate with pam
-    security.pam.services.swaylock = lib.mkIf config.tw.programs.hyprland.enable {};
+    security.pam.services.swaylock = lib.mkIf config.tw.programs.hyprland.enable { };
 
     home-manager = {
       users.tim = {
@@ -48,7 +48,12 @@ in {
           tree
           vscodium-fhs
           discord
+          # Enables fish starting when using nix-shell
           nix-your-shell
+          # Language server for Nix code
+          nil
+          # Formatter for Nix code
+          nixpkgs-fmt
         ] ++ (if config.tw.programs.hyprland.enable then [
           networkmanagerapplet
           wl-clipboard
@@ -60,7 +65,7 @@ in {
           brightnessctl
           swayidle
           wluma
-        ] else []);
+        ] else [ ]);
 
         xdg.configFile."hyprv4/scripts" = lib.mkIf config.tw.programs.hyprland.enable {
           recursive = true;
@@ -197,11 +202,14 @@ in {
             ] ++ (
               # workspaces
               # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}
-              builtins.concatLists (builtins.genList (
-                  x: let
+              builtins.concatLists (builtins.genList
+                (
+                  x:
+                  let
                     ws = builtins.toString (x + 1);
                     key = builtins.toString (if x < 9 then x + 1 else 0);
-                  in [
+                  in
+                  [
                     "$mod, ${key}, split-workspace, ${ws}"
                     "$mod SHIFT, ${key}, split-movetoworkspacesilent, ${ws}"
                   ]
@@ -213,7 +221,7 @@ in {
               "$mod, mouse:272, movewindow"
               "$mod, mouse:273, resizewindow"
               "$mod SHIFT, mouse:272, resizewindow"
-            ]; 
+            ];
 
             bindl = [
               ",switch:[Lid Switch],exec,swaylock"
@@ -388,8 +396,7 @@ in {
                 disable-scroll = true;
                 all-outputs = false;
                 on-click = "activate";
-                persistent_workspaces = {
-                };
+                persistent_workspaces = { };
               };
 
               "wlr/taskbar" = {
@@ -438,7 +445,7 @@ in {
                 format-plugged = " {capacity}%";
                 format-alt-click = "click-right";
                 format-alt = "{icon} {capacity}%";
-                format-icons = ["󰂎" "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹"];
+                format-icons = [ "󰂎" "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹" ];
               };
 
               pulseaudio = {
@@ -456,7 +463,7 @@ in {
                   phone = "";
                   portable = "";
                   car = "";
-                  default = ["" "" ""];
+                  default = [ "" "" "" ];
                 };
                 tooltip = true;
                 tooltip-format = "{icon} at {volume}%";
@@ -468,7 +475,7 @@ in {
 
               backlight = {
                 format = "{icon} {percent}%";
-                format-icons = ["󰃞" "󰃟" "󰃠"];
+                format-icons = [ "󰃞" "󰃟" "󰃠" ];
                 on-scroll-up = "~/.config/HyprV/waybar/scripts/brightness --inc";
                 on-scroll-down = "~/.config/HyprV/waybar/scripts/brightness --dec";
               };

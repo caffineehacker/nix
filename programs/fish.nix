@@ -1,12 +1,12 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
+{ lib
+, pkgs
+, config
+, ...
 }:
 let
   cfg = config.tw.programs.fish;
-in {
+in
+{
   options = {
     tw.programs.fish.enable = lib.mkOption {
       default = true;

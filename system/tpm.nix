@@ -8,15 +8,15 @@
 # Must be enabled by hand - e.g.
 # sudo systemd-cryptenroll --wipe-slot=tpm2 /dev/nvme0n1p3 --tpm2-device=auto --tpm2-pcrs=0+2+7
 #
-{
-  lib,
-  pkgs,
-  config,
-  ...
+{ lib
+, pkgs
+, config
+, ...
 }:
 let
   cfg = config.tw.system.tpm-unlock;
-in {
+in
+{
   options = {
     tw.system.tpm-unlock.enable = lib.mkOption {
       default = false;

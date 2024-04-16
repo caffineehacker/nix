@@ -1,12 +1,12 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
+{ lib
+, pkgs
+, config
+, ...
 }:
 let
   cfg = config.tw.system.secure-boot;
-in {
+in
+{
   options = {
     tw.system.secure-boot.enable = lib.mkOption {
       default = false;
