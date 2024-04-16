@@ -70,7 +70,6 @@ in {
         };
 
         wayland.windowManager.hyprland = lib.mkIf config.tw.programs.hyprland.enable {
-          package = inputs.hyprland.packages.${pkgs.system}.hyprland;
           enable = true;
           settings = {
             monitor = ",preferred,auto,1,vrr,1";
@@ -456,6 +455,10 @@ in {
                 };
                 tooltip = true;
                 tooltip-format = "{icon} at {volume}%";
+              };
+
+              clock = {
+                format = "{%r}";
               };
 
               # TODO: microphone and backlight

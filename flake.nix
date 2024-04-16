@@ -38,6 +38,7 @@
       config = {
         allowUnfree = true;
       };
+      overlays = [(self: super: { hyprland = super.hyprland.override { package = hyprland.packages.${system}.hyprland; }; })];
     };
   in
   {
