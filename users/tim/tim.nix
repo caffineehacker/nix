@@ -404,10 +404,8 @@ in {
 
               cpu = {
                 interval = 10;
-                format = "";
+                format = " {usage}%";
                 max-length = 10;
-                format-alt-click = "click-right";
-                format-alf = " {usage}%";
                 on-click = "kitty --start-as=fullscreen --title btop sh -c 'btop'";
               };
 
@@ -467,7 +465,7 @@ in {
               };
 
               clock = {
-                format = "{%r}";
+                format = " {:%I:%M %p   %m/%d/%Y}";
               };
 
               # TODO: microphone and backlight
