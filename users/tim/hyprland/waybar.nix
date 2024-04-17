@@ -1,10 +1,8 @@
 { lib
-, pkgs
 , config
-, inputs
 , ...
 }: {
-  home-manager = {
+  home-manager = lib.mkIf config.tw.programs.hyprland.enable {
     users.tim = {
       programs.waybar = {
         enable = true;
