@@ -37,8 +37,8 @@
             ];
 
             "custom/launch_wofi" = {
-              format = "";
-              on-click = "pkill wofi || wofi";
+              format = "";
+              on-click = "pkill wofi || wofi -c ~/.config/wofi/config-bmenu";
               tooltip = false;
             };
 
@@ -151,6 +151,8 @@
         };
         style = ./hyprv4/waybar/style/v4-style-dark.css;
       };
+
+      programs.wlogout.enable = true;
     };
   };
 }
