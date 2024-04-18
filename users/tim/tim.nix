@@ -47,7 +47,6 @@ in
         home.packages = with pkgs; [
           firefox
           tree
-          vscodium-fhs
           discord
           # Enables fish starting when using nix-shell
           nix-your-shell
@@ -81,6 +80,27 @@ in
         programs.btop.enable = true;
 
         programs.home-manager.enable = true;
+
+        programs.vscode = {
+          enable = true;
+          package = pkgs.vscodium-fhs;
+          userSettings = {
+            "workbench.colorTheme" = "Solarized Dark";
+
+            "git.autofetch" = true;
+            "git.enableSmartCommit" = true;
+            "git.confirmSync" = false;
+
+            "nix.enableLanguageServer" = true;
+            "nix.serverPath" = "nil";
+
+            "editor.formatOnSave" = true;
+            "files.autoSave" = "onFocusChange";
+          };
+          extensions = with pkgs; [
+            vscode-extensions.jnoortheen.nix-ide
+          ];
+        };
       };
     };
 
