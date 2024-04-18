@@ -1,5 +1,6 @@
 { lib
 , config
+, pkgs
 , ...
 }: {
   home-manager = lib.mkIf config.tw.programs.hyprland.enable {
@@ -139,8 +140,8 @@
             backlight = {
               format = "{icon} {percent}%";
               format-icons = [ "󰃞" "󰃟" "󰃠" ];
-              on-scroll-up = "~/.config/HyprV/waybar/scripts/brightness --inc";
-              on-scroll-down = "~/.config/HyprV/waybar/scripts/brightness --dec";
+              on-scroll-up = "~/.config/hyprv4/scripts/brightness --inc";
+              on-scroll-down = "~/.config/hyprv4/scripts/brightness --dec";
             };
 
             tray = {
@@ -153,6 +154,10 @@
       };
 
       programs.wlogout.enable = true;
+
+      home.packages = with pkgs; [
+        libnotify
+      ];
     };
   };
 }
