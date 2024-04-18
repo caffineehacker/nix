@@ -37,7 +37,7 @@ let
 
       xdg.configFile."wofi/config-bmenu".text = toConfig {
         width = 375;
-        height = -450;
+        height = 450;
         location = "top_left";
         show = "drun";
         prompt = "Search...";
