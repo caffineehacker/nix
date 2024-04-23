@@ -28,7 +28,6 @@
           xfce.thunar
           brightnessctl
           swayidle
-          wluma
         ];
 
         xdg.configFile."hyprv4/scripts" = {
