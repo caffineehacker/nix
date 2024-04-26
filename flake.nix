@@ -33,6 +33,7 @@
       inputs.hyprland.follows = "hyprland";
     };
     nix-colors.url = "github:misterio77/nix-colors";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
 
   outputs = { self, nixpkgs, lanzaboote, home-manager, hyprland, ... }@inputs:

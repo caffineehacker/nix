@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, inputs, ... }:
 
 {
   nix = {
@@ -54,6 +54,7 @@
 
   imports = [
     ../common.nix
+    inputs.nixos-hardware.nixosModules.framework-16-7040-amd
   ];
 
   tw.system.secure-boot.enable = true;
