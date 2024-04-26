@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   nix = {
@@ -7,7 +7,50 @@
       experimental-features = nix-command flakes
     '';
     settings.trusted-users = ["root" "tim"];
+    settings.system-features = ["gccarch-znver4" "benchmark" "big-parallel" "kvm" "nixos-test"];
+    settings.show-trace = true;
   };
+  nixpkgs.hostPlatform = {
+    system = "x86_64-linux";
+    gcc.arch = "znver4";
+    gcc.tune = "znver4";
+  };
+  nixpkgs.overlays = [
+    (self: super: {
+      # stdenv = super.withCFlags [ "-flto" "-funroll-loops" "-O3" ] super.stdenv;
+      # Segfault in checks - 4/23/2024
+      libvorbis = super.libvorbis.override(old: {
+        stdenv = super.addAttrsToDerivation { NIX_CFLAGS_COMPILE = "-march=x86-64 -mtune=x86-64"; } old.stdenv;
+      });
+      # Compile error in AVX512 test - 4/23/2024
+      simde = super.simde.override(old: {
+        stdenv = super.addAttrsToDerivation { NIX_CFLAGS_COMPILE = "-march=x86-64 -mtune=x86-64"; } old.stdenv;
+      });
+      # A test fails due to being too slow while building everything else - 4/24/2024
+      pythonPackages.hypothesis = super.pythonPackages.hypothesis.overridePythonAttrs {
+        doCheck = false;
+        pytestCheckPhase = "true";
+      };
+      # A test fails due to being too slow while building everything else - 4/24/2024
+      python3 = super.python3.override {
+        packageOverrides = pfinal: pprev: {
+          h2 = pprev.h2.overridePythonAttrs {
+            doCheck = false;
+            pytestCheckPhase = "true";
+            disabledTests = pprev.h2.disabledTests ++ ["test_flow_control_window"];
+          };
+        };
+      };
+      # A test seg faults - 4/24/2024
+      libsndfile = super.libsndfile.override(old: {
+        stdenv = old.stdenv // {hostPlatform = lib.systems.elaborate { system = "x86_64-linux"; };};
+      });
+      # Doesn't use optimization flags and takes forever to build
+      electron-unwrapped = super.electron-unwrapped.override(old: {
+        stdenv = old.stdenv // {hostPlatform = lib.systems.elaborate { system = "x86_64-linux"; };};
+      });
+    })
+  ];
 
   imports = [
     ../common.nix
@@ -104,6 +147,11 @@
   hardware.bluetooth.powerOnBoot = true;
 
   services.blueman.enable = true;
+
+  services.logind.extraConfig = ''
+    # don't shutdown when power button is short-pressed
+    HandlePowerKey=suspend
+  '';
 
   system.stateVersion = "23.11";
 }
