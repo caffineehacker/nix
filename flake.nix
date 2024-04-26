@@ -55,7 +55,7 @@
             ./machines/framework
             ./system
             ./programs
-            ./users/tim
+            ./users
           ];
         };
       };

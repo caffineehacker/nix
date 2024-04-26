@@ -9,7 +9,6 @@ let
 in
 {
   imports = [
-    ../home-manager.nix
     inputs.nix-colors.homeManagerModules.default
     ./hyprland
   ];
@@ -23,6 +22,13 @@ in
       '';
       type = lib.types.bool;
     };
+
+    tw.users.tim.colorScheme = lib.mkOption {
+      default = inputs.nix-colors.colorSchemes.solarized-dark;
+      description = ''
+        The Nix colors color scheme to use
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -32,8 +38,6 @@ in
       noto-fonts-emoji
       nerdfonts
     ];
-
-    colorScheme = inputs.nix-colors.colorSchemes.solarized-dark;
 
     # Enable swaylock to authenticate with pam
     security.pam.services.swaylock = lib.mkIf config.tw.programs.hyprland.enable { };
@@ -59,8 +63,8 @@ in
         programs.kitty = {
           enable = true;
           settings = {
-            foreground = "#${config.colorScheme.palette.base05}";
-            background = "#${config.colorScheme.palette.base00}";
+            foreground = "#${cfg.colorScheme.palette.base05}";
+            background = "#${cfg.colorScheme.palette.base00}";
           };
         };
 

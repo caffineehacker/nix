@@ -4,14 +4,12 @@
 , inputs
 , ...
 }: {
-  imports = [ ./wofi.nix ./waybar.nix ./swaylock.nix ];
+  imports = [ ./wofi.nix ./waybar.nix ./swaylock.nix ./mako.nix ];
   config = lib.mkIf config.tw.programs.hyprland.enable {
     fonts.packages = with pkgs; [
       noto-fonts-emoji
       nerdfonts
     ];
-
-    colorScheme = inputs.nix-colors.colorSchemes.solarized-dark;
 
     # Enable swaylock to authenticate with pam
     security.pam.services.swaylock = { };
@@ -22,7 +20,6 @@
           networkmanagerapplet
           wl-clipboard
           swww
-          mako
           pamixer
           cliphist
           xfce.thunar
