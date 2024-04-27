@@ -182,6 +182,17 @@ tooltip label{
     color: #${config.tw.users.tim.colorScheme.palette.base05};
 }
 
+#taskbar button:hover {
+  background: #${config.tw.users.tim.colorScheme.palette.base05};
+    color: #${config.tw.users.tim.colorScheme.palette.base01};
+}
+
+#taskbar button.active {
+    color: #${config.tw.users.tim.colorScheme.palette.base05};
+    background: #${config.tw.users.tim.colorScheme.palette.base02};
+    border-radius: 10px;
+}
+
 #workspaces button {
     padding: 5px;
     color: #${config.tw.users.tim.colorScheme.palette.base05};
@@ -189,7 +200,7 @@ tooltip label{
 }
 
 #workspaces button.active {
-    color: #000000;
+    color: #${config.tw.users.tim.colorScheme.palette.base05};
     background: #${config.tw.users.tim.colorScheme.palette.base02};
     border-radius: 10px;
 }
