@@ -32,7 +32,82 @@ let
           gtk_dark = true;
           dynamic_lines = true;
         };
-        style = builtins.readFile ./hyprv4/wofi/style/v4-style-dark.css;
+        style = ''
+window {
+    margin: 0px;
+    border: 5px solid #${config.tw.users.tim.colorScheme.palette.base01};
+    background-color: #${config.tw.users.tim.colorScheme.palette.base00};
+    border-radius: 0px;
+}
+
+#input {
+    padding: 4px;
+    margin: 4px;
+    padding-left: 20px;
+    border: none;
+    color: #${config.tw.users.tim.colorScheme.palette.base05};
+    font-weight: bold;
+    background-color: #${config.tw.users.tim.colorScheme.palette.base01};
+   	outline: none;
+    border-radius: 15px;
+    margin: 10px;
+    margin-bottom: 2px;
+}
+#input:focus {
+    border: 0px solid #${config.tw.users.tim.colorScheme.palette.base01};
+    margin-bottom: 0px;
+}
+
+#inner-box {
+    margin: 4px;
+    border: 10px solid #${config.tw.users.tim.colorScheme.palette.base01};
+    color: #${config.tw.users.tim.colorScheme.palette.base05};
+    font-weight: bold;
+    background-color: #${config.tw.users.tim.colorScheme.palette.base01};
+    border-radius: 15px;
+}
+
+#outer-box {
+    margin: 0px;
+    border: none;
+    border-radius: 15px;
+    background-color: #${config.tw.users.tim.colorScheme.palette.base01};
+}
+
+#scroll {
+    margin-top: 5px;
+    border: none;
+    border-radius: 15px;
+    margin-bottom: 5px;
+}
+
+#img:selected {
+    background-color: #${config.tw.users.tim.colorScheme.palette.base02};
+    border-radius: 15px;
+}
+
+#text:selected {
+    color: #${config.tw.users.tim.colorScheme.palette.base00};
+    margin: 0px 0px;
+    border: none;
+    border-radius: 15px;
+    background-color: #${config.tw.users.tim.colorScheme.palette.base02};
+}
+
+#entry {
+    margin: 0px 0px;
+    border: none;
+    border-radius: 15px;
+    background-color: transparent;
+}
+
+#entry:selected {
+    margin: 0px 0px;
+    border: none;
+    border-radius: 15px;
+    background-color: #${config.tw.users.tim.colorScheme.palette.base02};
+}
+        '';
       };
 
       xdg.configFile."wofi/config-bmenu".text = toConfig {
