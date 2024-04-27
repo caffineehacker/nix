@@ -87,7 +87,7 @@ window {
 }
 
 #text:selected {
-    color: #${config.tw.users.tim.colorScheme.palette.base00};
+    color: #${config.tw.users.tim.colorScheme.palette.base05};
     margin: 0px 0px;
     border: none;
     border-radius: 15px;
