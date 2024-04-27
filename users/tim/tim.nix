@@ -24,7 +24,7 @@ in
     };
 
     tw.users.tim.colorScheme = lib.mkOption {
-      default = inputs.nix-colors.colorSchemes.solarized-dark;
+      default = inputs.nix-colors.colorSchemes.catppuccin-frappe;
       description = ''
         The Nix colors color scheme to use
       '';
@@ -89,7 +89,7 @@ in
           enable = true;
           package = pkgs.vscodium-fhs;
           userSettings = {
-            "workbench.colorTheme" = "Solarized Dark";
+            "workbench.colorTheme" = "Catppuccin Frappé";
 
             "git.autofetch" = true;
             "git.enableSmartCommit" = true;
@@ -103,6 +103,7 @@ in
           };
           extensions = with pkgs; [
             vscode-extensions.jnoortheen.nix-ide
+            vscode-extensions.catppuccin.catppuccin-vsc
           ];
         };
       };
