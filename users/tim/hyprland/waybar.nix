@@ -195,8 +195,8 @@ tooltip label{
 }
 
 #workspaces button:hover {
-    background: #${config.tw.users.tim.colorScheme.palette.base00};
-    color: #${config.tw.users.tim.colorScheme.palette.base04};
+    background: #${config.tw.users.tim.colorScheme.palette.base05};
+    color: #${config.tw.users.tim.colorScheme.palette.base01};
     border-radius: 10px;
 }
 
