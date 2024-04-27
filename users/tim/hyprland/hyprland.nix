@@ -124,7 +124,11 @@
               "opacity 0.8 0.6,class:^(wofi)$"
             ];
             misc = {
-              force_default_wallpaper = -1;
+              force_default_wallpaper = 0;
+              focus_on_activate = true;
+              disable_hyprland_logo = true;
+              mouse_move_enables_dpms = true;
+              key_press_enables_dpms = true;
             };
 
             "$mod" = "SUPER";
@@ -133,6 +137,7 @@
               "$mod, F4, killactive,"
               "$mod, Q, exit,"
               "$mod, L, exec, swaylock"
+              "$mod, L, exec, sleep 1 && hyprctl dispatch dpms off"
               "$mod, E, exec, $fileManager"
               "$mod, F, togglefloating,"
               "$mod, SPACE, exec, wofi"
@@ -196,8 +201,6 @@
               "steam"
               # Enable sway lock when the system sleeps
               "swayidle -w before-sleep \"swaylock -f\""
-              # Automatic brightness control
-              "wluma"
             ];
 
             exec = [
