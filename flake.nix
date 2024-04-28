@@ -38,24 +38,30 @@
 
   outputs = { self, nixpkgs, lanzaboote, home-manager, hyprland, ... }@inputs:
     let
-      system = "x86_64-linux";
+      commonModules = [
+        ({ config, pkgs, ... }: {
+          nixpkgs.overlays = [
+            hyprland.overlays.default
+          ];
+        })
+        lanzaboote.nixosModules.lanzaboote
+        ./system
+        ./programs
+        ./users
+      ];
     in
     {
       nixosConfigurations = {
         framework = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs system; };
-          modules = [
-            ({ config, pkgs, ... }: {
-              nixpkgs.overlays = [
-                hyprland.overlays.default
-              ];
-            })
-            lanzaboote.nixosModules.lanzaboote
-            hyprland.nixosModules.default
+          specialArgs = { inherit inputs; system = "x86_64-linux"; };
+          modules = commonModules ++ [
             ./machines/framework
-            ./system
-            ./programs
-            ./users
+          ];
+        };
+        homeauto = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs; system = "aarch64-linux"; };
+          modules = commonModules ++ [
+            ./machines/homeauto
           ];
         };
       };

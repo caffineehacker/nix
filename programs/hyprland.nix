@@ -1,6 +1,7 @@
 { lib
 , pkgs
 , config
+, inputs
 , ...
 }:
 let
@@ -17,6 +18,8 @@ in
       type = lib.types.bool;
     };
   };
+
+  imports = [ inputs.hyprland.nixosModules.default ];
 
   config = lib.mkIf cfg.enable {
     programs.hyprland.enable = true;
