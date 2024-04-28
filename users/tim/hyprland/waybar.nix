@@ -135,9 +135,9 @@
 
             "custom/weather" = {
                 tooltip = true;
-                format = "{}";
+                format = "foo {}";
                 interval = 30;
-                exec = "~/.config/HyprV/waybar/scripts/waybar-wttr-c.py";
+                exec = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/waybar-wttr-c.py";
                 return-type = "json";
             };
 
