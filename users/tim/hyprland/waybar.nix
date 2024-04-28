@@ -27,13 +27,12 @@
               "cpu"
               "memory"
               "disk"
-              "temperature"
-              "custom/power_profile"
               "battery"
               "pulseaudio"
               "backlight"
               "tray"
               "custom/weather"
+              "power-profiles-daemon"
               "clock"
             ];
 
@@ -56,10 +55,10 @@
             };
 
             "hyprland/workspaces" = {
-              disable-scroll = true;
+              disable-scroll = false;
               all-outputs = false;
               on-click = "activate";
-              persistent_workspaces = { };
+              persistent-workspaces = { };
             };
 
             "wlr/taskbar" = {
@@ -130,6 +129,18 @@
               };
               tooltip = true;
               tooltip-format = "{icon} at {volume}%";
+            };
+
+            power-profiles-daemon = {
+              format = "{icon}";
+              tooltip-format = "Power profile: {profile}";
+              tooltip = true;
+              format-icons = {
+                default = "";
+                performance = "";
+                balanced = "";
+                power-saver = "";
+              };
             };
 
             clock = {
@@ -219,7 +230,7 @@ tooltip label{
 #custom-lock_screen,
 #custom-light_dark,
 #custom-power_btn,
-#custom-power_profile,
+#power-profiles-deamon,
 #custom-weather,
 #custom-myhyprv,
 #window,
