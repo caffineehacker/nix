@@ -49,6 +49,15 @@
       electron-unwrapped = super.electron-unwrapped.override(old: {
         stdenv = old.stdenv // {hostPlatform = lib.systems.elaborate { system = "x86_64-linux"; };};
       });
+      # Floating point precision test failures - 4/28/2024
+      gsl = super.gsl.override(old: {
+        # FIXME: Replay mtune=x86-64 with mtune=generic
+        stdenv = super.withCFlags ["-march=x86-64" "-mtune=x86-64" "-mno-fma"] old.stdenv;
+      });
+      # Flowing point precision test failures - 4/28/2024
+      lib2geom = super.lib2geom.override(old: {
+        stdenv = super.withCFlags ["-march=x86-64" "-mtune=generic" "-mno-fma"] old.stdenv;
+      });
     })
   ];
 

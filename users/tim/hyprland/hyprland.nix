@@ -32,11 +32,6 @@
           source = ./hyprv4/scripts;
         };
 
-        xdg.configFile."hyprv4/backgrounds" = {
-          recursive = true;
-          source = ./hyprv4/backgrounds;
-        };
-
         services.wlsunset = {
           enable = true;
           latitude = "47.7";
@@ -203,8 +198,16 @@
               "swayidle -w before-sleep \"swaylock -f\""
             ];
 
-            exec = [
-              "swww img ~/.config/hyprv4/backgrounds/v1-background-dark.jpg"
+            exec = let
+              inherit (inputs.nix-colors.lib.contrib { inherit pkgs; })
+                nixWallpaperFromScheme;
+              wallpaper = nixWallpaperFromScheme {
+                scheme = config.tw.users.tim.colorScheme;
+                width = 2560;
+                height = 1600;
+                logoScale = 5.0;
+              }; in [
+              "swww img ${wallpaper}"
             ];
 
             # Temporary fix for https://github.com/Alexays/Waybar/issues/2666
