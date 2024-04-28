@@ -6,6 +6,8 @@
 }:
 let
   cfg = config.tw.users.tim;
+  inherit (inputs.nix-colors.lib.contrib { inherit pkgs; })
+    gtkThemeFromScheme;
 in
 {
   imports = [
@@ -47,6 +49,14 @@ in
         home.username = "tim";
         home.homeDirectory = "/home/tim";
         home.stateVersion = "23.05";
+
+        gtk = {
+          enable = true;
+          theme = {
+            name = "${cfg.colorScheme.slug}";
+            package = gtkThemeFromScheme { scheme = cfg.colorScheme; };
+          };
+        };
 
         home.packages = with pkgs; [
           firefox
