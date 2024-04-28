@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#! /usr/bin/env nix-shell
+#! nix-shell -i python3 -p python3 python3Packages.requests
 
 import json
 import requests
@@ -58,7 +59,7 @@ WEATHER_CODES = {
 data = {}
 
 
-weather = requests.get("https://wttr.in/?format=j1").json()
+weather = requests.get("https://wttr.in/Seattle?format=j1").json()
 
 
 def format_time(time):

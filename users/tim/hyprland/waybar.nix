@@ -135,9 +135,9 @@
 
             "custom/weather" = {
                 tooltip = true;
-                format = "foo {}";
+                format = "{}";
                 interval = 30;
-                exec = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/waybar-wttr-c.py";
+                exec = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/waybar-wttr.py";
                 return-type = "json";
             };
 
@@ -279,8 +279,7 @@ tooltip label{
 #custom-launch_thunderbird,
 #custom-launch_thunar,
 #custom-launch_wofi,
-#custom-launch_kitty,
-#custom-weather {
+#custom-launch_kitty {
     margin-left: 0px;
     border-right: 0px;
     font-size: 24px;
