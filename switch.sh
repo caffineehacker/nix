@@ -2,4 +2,4 @@
 #!nix-shell -i bash -p nh
 set -e
 
-nh os switch --ask $(dirname "$0") -- -j 2
+nh os switch --ask $(dirname "$0") -- -j 2 --keep-failed --keep-going
