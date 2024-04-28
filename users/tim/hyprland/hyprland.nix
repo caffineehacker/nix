@@ -3,7 +3,9 @@
 , config
 , inputs
 , ...
-}: {
+}: let 
+ cfgTim = config.home-manager.users.tim;
+ in {
   imports = [ ./wofi.nix ./waybar.nix ./swaylock.nix ./mako.nix ];
   config = lib.mkIf config.tw.programs.hyprland.enable {
     fonts.packages = with pkgs; [
@@ -27,7 +29,7 @@
           swayidle
         ];
 
-        xdg.configFile."hyprv4/scripts" = {
+        xdg.configFile."hypr/scripts" = {
           recursive = true;
           source = ./hyprv4/scripts;
         };
@@ -148,15 +150,15 @@
               "ALT, TAB, overview:toggle"
 
               # Media key binds
-              ", xf86audioraisevolume, exec, ~/.config/hyprv4/scripts/volume --inc"
-              ", xf86audiolowervolume, exec, ~/.config/hyprv4/scripts/volume --dec"
-              ", xf86AudioMicMute, exec, ~/.config/hyprv4/scripts/volume --toggle-mic"
-              ", xf86audioMute, exec, ~/.config/hyprv4/scripts/volume --toggle"
+              ", xf86audioraisevolume, exec, ${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --inc"
+              ", xf86audiolowervolume, exec, ${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --dec"
+              ", xf86AudioMicMute, exec, ${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --toggle-mic"
+              ", xf86audioMute, exec, ${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --toggle"
 
-              ", xf86KbdBrightnessDown, exec, ~/.config/hyprv4/scripts/kb-brightness --dec"
-              ", xf86KbdBrightnessUp, exec, ~/.config/hyprv4/scripts/kb-brightness --inc"
-              ", xf86MonBrightnessDown, exec, ~/.config/hyprv4/scripts/brightness --dec"
-              ", xf86MonBrightnessUp, exec, ~/.config/hyprv4/scripts/brightness --inc"
+              ", xf86KbdBrightnessDown, exec, ${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/kb-brightness --dec"
+              ", xf86KbdBrightnessUp, exec, ${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/kb-brightness --inc"
+              ", xf86MonBrightnessDown, exec, ${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/brightness --dec"
+              ", xf86MonBrightnessUp, exec, ${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/brightness --inc"
             ] ++ (
               # workspaces
               # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}

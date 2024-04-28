@@ -2,7 +2,9 @@
 , config
 , pkgs
 , ...
-}: {
+}: let 
+ cfgTim = config.home-manager.users.tim;
+ in {
   home-manager = lib.mkIf config.tw.programs.hyprland.enable {
     users.tim = {
       programs.waybar = {
@@ -113,10 +115,10 @@
             pulseaudio = {
               format = "{icon} {volume}%";
               format-muted = "";
-              on-click = "~/.config/hyprv4/scripts/volume --toggle";
+              on-click = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --toggle";
               on-click-right = "pavucontrol";
-              on-scroll-up = "~/.config/hyprv4/scripts/volume --inc";
-              on-scroll-down = "~/.config/hyprv4/scripts/volume --dec";
+              on-scroll-up = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --inc";
+              on-scroll-down = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --dec";
               scroll-step = 5;
               format-icons = {
                 headphone = "";
@@ -129,6 +131,14 @@
               };
               tooltip = true;
               tooltip-format = "{icon} at {volume}%";
+            };
+
+            "custom/weather" = {
+                tooltip = true;
+                format = "{}";
+                interval = 30;
+                exec = "~/.config/HyprV/waybar/scripts/waybar-wttr-c.py";
+                return-type = "json";
             };
 
             power-profiles-daemon = {
@@ -150,8 +160,8 @@
             backlight = {
               format = "{icon} {percent}%";
               format-icons = [ "󰃞" "󰃟" "󰃠" ];
-              on-scroll-up = "~/.config/hyprv4/scripts/brightness --inc";
-              on-scroll-down = "~/.config/hyprv4/scripts/brightness --dec";
+              on-scroll-up = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/brightness --inc";
+              on-scroll-down = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/brightness --dec";
             };
 
             tray = {
