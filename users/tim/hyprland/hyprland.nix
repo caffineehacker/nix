@@ -147,8 +147,6 @@
               "$mod, up, movefocus, u"
               "$mod, down, movefocus, d"
 
-              "ALT, TAB, overview:toggle"
-
               # Media key binds
               ", xf86audioraisevolume, exec, ${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --inc"
               ", xf86audiolowervolume, exec, ${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --dec"
@@ -222,22 +220,12 @@
               split-monitor-workspaces = {
                 count = 10;
               };
-              hyprexpo = {
-                columns = 3;
-                gap_size = 5;
-                bg_col = "rgb(111111)";
-                workspace_method = "center current";
-                enable_gesture = true;
-                gesture_distance = 300;
-                gesture_positive = true;
-              };
             };
           };
 
           plugins = [
             inputs.split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces
             inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars
-            inputs.Hyprspace.packages.${pkgs.system}.Hyprspace
           ];
         };
       };
