@@ -90,6 +90,10 @@
       patch = ./kernelpatches/cros_ec_lpc_part4.patch;
     }
   ];
+  boot.extraModulePackages = [
+      pkgs.linuxPackages_zen.framework-laptop-kmod
+  ];
+  boot.kernelModules = [ "cros_ec" "cros_ec_lpcs" ];
 
   tw.system.tpm-unlock.enable = true;
 
