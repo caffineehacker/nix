@@ -1,6 +1,7 @@
 { pkgs, lib, inputs, ... }:
-
-{
+let 
+  kernelPkgs = pkgs.linuxPackages_zen;
+in {
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = ''
@@ -71,27 +72,19 @@
   boot.loader.systemd-boot.memtest86.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.systemd.enable = true;
-  boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelPackages = kernelPkgs;
   boot.kernelPatches = [
+    (lib.mkIf (lib.versionOlder kernelPkgs.kernel.version "6.9")
     {
-      name = "cros_ec_lpc_part1";
-      patch = ./kernelpatches/cros_ec_lpc_part1.patch;
-    }
-    {
-      name = "cros_ec_lpc_part2";
-      patch = ./kernelpatches/cros_ec_lpc_part2.patch;
-    }
-    {
-      name = "cros_ec_lpc_part3";
-      patch = ./kernelpatches/cros_ec_lpc_part3.patch;
-    }
-    {
-      name = "cros_ec_lpc_part4";
-      patch = ./kernelpatches/cros_ec_lpc_part4.patch;
-    }
+      name = "cros_ec_lpc";
+      patch = (pkgs.fetchpatch {
+        url = "https://patchwork.kernel.org/series/840830/mbox/";
+        sha256 = "sha256-7jSEAGInFC+a+ozCyD4dFz3Qgh2JrHskwz7UfswizFw=";
+      });
+    })
   ];
   boot.extraModulePackages = [
-      pkgs.linuxPackages_zen.framework-laptop-kmod
+      kernelPkgs.framework-laptop-kmod
   ];
   boot.kernelModules = [ "cros_ec" "cros_ec_lpcs" ];
 
