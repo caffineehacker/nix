@@ -1,0 +1,1 @@
+cros_ec_lpc patches come from version 3 of the patches at https://lore.kernel.org/chrome-platform/2fba7925-f22a-4ea9-9368-57e50d2bddda@t-8ch.de/. We should be able to remove them when Kernel 6.9 is released.

@@ -72,6 +72,24 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.systemd.enable = true;
   boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelPatches = [
+    {
+      name = "cros_ec_lpc_part1";
+      patch = ./kernelpatches/cros_ec_lpc_part1.patch;
+    }
+    {
+      name = "cros_ec_lpc_part2";
+      patch = ./kernelpatches/cros_ec_lpc_part2.patch;
+    }
+    {
+      name = "cros_ec_lpc_part3";
+      patch = ./kernelpatches/cros_ec_lpc_part3.patch;
+    }
+    {
+      name = "cros_ec_lpc_part4";
+      patch = ./kernelpatches/cros_ec_lpc_part4.patch;
+    }
+  ];
 
   tw.system.tpm-unlock.enable = true;
 
@@ -85,14 +103,6 @@
   # services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
-
-  # Configure keymap in X11
-  # services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio.enable = true;
@@ -102,8 +112,6 @@
 
   tw.users.tim.enable = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
     # Necessary for Gnome to use the ambient light sensor
     # TODO: Move to a gnome module
