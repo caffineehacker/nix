@@ -17,6 +17,8 @@
 1. Run `sudo sbctl create-keys`
 1. Run `sudo sbctl enroll-keys`
 1. Reboot and enable secure boot in the bios
+1. Now you should be able to boot without typing in the drive password
+1. Run `sudo fprintd-enroll <user>` to configure a fingerprint for better login
 
 # Notes
 
