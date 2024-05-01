@@ -7,11 +7,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-YSkfv3aIBDTS78tIS2zkq8s5l0+gi98+ExSXZq2AoQ8=",
-        "path": "/nix/store/ywhrsqw0k65r4xmfiyk19ld1bd85dpsc-source/flakes/fw-ectool",
+        "path": "/nix/store/16k7zcjhmidkw0rd4jd9qzsnk1sgc359-source/flakes/fw-ectool",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/ywhrsqw0k65r4xmfiyk19ld1bd85dpsc-source/flakes/fw-ectool",
+        "path": "/nix/store/16k7zcjhmidkw0rd4jd9qzsnk1sgc359-source/flakes/fw-ectool",
         "type": "path"
       }
     },
