@@ -1,0 +1,9 @@
+--- result/lib/python3.11/site-packages/fanctrl.py	1969-12-31 16:00:01.000000000 -0800
++++ ./fanctrl.py	2024-05-01 11:27:22.707158926 -0700
+@@ -86,7 +86,6 @@
+         self.speedCurve = strategy["speedCurve"]
+         self.fanSpeedUpdateFrequency = strategy["fanSpeedUpdateFrequency"]
+         self.movingAverageInterval = strategy["movingAverageInterval"]
+-        self.setSpeed(self.speedCurve[0]["speed"])
+         self.updateTemperature()
+         self.temps = [self.temps[self._tempIndex]] * 100

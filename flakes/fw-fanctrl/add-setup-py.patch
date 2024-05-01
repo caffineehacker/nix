@@ -1,0 +1,11 @@
+--- /dev/null	2024-04-30 10:50:19.161606624 -0700
++++ src/setup.py	2024-05-01 10:51:13.845958719 -0700
+@@ -0,0 +1,8 @@
++# setup.py
++from distutils.core import setup
++
++setup(
++    name='fw-fanctrl',
++    version='0.0.1',
++    scripts=['fanctrl.py',],
++)
