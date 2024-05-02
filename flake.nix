@@ -27,11 +27,17 @@
       ref = "v0.39.1"; ### REPLACE_HYPRLAND_TAG
     };
     split-monitor-workspaces = {
-      url = "github:Duckonaut/split-monitor-workspaces";
+      type = "github";
+      owner = "Duckonaut";
+      repo = "split-monitor-workspaces";
+      rev = "b0ee3953eaeba70f3fba7c4368987d727779826a";
       inputs.hyprland.follows = "hyprland";
     };
     hyprland-plugins = {
-      url = "github:hyprwm/hyprland-plugins";
+      type = "github";
+      owner = "hyprwm";
+      repo = "hyprland-plugins";
+      rev = "9971fec974a9d94a2a1b1d68d5ada5fc59fec053";
       inputs.hyprland.follows = "hyprland";
     };
     nix-colors.url = "github:misterio77/nix-colors";
