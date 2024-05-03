@@ -16,16 +16,37 @@ in {
     gcc.arch = "znver4";
     gcc.tune = "znver4";
   };
-  nixpkgs.overlays = [
+  nixpkgs.overlays = let 
+    # This comes from nixpkgs/pkgs/stdenv/adapters.nix   
+    # withOldMkDerivation = stdenvSuperArgs: k: stdenvSelf: let
+    #   mkDerivationFromStdenv-super = stdenvSuperArgs.mkDerivationFromStdenv;
+    #   mkDerivationSuper = mkDerivationFromStdenv-super stdenvSelf;
+    # in
+    #   k stdenvSelf mkDerivationSuper;
+
+    # # Wrap the original `mkDerivation` providing extra args to it.
+    # extendMkDerivationArgs = old: f: withOldMkDerivation old (_: mkDerivationSuper: args:
+    #   (mkDerivationSuper args).overrideAttrs f);
+  in [
     (self: super: {
-      # stdenv = super.withCFlags [ "-flto" "-funroll-loops" "-O3" ] super.stdenv;
+      # This works, but GCC provided by NixOs doesn't support LTO so that would need to be fixed first :-(
+
+      # This is the same as super.withCFlags, but allows setting the attribute instead of the env for some packages
+      # We need to apply addAttrsToDerivation to ensure there is always a mkDerivationFromStdenv already.
+      # stdenv = (super.addAttrsToDerivation {} super.stdenv).override (old: {
+      #   mkDerivationFromStdenv = extendMkDerivationArgs old (args: if (args ? "NIX_CFLAGS_COMPILE") then {
+      #     NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE) + " -flto -O3 ";
+      #   } else {
+      #     env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -flto -O3 "; };
+      #   });
+      # });
       # Segfault in checks - 4/23/2024
       libvorbis = super.libvorbis.override(old: {
-        stdenv = super.addAttrsToDerivation { NIX_CFLAGS_COMPILE = "-march=x86-64 -mtune=x86-64"; } old.stdenv;
+        stdenv = super.withCFlags [ "-march=x86-64 -mtune=generic" ] old.stdenv;
       });
       # Compile error in AVX512 test - 4/23/2024
       simde = super.simde.override(old: {
-        stdenv = super.addAttrsToDerivation { NIX_CFLAGS_COMPILE = "-march=x86-64 -mtune=x86-64"; } old.stdenv;
+        stdenv = super.withCFlags [ "-march=x86-64 -mtune=generic" ] old.stdenv;
       });
       # A test fails due to being too slow while building everything else - 4/24/2024
       pythonPackages.hypothesis = super.pythonPackages.hypothesis.overridePythonAttrs {
@@ -46,14 +67,9 @@ in {
       libsndfile = super.libsndfile.override(old: {
         stdenv = old.stdenv // {hostPlatform = lib.systems.elaborate { system = "x86_64-linux"; };};
       });
-      # Doesn't use optimization flags and takes forever to build
-      electron-unwrapped = super.electron-unwrapped.override(old: {
-        stdenv = old.stdenv // {hostPlatform = lib.systems.elaborate { system = "x86_64-linux"; };};
-      });
       # Floating point precision test failures - 4/28/2024
       gsl = super.gsl.override(old: {
-        # FIXME: Replay mtune=x86-64 with mtune=generic
-        stdenv = super.withCFlags ["-march=x86-64" "-mtune=x86-64" "-mno-fma"] old.stdenv;
+        stdenv = super.withCFlags ["-march=x86-64" "-mtune=generic" "-mno-fma"] old.stdenv;
       });
       # Floating point precision test failures - 4/28/2024
       lib2geom = super.lib2geom.override(old: {
