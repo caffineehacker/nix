@@ -6,7 +6,7 @@
 }: let 
  cfgTim = config.home-manager.users.tim;
  in {
-  imports = [ ./wofi.nix ./waybar.nix ./swaylock.nix ./mako.nix ];
+  imports = [ ./wofi.nix ./waybar.nix ./swaylock.nix ./mako.nix ./wlogout.nix ];
   config = lib.mkIf config.tw.programs.hyprland.enable {
     fonts.packages = with pkgs; [
       noto-fonts-emoji

@@ -5,172 +5,174 @@
 }: let 
  cfgTim = config.home-manager.users.tim;
  in {
-  home-manager = lib.mkIf config.tw.programs.hyprland.enable {
-    users.tim = {
-      programs.waybar = {
-        enable = true;
-        settings = {
-          topBar = {
-            layer = "top";
-            position = "top";
-            mod = "dock";
-            exclusive = true;
-            passthrough = false;
-            gtk-layer-shell = true;
-            height = 20;
-            modules-left = [
-              "custom/launch_wofi"
-              "custom/power_btn"
-              "custom/lock_screen"
-              "hyprland/workspaces"
-              "wlr/taskbar"
-            ];
-            modules-right = [
-              "cpu"
-              "memory"
-              "disk"
-              "battery"
-              "pulseaudio"
-              "backlight"
-              "tray"
-              "custom/weather"
-              "power-profiles-daemon"
-              "clock"
-            ];
-
-            "custom/launch_wofi" = {
-              format = "";
-              on-click = "pkill wofi || wofi -c ~/.config/wofi/config-bmenu";
-              tooltip = false;
-            };
-
-            "custom/power_btn" = {
-              format = "";
-              on-click = "sh -c '(sleep 0.5s; wlogout --protocol layer-shell)' & disown";
-              tooltip = false;
-            };
-
-            "custom/lock_screen" = {
-              format = "";
-              on-click = "sh -c '(sleep 0.5s; swaylock)' & disown";
-              tooltip = false;
-            };
-
-            "hyprland/workspaces" = {
-              disable-scroll = false;
-              all-outputs = false;
-              on-click = "activate";
-              persistent-workspaces = { };
-            };
-
-            "wlr/taskbar" = {
-              format = "{icon}{name}";
-              icon-size = 16;
-              all-outputs = false;
-              tooltip-format = "{title}";
-              on-click = "activate";
-              on-click-middle = "close";
-              ignore-list = [
-                "wofi"
+  config = lib.mkIf config.tw.programs.hyprland.enable {
+    tw.users.tim.wlogout.enable = true;
+    home-manager = {
+      users.tim = {
+        programs.waybar = {
+          enable = true;
+          settings = {
+            topBar = {
+              layer = "top";
+              position = "top";
+              mod = "dock";
+              exclusive = true;
+              passthrough = false;
+              gtk-layer-shell = true;
+              height = 20;
+              modules-left = [
+                "custom/launch_wofi"
+                "custom/power_btn"
+                "custom/lock_screen"
+                "hyprland/workspaces"
+                "wlr/taskbar"
               ];
-            };
+              modules-right = [
+                "cpu"
+                "memory"
+                "disk"
+                "battery"
+                "pulseaudio"
+                "backlight"
+                "tray"
+                "custom/weather"
+                "power-profiles-daemon"
+                "clock"
+              ];
 
-            cpu = {
-              interval = 10;
-              format = " {usage}%";
-              max-length = 10;
-              on-click = "kitty --start-as=fullscreen --title btop sh -c 'btop'";
-            };
-
-            memory = {
-              interval = 30;
-              format = " {}%";
-              max-length = 10;
-              tooltip = true;
-              tooltip-format = "Memory - {used:0.1f}GB used";
-              on-click = "kitty --start-as=fullscreen --title btop sh -c 'btop'";
-            };
-
-            disk = {
-              interval = 30;
-              format = "󰋊 {percentage_used}%";
-              path = "/";
-              on-click = "kitty --start-as=fullscreen --title btop sh -c 'btop'";
-            };
-
-            battery = {
-              states = {
-                good = 80;
-                warning = 30;
-                critical = 20;
+              "custom/launch_wofi" = {
+                format = "";
+                on-click = "pkill wofi || wofi -c ~/.config/wofi/config-bmenu";
+                tooltip = false;
               };
-              format = "{icon}";
-              format-charging = " {capacity}%";
-              format-plugged = " {capacity}%";
-              format-alt-click = "click-right";
-              format-alt = "{icon} {capacity}%";
-              format-icons = [ "󰂎" "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹" ];
-            };
 
-            pulseaudio = {
-              format = "{icon} {volume}%";
-              format-muted = "";
-              on-click = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --toggle";
-              on-click-right = "pavucontrol";
-              on-scroll-up = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --inc";
-              on-scroll-down = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --dec";
-              scroll-step = 5;
-              format-icons = {
-                headphone = "";
-                hands-free = "";
-                headset = "";
-                phone = "";
-                portable = "";
-                car = "";
-                default = [ "" "" "" ];
+              "custom/power_btn" = {
+                format = "";
+                on-click = "sh -c '(sleep 0.5s; wlogout --protocol layer-shell)' & disown";
+                tooltip = false;
               };
-              tooltip = true;
-              tooltip-format = "{icon} at {volume}%";
-            };
 
-            "custom/weather" = {
-                tooltip = true;
-                format = "{}";
+              "custom/lock_screen" = {
+                format = "";
+                on-click = "sh -c '(sleep 0.5s; swaylock)' & disown";
+                tooltip = false;
+              };
+
+              "hyprland/workspaces" = {
+                disable-scroll = false;
+                all-outputs = false;
+                on-click = "activate";
+                persistent-workspaces = { };
+              };
+
+              "wlr/taskbar" = {
+                format = "{icon}{name}";
+                icon-size = 16;
+                all-outputs = false;
+                tooltip-format = "{title}";
+                on-click = "activate";
+                on-click-middle = "close";
+                ignore-list = [
+                  "wofi"
+                ];
+              };
+
+              cpu = {
+                interval = 10;
+                format = " {usage}%";
+                max-length = 10;
+                on-click = "kitty --start-as=fullscreen --title btop sh -c 'btop'";
+              };
+
+              memory = {
                 interval = 30;
-                exec = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/waybar-wttr.py";
-                return-type = "json";
-            };
-
-            power-profiles-daemon = {
-              format = "{icon}";
-              tooltip-format = "Power profile: {profile}";
-              tooltip = true;
-              format-icons = {
-                default = "";
-                performance = "";
-                balanced = "";
-                power-saver = "";
+                format = " {}%";
+                max-length = 10;
+                tooltip = true;
+                tooltip-format = "Memory - {used:0.1f}GB used";
+                on-click = "kitty --start-as=fullscreen --title btop sh -c 'btop'";
               };
-            };
 
-            clock = {
-              format = " {:%I:%M %p   %m/%d/%Y}";
-            };
+              disk = {
+                interval = 30;
+                format = "󰋊 {percentage_used}%";
+                path = "/";
+                on-click = "kitty --start-as=fullscreen --title btop sh -c 'btop'";
+              };
 
-            backlight = {
-              format = "{icon} {percent}%";
-              format-icons = [ "󰃞" "󰃟" "󰃠" ];
-              on-scroll-up = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/brightness --inc";
-              on-scroll-down = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/brightness --dec";
-            };
+              battery = {
+                states = {
+                  good = 80;
+                  warning = 30;
+                  critical = 20;
+                };
+                format = "{icon}";
+                format-charging = " {capacity}%";
+                format-plugged = " {capacity}%";
+                format-alt-click = "click-right";
+                format-alt = "{icon} {capacity}%";
+                format-icons = [ "󰂎" "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹" ];
+              };
 
-            tray = {
-              icon-size = 16;
-              spacing = 10;
+              pulseaudio = {
+                format = "{icon} {volume}%";
+                format-muted = "";
+                on-click = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --toggle";
+                on-click-right = "pavucontrol";
+                on-scroll-up = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --inc";
+                on-scroll-down = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --dec";
+                scroll-step = 5;
+                format-icons = {
+                  headphone = "";
+                  hands-free = "";
+                  headset = "";
+                  phone = "";
+                  portable = "";
+                  car = "";
+                  default = [ "" "" "" ];
+                };
+                tooltip = true;
+                tooltip-format = "{icon} at {volume}%";
+              };
+
+              "custom/weather" = {
+                  tooltip = true;
+                  format = "{}";
+                  interval = 30;
+                  exec = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/waybar-wttr.py";
+                  return-type = "json";
+              };
+
+              power-profiles-daemon = {
+                format = "{icon}";
+                tooltip-format = "Power profile: {profile}";
+                tooltip = true;
+                format-icons = {
+                  default = "";
+                  performance = "";
+                  balanced = "";
+                  power-saver = "";
+                };
+              };
+
+              clock = {
+                format = " {:%I:%M %p   %m/%d/%Y}";
+              };
+
+              backlight = {
+                format = "{icon} {percent}%";
+                format-icons = [ "󰃞" "󰃟" "󰃠" ];
+                on-scroll-up = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/brightness --inc";
+                on-scroll-down = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/brightness --dec";
+              };
+
+              tray = {
+                icon-size = 16;
+                spacing = 10;
+              };
             };
           };
-        };
-        style = ''
+          style = ''
 * {
     border: none;
     border-radius: 0;
@@ -204,7 +206,7 @@ tooltip label{
 }
 
 #taskbar button:hover {
-  background: #${config.tw.users.tim.colorScheme.palette.base05};
+    background: #${config.tw.users.tim.colorScheme.palette.base05};
     color: #${config.tw.users.tim.colorScheme.palette.base01};
 }
 
@@ -290,14 +292,13 @@ tooltip label{
 #custom-launch_kitty {
     font-size: 20px;
 }
-        '';
+          '';
+        };
+
+        home.packages = with pkgs; [
+          libnotify
+        ];
       };
-
-      programs.wlogout.enable = true;
-
-      home.packages = with pkgs; [
-        libnotify
-      ];
     };
   };
 }
