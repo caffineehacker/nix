@@ -39,9 +39,9 @@ in {
         mkDerivationFromStdenv = extendMkDerivationArgs old (args:
           if (lib.strings.hasInfix "bootstrap" old.name) then {} else
             if (args ? "NIX_CFLAGS_COMPILE") then {
-              NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE) + " -O3 -flto ";
+              NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE) + " -O3 -flto " + (if (super.stdenv.system == "x86_64-linux") then " -march=znver4 -mtune=znver4 " else "");
             } else {
-              env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -O3 -flto "; };
+              env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -O3 -flto " + (if (super.stdenv.system == "x86_64-linux") then " -march=znver4 -mtune=znver4 " else ""); };
             });
       });
       # Segfault in checks - 4/23/2024
