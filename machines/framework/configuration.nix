@@ -16,30 +16,34 @@ in {
     gcc.arch = "znver4";
     gcc.tune = "znver4";
   };
-  nixpkgs.overlays = let 
-    # This comes from nixpkgs/pkgs/stdenv/adapters.nix   
-    # withOldMkDerivation = stdenvSuperArgs: k: stdenvSelf: let
-    #   mkDerivationFromStdenv-super = stdenvSuperArgs.mkDerivationFromStdenv;
-    #   mkDerivationSuper = mkDerivationFromStdenv-super stdenvSelf;
-    # in
-    #   k stdenvSelf mkDerivationSuper;
+  nixpkgs.overlays =
+    let 
+    # This comes from nixpkgs/pkgs/stdenv/adapters.nix. The primary change is that we don't make a default mkDerivationFromStdenv if stdenvSuperArgs.mkDerivationFromStdenv doesn't exist.
+    # Instead, we require the caller to have already used a method like addAttrsToDerivation which will create a default mkDerivationFromStdenv if it doesn't already exist.
+    withOldMkDerivation = stdenvSuperArgs: k: stdenvSelf: let
+      mkDerivationFromStdenv-super = stdenvSuperArgs.mkDerivationFromStdenv;
+      mkDerivationSuper = mkDerivationFromStdenv-super stdenvSelf;
+    in
+      k stdenvSelf mkDerivationSuper;
 
-    # # Wrap the original `mkDerivation` providing extra args to it.
-    # extendMkDerivationArgs = old: f: withOldMkDerivation old (_: mkDerivationSuper: args:
-    #   (mkDerivationSuper args).overrideAttrs f);
-  in [
+    # Wrap the original `mkDerivation` providing extra args to it.
+    extendMkDerivationArgs = old: f: withOldMkDerivation old (_: mkDerivationSuper: args:
+      (mkDerivationSuper args).overrideAttrs f);
+    in
+  [
     (self: super: {
-      # This works, but GCC provided by NixOs doesn't support LTO so that would need to be fixed first :-(
-
       # This is the same as super.withCFlags, but allows setting the attribute instead of the env for some packages
       # We need to apply addAttrsToDerivation to ensure there is always a mkDerivationFromStdenv already.
-      # stdenv = (super.addAttrsToDerivation {} super.stdenv).override (old: {
-      #   mkDerivationFromStdenv = extendMkDerivationArgs old (args: if (args ? "NIX_CFLAGS_COMPILE") then {
-      #     NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE) + " -flto -O3 ";
-      #   } else {
-      #     env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -flto -O3 "; };
-      #   });
-      # });
+      stdenv = (super.addAttrsToDerivation {} super.stdenv).override (old: {
+        # Bootstrap compilers don't support lto and don't really need special flags
+        mkDerivationFromStdenv = extendMkDerivationArgs old (args:
+          if (lib.strings.hasInfix "bootstrap" old.name) then {} else
+            if (args ? "NIX_CFLAGS_COMPILE") then {
+              NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE) + " -O3 -flto ";
+            } else {
+              env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -O3 -flto "; };
+            });
+      });
       # Segfault in checks - 4/23/2024
       libvorbis = super.libvorbis.override(old: {
         stdenv = super.withCFlags [ "-march=x86-64 -mtune=generic" ] old.stdenv;
