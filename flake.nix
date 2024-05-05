@@ -44,29 +44,40 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
 
-  outputs = { self, nixpkgs, lanzaboote, home-manager, hyprland, ... }@inputs:
-    let
-      commonModules = [
-        ({ config, pkgs, ... }: {
-          nixpkgs.overlays = [
-            hyprland.overlays.default
-          ];
-        })
-        lanzaboote.nixosModules.lanzaboote
-        ./system
-        ./programs
-        ./users
-      ];
-    in
-    {
+  outputs = inputs: let
+    commonModules = [
+      inputs.lanzaboote.nixosModules.lanzaboote
+      ./system
+      ./programs
+      ./users
+    ];
+    in {
       nixosConfigurations = {
-        framework = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs; system = "x86_64-linux"; };
+        framework = let
+          system = "x86_64-linux";
+          originPkgs = inputs.nixpkgs.legacyPackages.${system};
+          nixpkgs = originPkgs.applyPatches {
+            name = "nixpkgs-patched";
+            src = inputs.nixpkgs;
+            # Binutils patch allows LTO when linking - Adapted from https://github.com/NixOS/nixpkgs/pull/188544
+            # Static link patch fixes the adapter for static linking to use the right linking variable. This is my own patch.
+            patches = [ ./binutils_first.patch ./static_link.patch ];
+          };
+          nixosSystem = import (nixpkgs + "/nixos/lib/eval-config.nix");
+        in nixosSystem {
+          inherit system;
+          specialArgs = { inherit inputs system; };
           modules = commonModules ++ [
+            ({ config, pkgs, ... }: {
+              nixpkgs.overlays = [
+                inputs.hyprland.overlays.default
+              ];
+            })
             ./machines/framework
           ];
         };
-        homeauto = nixpkgs.lib.nixosSystem {
+        homeauto = inputs.nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
           specialArgs = { inherit inputs; system = "aarch64-linux"; };
           modules = commonModules ++ [
             ./machines/homeauto

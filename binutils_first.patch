@@ -1,0 +1,40 @@
+diff --git a/pkgs/development/tools/misc/binutils/default.nix b/pkgs/development/tools/misc/binutils/default.nix
+index c707d0daec89..3f3dbd64c7df 100644
+--- a/pkgs/development/tools/misc/binutils/default.nix
++++ b/pkgs/development/tools/misc/binutils/default.nix
+@@ -51,6 +51,8 @@ let
+   #INFO: The targetPrefix prepended to binary names to allow multiple binuntils
+   # on the PATH to both be usable.
+   targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
++
++  gcc_lto_plugin_path = "${stdenv.cc.cc}/libexec/gcc/${stdenv.targetPlatform.config}/${stdenv.cc.cc.version or "UNKNOWN"}/liblto_plugin.so";
+ in
+ 
+ stdenv.mkDerivation (finalAttrs: {
+@@ -240,6 +242,11 @@ stdenv.mkDerivation (finalAttrs: {
+   postInstall = lib.optionalString (hostPlatform.config != targetPlatform.config) ''
+     ln -s $out/${hostPlatform.config}/${targetPlatform.config}/lib/*     $out/lib/
+     ln -s $out/${hostPlatform.config}/${targetPlatform.config}/include/* $dev/include/
++  '' + lib.optionalString (stdenv.cc.stdenv.hostPlatform == stdenv.hostPlatform
++        && stdenv.cc.stdenv.targetPlatform == stdenv.targetPlatform && !(lib.strings.hasInfix "bootstrap" stdenv.name)) ''
++    if [ -e ${gcc_lto_plugin_path} ]; then
++      ln -s ${gcc_lto_plugin_path} $out/lib/bfd-plugins/
++    fi
+   '';
+ 
+   passthru = {
+diff --git a/pkgs/stdenv/linux/make-bootstrap-tools.nix b/pkgs/stdenv/linux/make-bootstrap-tools.nix
+index 874330331bb8..fffe7a582f2a 100644
+--- a/pkgs/stdenv/linux/make-bootstrap-tools.nix
++++ b/pkgs/stdenv/linux/make-bootstrap-tools.nix
+@@ -177,6 +177,10 @@ in with pkgs; rec {
+           cp ${bootBinutils.out}/bin/$i $out/bin
+         done
+         cp -r '${lib.getLib binutils.bintools}'/lib/* "$out/lib/"
++        chmod -R u+w $out/lib
++        # remove link to gcc's lto plugin in binutils. Does not exist
++        # for cross-gcc.
++        rm -f "$out/lib/bfd-plugins/liblto_plugin.so"
+ 
+         chmod -R u+w $out
+ 

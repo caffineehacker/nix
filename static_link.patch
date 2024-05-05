@@ -1,0 +1,20 @@
+diff --git a/pkgs/stdenv/adapters.nix b/pkgs/stdenv/adapters.nix
+index 2304b3289b7e..cd41f2592006 100644
+--- a/pkgs/stdenv/adapters.nix
++++ b/pkgs/stdenv/adapters.nix
+@@ -95,9 +95,13 @@ rec {
+       mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
+       if stdenv.hostPlatform.isDarwin
+       then throw "Cannot build fully static binaries on Darwin/macOS"
+-      else (mkDerivationSuper args).overrideAttrs (args: {
++      else (mkDerivationSuper args).overrideAttrs (args: (if (args ? NIX_CLFAGS_LINK) then {
+         NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
+-      } // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
++      } else {
++        env = (args.env or {}) // {
++          NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
++        };
++      }) // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
+         configureFlags = (args.configureFlags or []) ++ [
+           "--disable-shared" # brrr...
+         ];
