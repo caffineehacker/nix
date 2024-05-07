@@ -11,13 +11,14 @@ index c707d0daec89..3f3dbd64c7df 100644
  in
  
  stdenv.mkDerivation (finalAttrs: {
-@@ -240,6 +242,11 @@ stdenv.mkDerivation (finalAttrs: {
+@@ -240,6 +242,12 @@ stdenv.mkDerivation (finalAttrs: {
    postInstall = lib.optionalString (hostPlatform.config != targetPlatform.config) ''
      ln -s $out/${hostPlatform.config}/${targetPlatform.config}/lib/*     $out/lib/
      ln -s $out/${hostPlatform.config}/${targetPlatform.config}/include/* $dev/include/
 +  '' + lib.optionalString (stdenv.cc.stdenv.hostPlatform == stdenv.hostPlatform
 +        && stdenv.cc.stdenv.targetPlatform == stdenv.targetPlatform && !(lib.strings.hasInfix "bootstrap" stdenv.name)) ''
 +    if [ -e ${gcc_lto_plugin_path} ]; then
++      mkdir -p $out/lib/bfd-plugins
 +      ln -s ${gcc_lto_plugin_path} $out/lib/bfd-plugins/
 +    fi
    '';

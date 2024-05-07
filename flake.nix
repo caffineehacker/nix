@@ -24,20 +24,19 @@
       owner = "hyprwm";
       repo = "Hyprland";
       # Current head changed a lot of protocols and doesn't work properly with everything.
-      ref = "v0.39.1"; ### REPLACE_HYPRLAND_TAG
+      ref = "v0.40.0"; ### REPLACE_HYPRLAND_TAG
     };
     split-monitor-workspaces = {
       type = "github";
       owner = "Duckonaut";
       repo = "split-monitor-workspaces";
-      rev = "b0ee3953eaeba70f3fba7c4368987d727779826a";
       inputs.hyprland.follows = "hyprland";
     };
     hyprland-plugins = {
       type = "github";
       owner = "hyprwm";
       repo = "hyprland-plugins";
-      rev = "9971fec974a9d94a2a1b1d68d5ada5fc59fec053";
+      rev = "18daf37b7c4e6e51ca2bf8953ce4cff1c38ca725";
       inputs.hyprland.follows = "hyprland";
     };
     nix-colors.url = "github:misterio77/nix-colors";
@@ -55,15 +54,19 @@
       nixosConfigurations = {
         framework = let
           system = "x86_64-linux";
-          originPkgs = inputs.nixpkgs.legacyPackages.${system};
-          nixpkgs = originPkgs.applyPatches {
-            name = "nixpkgs-patched";
-            src = inputs.nixpkgs;
-            # Binutils patch allows LTO when linking - Adapted from https://github.com/NixOS/nixpkgs/pull/188544
-            # Static link patch fixes the adapter for static linking to use the right linking variable. This is my own patch.
-            patches = [ ./binutils_first.patch ./static_link.patch ];
-          };
-          nixosSystem = import (nixpkgs + "/nixos/lib/eval-config.nix");
+          # originPkgs = inputs.nixpkgs.legacyPackages.${system};
+          # nixpkgs = originPkgs.applyPatches {
+          #   name = "nixpkgs-patched";
+          #   src = inputs.nixpkgs;
+          #   # Binutils patch allows LTO when linking - Adapted from https://github.com/NixOS/nixpkgs/pull/188544
+          #   # Static link patch fixes the adapter for static linking to use the right linking variable. This is my own patch.
+          #   patches = [ 
+          #     ./binutils_first.patch
+          #     # ./static_link.patch
+          #   ];
+          # };
+          # nixosSystem = import (nixpkgs + "/nixos/lib/eval-config.nix");
+          nixosSystem = inputs.nixpkgs.lib.nixosSystem;
         in nixosSystem {
           inherit system;
           specialArgs = { inherit inputs system; };
