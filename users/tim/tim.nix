@@ -41,9 +41,6 @@ in
       nerdfonts
     ];
 
-    # Enable swaylock to authenticate with pam
-    security.pam.services.swaylock = lib.mkIf config.tw.programs.hyprland.enable { };
-
     home-manager = {
       users.tim = {
         home.username = "tim";

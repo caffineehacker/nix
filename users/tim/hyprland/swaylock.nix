@@ -2,6 +2,9 @@
 , config
 , ...
 }: {
+  # Enable swaylock to authenticate with pam
+  security.pam.services.swaylock = lib.mkIf config.tw.programs.hyprland.enable { };
+
   home-manager = lib.mkIf config.tw.programs.hyprland.enable {
     users.tim = {
       programs.swaylock = {
