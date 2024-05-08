@@ -56,7 +56,7 @@ in
         };
 
         home.packages = with pkgs; [
-          firefox
+          firefox-bin
           tree
           discord
           # Enables fish starting when using nix-shell
