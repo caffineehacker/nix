@@ -135,7 +135,18 @@ in {
             });
         });
       });
+      # Weird build errors
       tbb = nixpkgs-unoptimized.pkgs.tbb;
+      # Test failure - 5/7/2024
+      inherit (nixpkgs-unoptimized.pkgs) dav1d;
+
+      # These take a long time to build so let's just use binaries
+      inherit (nixpkgs-unoptimized.pkgs) electron;
+      inherit (nixpkgs-unoptimized.pkgs) electron-unwrapped;
+      inherit (nixpkgs-unoptimized.pkgs) nodejs;
+      inherit (nixpkgs-unoptimized.pkgs) firefox;
+      inherit (nixpkgs-unoptimized.pkgs) firefox-bin;
+      inherit (nixpkgs-unoptimized.pkgs) webkitgtk;
     })
   ];
 
