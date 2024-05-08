@@ -2,7 +2,10 @@
 let 
   kernelPkgs = pkgs.linuxPackages_zen;
   nixpkgs-unoptimized = import inputs.nixpkgs {
-    system = "x86_64-linux";
+    inherit (pkgs) system;
+  };
+  nixpkgs-unoptimized-i686 = import inputs.nixpkgs {
+    system = "i686-linux";
   };
 in {
   nix = {
@@ -38,6 +41,12 @@ in {
     removeOFlags = flags: removeFlagsByPrefix "-O" flags;
     removeMarchFlags = flags: removeFlagsByPrefix "-mtune=" (removeFlagsByPrefix "-march=" flags);
     removeExistingOptimizations = flags: removeOFlags (removeMarchFlags flags);
+
+    # This is hacky, but just replacing the x86_64 package will cause the i686 package to incorrectly use x86_64-linux system.
+    # We also can't directly override the pkgsi686linux and instead have to do this...
+    useUnoptimized-x64 = super: pkgs: lib.lists.foldr (a: b: (lib.attrsets.setAttrByPath [a] (lib.attrsets.getAttrFromPath [a] nixpkgs-unoptimized.pkgs)) // b) { } pkgs;
+    useUnoptimized-i686 = super: pkgs: lib.lists.foldr (a: b: (lib.attrsets.setAttrByPath [a] (lib.attrsets.getAttrFromPath [a] nixpkgs-unoptimized-i686.pkgs)) // b) { } pkgs;
+    useUnoptimized = super: pkgs: if (super.stdenv.system == "x86_64-linux") then (useUnoptimized-x64 super pkgs) else (useUnoptimized-i686 super pkgs);
     in
   [
     (self: super: {
@@ -135,19 +144,35 @@ in {
             });
         });
       });
-      # Weird build errors
-      tbb = nixpkgs-unoptimized.pkgs.tbb;
-      # Test failure - 5/7/2024
-      inherit (nixpkgs-unoptimized.pkgs) dav1d;
-
-      # These take a long time to build so let's just use binaries
-      inherit (nixpkgs-unoptimized.pkgs) electron;
-      inherit (nixpkgs-unoptimized.pkgs) electron-unwrapped;
-      inherit (nixpkgs-unoptimized.pkgs) nodejs;
-      inherit (nixpkgs-unoptimized.pkgs) firefox;
-      inherit (nixpkgs-unoptimized.pkgs) firefox-bin;
-      inherit (nixpkgs-unoptimized.pkgs) webkitgtk;
     })
+    # (final: super: {
+    #   stdenv = (super.addAttrsToDerivation {} super.stdenv).override (old: {
+    #     # Bootstrap compilers don't support lto and don't really need special flags
+    #     mkDerivationFromStdenv = extendMkDerivationArgs old (args:
+    #       if (lib.strings.hasInfix "bootstrap" old.name) then {} else 
+    #         if (super.stdenv.system == "i686-linux") then {
+    #           localSystem = {
+    #             parsed = super.stdenv.hostPlatform.parsed // {
+    #               cpu = lib.systems.parse.cpuTypes.i686;
+    #             };
+    #           };
+    #         } else {});
+    #   });
+    # })
+    (final: super: (useUnoptimized super [
+      # These are here because they can be very slow to build
+      "nodejs"
+      "electron"
+      "firefox"
+      "firefox-bin"
+      "webkitgtk"
+      "webkitgtk_4_1"
+      "webkitgtk_5_0"
+      "webkitgtk_6_0"
+      # Build failure - 5/8/2024
+      "dav1d"
+      # Test failure if too many builds are happening at once
+      "fprintd"]))
   ];
 
   imports = [
