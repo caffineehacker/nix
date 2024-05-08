@@ -1,6 +1,6 @@
 { pkgs, lib, inputs, ... }:
 let 
-  kernelPkgs = pkgs.linuxPackages_zen;
+  kernelPkgs = nixpkgs-unoptimized.linuxPackages_zen;
   nixpkgs-unoptimized = import inputs.nixpkgs {
     inherit (pkgs) system;
   };
@@ -47,6 +47,14 @@ in {
     useUnoptimized-x64 = super: pkgs: lib.lists.foldr (a: b: (lib.attrsets.setAttrByPath [a] (lib.attrsets.getAttrFromPath [a] nixpkgs-unoptimized.pkgs)) // b) { } pkgs;
     useUnoptimized-i686 = super: pkgs: lib.lists.foldr (a: b: (lib.attrsets.setAttrByPath [a] (lib.attrsets.getAttrFromPath [a] nixpkgs-unoptimized-i686.pkgs)) // b) { } pkgs;
     useUnoptimized = super: pkgs: if (super.stdenv.system == "x86_64-linux") then (useUnoptimized-x64 super pkgs) else (useUnoptimized-i686 super pkgs);
+
+    useUnoptimizedHaskell-x64 = super: pkgs: lib.lists.foldr (a: b: (lib.attrsets.setAttrByPath [a] (lib.attrsets.getAttrFromPath [a] nixpkgs-unoptimized.pkgs.haskellPackages)) // b) { } pkgs;
+    useUnoptimizedHaskell-i686 = super: pkgs: lib.lists.foldr (a: b: (lib.attrsets.setAttrByPath [a] (lib.attrsets.getAttrFromPath [a] nixpkgs-unoptimized-i686.pkgs.haskellPackages)) // b) { } pkgs;
+    useUnoptimizedHaskell = super: pkgs: {
+      haskellPackages = super.haskellPackages.override{
+        overrides = (new: old: (if (super.stdenv.system == "x86_64-linux") then (useUnoptimizedHaskell-x64 super pkgs) else (useUnoptimizedHaskell-i686 super pkgs)));
+      };
+    };
     in
   [
     (self: super: {
@@ -145,24 +153,11 @@ in {
         });
       });
     })
-    # (final: super: {
-    #   stdenv = (super.addAttrsToDerivation {} super.stdenv).override (old: {
-    #     # Bootstrap compilers don't support lto and don't really need special flags
-    #     mkDerivationFromStdenv = extendMkDerivationArgs old (args:
-    #       if (lib.strings.hasInfix "bootstrap" old.name) then {} else 
-    #         if (super.stdenv.system == "i686-linux") then {
-    #           localSystem = {
-    #             parsed = super.stdenv.hostPlatform.parsed // {
-    #               cpu = lib.systems.parse.cpuTypes.i686;
-    #             };
-    #           };
-    #         } else {});
-    #   });
-    # })
     (final: super: (useUnoptimized super [
       # These are here because they can be very slow to build
       "nodejs"
       "electron"
+      "electron_29"
       "firefox"
       "firefox-bin"
       "webkitgtk"
@@ -173,6 +168,11 @@ in {
       "dav1d"
       # Test failure if too many builds are happening at once
       "fprintd"]))
+    (final: super: (useUnoptimizedHaskell super [
+      # Test failure - 5/8/2024
+      "crypton"
+      # Test failure - 5/8/2024
+      "cryptonite"]))
   ];
 
   imports = [
@@ -228,7 +228,7 @@ in {
     iio-sensor-proxy
     # Framework specific bits
     framework-tool
-    linuxKernel.packages.linux_zen.framework-laptop-kmod
+    nixpkgs-unoptimized.linuxKernel.packages.linux_zen.framework-laptop-kmod
   ];
 
   tw.programs.games.enable = true;
