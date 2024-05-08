@@ -3,7 +3,11 @@
 
   inputs = {
     nixpkgs = {
-      url = "github:NixOS/nixpkgs/nixos-unstable";
+      type = "github";
+      owner = "NixOS";
+      repo = "nixpkgs";
+      # Make sure we pick a rev with hydra builds
+      rev = "b211b392b8486ee79df6cdfb1157ad2133427a29"; ### REPLACE_NIXPKGS_REV
     };
     lanzaboote = {
       url = "github:nix-community/lanzaboote";
@@ -25,6 +29,7 @@
       repo = "Hyprland";
       # Current head changed a lot of protocols and doesn't work properly with everything.
       ref = "v0.40.0"; ### REPLACE_HYPRLAND_TAG
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     split-monitor-workspaces = {
       type = "github";
@@ -39,8 +44,12 @@
       rev = "18daf37b7c4e6e51ca2bf8953ce4cff1c38ca725";
       inputs.hyprland.follows = "hyprland";
     };
-    nix-colors.url = "github:misterio77/nix-colors";
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nix-colors = {
+      url = "github:misterio77/nix-colors";
+    };
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware/master";
+    };
   };
 
   outputs = inputs: let
