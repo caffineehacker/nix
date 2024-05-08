@@ -29,6 +29,7 @@ in
       heroic
       lutris
       mangohud
+      ryujinx
     ];
   };
 }
