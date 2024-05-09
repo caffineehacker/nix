@@ -51,6 +51,10 @@
     nixos-hardware = {
       url = "github:NixOS/nixos-hardware/master";
     };
+    inputmodule-control = {
+      url = "./flakes/inputmodule-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs: let
@@ -84,6 +88,7 @@
             ({ config, pkgs, ... }: {
               nixpkgs.overlays = [
                 inputs.hyprland.overlays.default
+                inputs.inputmodule-control.overlays.default
               ];
             })
             ./machines/framework

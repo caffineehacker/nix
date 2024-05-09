@@ -229,6 +229,7 @@ in {
     # Framework specific bits
     framework-tool
     nixpkgs-unoptimized.linuxKernel.packages.linux_zen.framework-laptop-kmod
+    fw-inputmodule
   ];
 
   tw.programs.games.enable = true;
