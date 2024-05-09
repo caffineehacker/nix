@@ -11,9 +11,6 @@
     version = "0.2.0";
     allSystems = [
       "x86_64-linux" # 64-bit Intel/AMD Linux
-      "aarch64-linux" # 64-bit ARM Linux
-      "x86_64-darwin" # 64-bit Intel macOS
-      "aarch64-darwin" # 64-bit ARM macOS
     ];
 
     # Helper to provide system-specific attributes
@@ -21,6 +18,11 @@
       pkgs = import nixpkgs { inherit system; overlays = [ rust-overlay.overlays.default ]; };
     });
   in {
+    overlays = {
+      default = (final: prev: {
+        fw-inputmodule = self.packages.x86_64-linux.default;
+      });
+    };
     packages = forAllSystems ({ pkgs }: let
       rust = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
     in {
@@ -71,5 +73,7 @@
             };
           };
       });
+
+    legacyPackages.x86_64-linux.fw-inputmodule = self.packages.x86_64-linux.default;
   };
 }
