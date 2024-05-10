@@ -1,5 +1,5 @@
 {
-  description = "flake for framework laptop";
+  description = "flake for my Nix setups";
 
   inputs = {
     nixpkgs = {
