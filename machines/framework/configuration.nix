@@ -12,6 +12,9 @@ in {
     package = pkgs.nixFlakes;
     extraOptions = ''
       experimental-features = nix-command flakes
+      # This ensures garbage collection won't collect build dependencies
+      keep-outputs = true
+      keep-derivations = true
     '';
     settings.trusted-users = ["root" "tim"];
     settings.system-features = ["gccarch-znver4" "benchmark" "big-parallel" "kvm" "nixos-test"];
@@ -200,6 +203,8 @@ in {
       kernelPkgs.framework-laptop-kmod
   ];
   boot.kernelModules = [ "cros_ec" "cros_ec_lpcs" ];
+  # We have plenty of ram
+  boot.kernel.sysctl = { "vm.swappiness" = 10; };
 
   tw.system.tpm-unlock.enable = true;
 
