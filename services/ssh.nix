@@ -27,5 +27,7 @@ in
 
     # Don't enable SSH without fail2ban
     services.fail2ban.enable = true;
+
+    programs.mosh.enable = true;
   };
 }
