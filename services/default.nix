@@ -1,3 +1,3 @@
 {...}:{
-  imports = [ ./ssh.nix ];
+  imports = [ ./ssh.nix ./kdeconnect.nix ];
 }
