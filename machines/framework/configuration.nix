@@ -207,6 +207,7 @@ in {
   boot.kernel.sysctl = { "vm.swappiness" = 10; };
 
   tw.system.tpm-unlock.enable = true;
+  tw.services.ssh.enable = true;
 
   networking.hostName = "framework";
 

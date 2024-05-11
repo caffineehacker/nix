@@ -63,6 +63,7 @@
       ./system
       ./programs
       ./users
+      ./services
     ];
     in {
       nixosConfigurations = {
