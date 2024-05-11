@@ -66,11 +66,13 @@ in
           # Formatter for Nix code
           nixpkgs-fmt
           (lib.mkIf config.tw.programs.games.enable protonup)
+          (lib.mkIf config.tw.services.ssh.enable byobu)
         ];
 
         home.sessionVariables = lib.mkIf config.tw.programs.games.enable {
           STEAM_EXTRA_COMPAT_TOOLS_PATHS =
             "\\\${HOME}/.steam/root/compatibilitytools.d";
+          MANGOHUD = "1";
         };
 
         programs.kitty = {
