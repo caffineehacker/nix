@@ -67,6 +67,7 @@ in
           nixpkgs-fmt
           (lib.mkIf config.tw.programs.games.enable protonup)
           (lib.mkIf config.tw.services.ssh.enable byobu)
+          (lib.mkIf config.tw.services.ssh.enable tmux)
         ];
 
         home.sessionVariables = lib.mkIf config.tw.programs.games.enable {
@@ -131,6 +132,7 @@ in
         "networkmanager"
         # Allows serial port access
         "dialout"
+        "input"
       ];
       openssh.authorizedKeys.keys = [
         # Juice

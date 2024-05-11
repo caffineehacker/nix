@@ -240,6 +240,13 @@ in {
   ];
 
   tw.programs.games.enable = true;
+  services.sunshine = {
+    enable = true;
+    capSysAdmin = true;
+    autoStart = false;
+    # We open the ports, but don't enable autostart so there will only be something listening when we're at home
+    openFirewall = true;
+  };
   tw.programs.hyprland.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -249,17 +256,6 @@ in {
   #   enable = true;
   #   enableSSHSupport = true;
   # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   services.fwupd.enable = true;
 
