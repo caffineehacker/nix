@@ -159,6 +159,7 @@ in {
     (final: super: (useUnoptimized super [
       # These are here because they can be very slow to build
       "nodejs"
+      "nodejs-slim"
       "electron"
       "electron_29"
       "firefox"
