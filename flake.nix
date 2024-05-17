@@ -7,7 +7,7 @@
       owner = "NixOS";
       repo = "nixpkgs";
       # Make sure we pick a rev with hydra builds
-      rev = "2057814051972fa1453ddfb0d98badbea9b83c06"; ### REPLACE_NIXPKGS_REV
+      rev = "33d1e753c82ffc557b4a585c77de43d4c922ebb5"; ### REPLACE_NIXPKGS_REV
     };
     lanzaboote = {
       url = "github:nix-community/lanzaboote";
@@ -95,11 +95,13 @@
             ./machines/framework
           ];
         };
-        homeauto = inputs.nixpkgs.lib.nixosSystem {
-          system = "aarch64-linux";
-          specialArgs = { inherit inputs; system = "aarch64-linux"; };
+        homelab = let
+          system = "x86_64-linux";
+        in inputs.nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = { inherit inputs system; };
           modules = commonModules ++ [
-            ./machines/homeauto
+            ./machines/homelab
           ];
         };
       };

@@ -168,6 +168,7 @@ in {
       "webkitgtk_4_1"
       "webkitgtk_5_0"
       "webkitgtk_6_0"
+      "llvm"
       # Build failure - 5/8/2024
       "dav1d"
       # Test failure if too many builds are happening at once

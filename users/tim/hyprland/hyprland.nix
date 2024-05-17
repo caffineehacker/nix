@@ -29,6 +29,13 @@
           swayidle
         ];
 
+        xdg.mimeApps = {
+          enable = true;
+          associations.added = {
+            "inode/directory" = ["thunar.desktop"];
+          };
+        };
+
         xdg.configFile."hypr/scripts" = {
           recursive = true;
           source = ./hyprv4/scripts;
