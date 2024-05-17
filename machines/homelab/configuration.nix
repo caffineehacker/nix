@@ -20,6 +20,7 @@
   boot.loader.systemd-boot.memtest86.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.systemd.enable = true;
+  boot.loader.grub.device = "nodev";
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
   tw.services.ssh.enable = true;
