@@ -138,7 +138,7 @@ in
         # Juice
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDIyA+pkw1odhFbmruA2HsQgUKqJp04ewiw60OPeW/K7"
         # Framework
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH9V+d6LsXdobV9lk2A1SyITPGRGcHQhIdC9JI6jgxP3"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICHMR1/H8/FaR+PV2kqWCIwM9ushx8k1ZWqHtffusqyV"
       ];
     };
   };
