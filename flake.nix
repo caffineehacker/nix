@@ -64,6 +64,7 @@
       ./programs
       ./users
       ./services
+      ./containers
     ];
     in {
       nixosConfigurations = {
