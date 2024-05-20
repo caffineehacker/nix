@@ -239,6 +239,7 @@ in {
     framework-tool
     nixpkgs-unoptimized.linuxKernel.packages.linux_zen.framework-laptop-kmod
     fw-inputmodule
+    sops
   ];
 
   tw.programs.games.enable = true;

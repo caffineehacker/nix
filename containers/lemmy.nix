@@ -1,5 +1,6 @@
 {config, lib, ...}: let
   cfg = config.tw.containers.lemmy;
+  tunnelFile = config.sops.secrets."cloudflare/tunnels/homelab.json".path;
 in {
   options = {
     tw.containers.lemmy.enable = lib.mkOption {
@@ -15,10 +16,15 @@ in {
   config = lib.mkIf cfg.enable {
     containers.lemmy = {
       autoStart = true;
-      ephemeral = true;
       privateNetwork = true;
       hostAddress = "10.0.0.10";
       localAddress = "10.0.0.110";
+
+      extraFlags = [
+        # Load the cloudflare secret
+        "--load-credential=homelab.json:${tunnelFile}"
+      ];
+
       config = {config, pkgs, lib, ...}: {
         system.stateVersion = "23.11";
         services.lemmy = {
@@ -85,6 +91,49 @@ in {
         };
 
         services.resolved.enable = true;
+
+        services.cloudflared = {
+          enable = true;
+          tunnels = {
+            "389d646c-ea05-4a8c-80b0-ffa2483a0b33" = {
+              credentialsFile = "@CREDENTIALS_FILE@";
+              ingress = {
+                "lemmy.timwaterhouse.com" = "http://localhost:8180";
+              };
+              default = "http_status:404";
+            };
+          };
+        };
+
+        systemd.services."cloudflared-tunnel-389d646c-ea05-4a8c-80b0-ffa2483a0b33" = 
+          let
+            filterConfig = lib.attrsets.filterAttrsRecursive (_: v: ! builtins.elem v [ null [ ] { } ]);
+
+            fullConfig = filterConfig {
+              tunnel = "389d646c-ea05-4a8c-80b0-ffa2483a0b33";
+              "credentials-file" = "@CREDENTIALS_FILE@";
+              ingress = [
+                {
+                  hostname = "lemmy.timwaterhouse.com";
+                  service = "http://localhost:8180";
+                }
+                { service = "http_status:404"; }
+              ];
+            };
+
+            mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
+          in
+          {
+            serviceConfig.LoadCredential = [
+              "homelab.json"
+            ];
+            serviceConfig.RuntimeDirectory = "cloudflared-tunnel-389d646c-ea05-4a8c-80b0-ffa2483a0b33";
+            preStart = ''
+              install -m600 ${mkConfigFile} $RUNTIME_DIRECTORY/cloudflared.yml
+              ${pkgs.gnused}/bin/sed -i "s;@CREDENTIALS_FILE@;$CREDENTIALS_DIRECTORY/homelab.json;g" $RUNTIME_DIRECTORY/cloudflared.yml
+            '';
+            serviceConfig.ExecStart = lib.mkForce "${pkgs.bash}/bin/bash -c '${pkgs.cloudflared}/bin/cloudflared tunnel --config=$RUNTIME_DIRECTORY/cloudflared.yml --no-autoupdate run'";
+          };
       };
     };
   };

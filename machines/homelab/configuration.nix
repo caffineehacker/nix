@@ -12,10 +12,6 @@
     system = "x86_64-linux";
   };
 
-  imports = [
-    ../common.nix
-  ];
-
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.systemd-boot.memtest86.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;

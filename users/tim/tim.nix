@@ -6,13 +6,12 @@
 }:
 let
   cfg = config.tw.users.tim;
-  inherit (inputs.nix-colors.lib.contrib { inherit pkgs; })
-    gtkThemeFromScheme;
 in
 {
   imports = [
     inputs.nix-colors.homeManagerModules.default
     ./hyprland
+    ./ui.nix
   ];
 
   options = {
@@ -36,29 +35,14 @@ in
   config = lib.mkIf cfg.enable {
     tw.users.home-manager.enable = true;
 
-    fonts.packages = with pkgs; [
-      noto-fonts-emoji
-      nerdfonts
-    ];
-
     home-manager = {
       users.tim = {
         home.username = "tim";
         home.homeDirectory = "/home/tim";
         home.stateVersion = "23.05";
 
-        gtk = {
-          enable = true;
-          theme = {
-            name = "${cfg.colorScheme.slug}";
-            package = gtkThemeFromScheme { scheme = cfg.colorScheme; };
-          };
-        };
-
         home.packages = with pkgs; [
-          firefox-bin
           tree
-          discord
           # Enables fish starting when using nix-shell
           nix-your-shell
           # Language server for Nix code
@@ -74,14 +58,6 @@ in
           STEAM_EXTRA_COMPAT_TOOLS_PATHS =
             "\\\${HOME}/.steam/root/compatibilitytools.d";
           MANGOHUD = "1";
-        };
-
-        programs.kitty = {
-          enable = true;
-          settings = {
-            foreground = "#${cfg.colorScheme.palette.base05}";
-            background = "#${cfg.colorScheme.palette.base00}";
-          };
         };
 
         programs.git = {
@@ -100,28 +76,6 @@ in
         programs.btop.enable = true;
 
         programs.home-manager.enable = true;
-
-        programs.vscode = {
-          enable = true;
-          package = pkgs.vscodium-fhs;
-          userSettings = {
-            "workbench.colorTheme" = "Catppuccin Frappé";
-
-            "git.autofetch" = true;
-            "git.enableSmartCommit" = true;
-            "git.confirmSync" = false;
-
-            "nix.enableLanguageServer" = true;
-            "nix.serverPath" = "nil";
-
-            "editor.formatOnSave" = true;
-            "files.autoSave" = "onFocusChange";
-          };
-          extensions = with pkgs; [
-            vscode-extensions.jnoortheen.nix-ide
-            vscode-extensions.catppuccin.catppuccin-vsc
-          ];
-        };
       };
     };
 
