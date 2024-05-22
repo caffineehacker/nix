@@ -3,5 +3,5 @@
 
   networking.nat.enable = true;
   networking.nat.internalInterfaces = [ "ve-+" ];
-  networking.nat.externalInterface = "enp30s0";
+  networking.nat.externalInterface = "eno1";
 }

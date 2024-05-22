@@ -27,9 +27,6 @@
   networking.networkmanager.enable = false;
   networking.useNetworkd = true;
 
-  networking.nat.enable = true;
-  networking.nat.internalInterfaces = ["ve-+"];
-  networking.nat.externalInterface = "enp30s0";
   networking.networkmanager.unmanaged = [ "interface-name:ve-*" ];
 
   tw.users.tim.enable = true;
@@ -38,6 +35,12 @@
   ];
 
   services.fwupd.enable = true;
+  services.power-profiles-daemon.enable = true;
+
+  boot.kernel.sysctl = {
+    "vm.dirty_ratio" = 10;
+    "vm.dirty_background_ratio" = 5;
+  };
 
   # Trim ssd for longer life and better storage
   services.fstrim.enable = true;

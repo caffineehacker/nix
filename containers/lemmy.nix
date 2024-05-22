@@ -1,6 +1,6 @@
 {config, lib, ...}: let
   cfg = config.tw.containers.lemmy;
-  tunnelFile = config.sops.secrets."cloudflare/tunnels/homelab.json".path;
+  tunnelFile = config.sops.secrets."cloudflare/tunnels/lemmy.json".path;
 in {
   options = {
     tw.containers.lemmy.enable = lib.mkOption {
@@ -22,11 +22,16 @@ in {
 
       extraFlags = [
         # Load the cloudflare secret
-        "--load-credential=homelab.json:${tunnelFile}"
+        "--load-credential=tunnel.json:${tunnelFile}"
       ];
 
       config = {config, pkgs, lib, ...}: {
         system.stateVersion = "23.11";
+
+        imports = [
+          ./cloudflared.nix
+        ];
+
         services.lemmy = {
           enable = true;
           settings = {
@@ -35,6 +40,12 @@ in {
           database = {
             createLocally = true;
           };
+        };
+
+        tw.containers.cloudflared = {
+          tunnelId = "7abb4240-e222-48ae-a335-5557b3fe6b9c";
+          hostname = "lemmy.timwaterhouse.com";
+          port = 8180;
         };
 
         services.caddy = {
@@ -83,7 +94,7 @@ in {
         networking = {
           firewall = {
             enable = true;
-            allowedTCPPorts = [ 8180 8181 ];
+            allowedTCPPorts = [ ];
           };
           # Use systemd-resolved inside the container
           # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
@@ -91,49 +102,6 @@ in {
         };
 
         services.resolved.enable = true;
-
-        services.cloudflared = {
-          enable = true;
-          tunnels = {
-            "389d646c-ea05-4a8c-80b0-ffa2483a0b33" = {
-              credentialsFile = "@CREDENTIALS_FILE@";
-              ingress = {
-                "lemmy.timwaterhouse.com" = "http://localhost:8180";
-              };
-              default = "http_status:404";
-            };
-          };
-        };
-
-        systemd.services."cloudflared-tunnel-389d646c-ea05-4a8c-80b0-ffa2483a0b33" = 
-          let
-            filterConfig = lib.attrsets.filterAttrsRecursive (_: v: ! builtins.elem v [ null [ ] { } ]);
-
-            fullConfig = filterConfig {
-              tunnel = "389d646c-ea05-4a8c-80b0-ffa2483a0b33";
-              "credentials-file" = "@CREDENTIALS_FILE@";
-              ingress = [
-                {
-                  hostname = "lemmy.timwaterhouse.com";
-                  service = "http://localhost:8180";
-                }
-                { service = "http_status:404"; }
-              ];
-            };
-
-            mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
-          in
-          {
-            serviceConfig.LoadCredential = [
-              "homelab.json"
-            ];
-            serviceConfig.RuntimeDirectory = "cloudflared-tunnel-389d646c-ea05-4a8c-80b0-ffa2483a0b33";
-            preStart = ''
-              install -m600 ${mkConfigFile} $RUNTIME_DIRECTORY/cloudflared.yml
-              ${pkgs.gnused}/bin/sed -i "s;@CREDENTIALS_FILE@;$CREDENTIALS_DIRECTORY/homelab.json;g" $RUNTIME_DIRECTORY/cloudflared.yml
-            '';
-            serviceConfig.ExecStart = lib.mkForce "${pkgs.bash}/bin/bash -c '${pkgs.cloudflared}/bin/cloudflared tunnel --config=$RUNTIME_DIRECTORY/cloudflared.yml --no-autoupdate run'";
-          };
       };
     };
   };
