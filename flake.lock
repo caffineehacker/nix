@@ -320,11 +320,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-s+PEYvD90nr0Oxx3VWEJLHNTNw+lP/v8lRIy4Jxb7l0=",
-        "path": "/nix/store/2dmks8yrchqxng6dsgr635dra8rra38q-source/flakes/inputmodule-rs",
+        "path": "/nix/store/mwfvisxp30j6q18hkvdw1qz87vkfxmik-source/flakes/inputmodule-rs",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/2dmks8yrchqxng6dsgr635dra8rra38q-source/flakes/inputmodule-rs",
+        "path": "/nix/store/mwfvisxp30j6q18hkvdw1qz87vkfxmik-source/flakes/inputmodule-rs",
         "type": "path"
       }
     },

@@ -1,3 +1,6 @@
 {...}:{
-  imports = [ ./lemmy.nix ];
+  imports = [
+    ./lemmy.nix
+    ./vaultwarden.nix
+  ];
 }

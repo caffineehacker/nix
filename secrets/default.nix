@@ -5,6 +5,7 @@
     secrets = {
       "cloudflare/tunnels/homelab.json" = {};
       "cloudflare/tunnels/lemmy.json" = {};
+      "cloudflare/tunnels/vaultwarden.json" = {};
     };
   };
 }

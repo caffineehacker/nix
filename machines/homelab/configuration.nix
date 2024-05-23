@@ -19,6 +19,12 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.grub.device = "nodev";
   boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelParams = [
+    # I get random hangs / crashes, trying lots of things
+    "acpi=off"
+    "noapic"
+    "processor.max_cstate=1"
+  ];
 
   tw.services.ssh.enable = true;
 
