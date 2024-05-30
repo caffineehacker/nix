@@ -1,0 +1,3 @@
+This does not currently work. DO NOT USE.
+
+To update you'll need to copy the pubspec.lock from https://github.com/TomBursch/kitchenowl/blob/main/kitchenowl/pubspec.lock for the version you want and then run `yq . pubspec.lock > pubspec.lock.json` to recreate the json file. Beyond that, the rest should warn you if there is anything wrong. Note that in the initial version I'm creating I did need to change the flutter_colorpicker from a git dependency to a hosted one to avoid a hash issue.

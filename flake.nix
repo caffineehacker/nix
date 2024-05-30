@@ -7,7 +7,7 @@
       owner = "NixOS";
       repo = "nixpkgs";
       # Make sure we pick a rev with hydra builds
-      rev = "3eaeaeb6b1e08a016380c279f8846e0bd8808916"; ### REPLACE_NIXPKGS_REV
+      rev = "ad57eef4ef0659193044870c731987a6df5cf56b"; ### REPLACE_NIXPKGS_REV
     };
     lanzaboote = {
       url = "github:nix-community/lanzaboote";
@@ -71,6 +71,7 @@
       ./services
       ./containers
       ./secrets
+      ./flakes/kitchenowl
     ];
     in {
       nixosConfigurations = {
