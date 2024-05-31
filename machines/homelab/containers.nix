@@ -1,5 +1,6 @@
 {...}: {
   tw.containers.lemmy.enable = true;
+  tw.containers.matrix.enable = true;
   tw.containers.vaultwarden.enable = true;
 
   networking.nat.enable = true;
