@@ -23,6 +23,7 @@ in {
       home.packages = with pkgs; [
         firefox-bin
         discord
+        element-desktop
       ];
 
       programs.kitty = {
