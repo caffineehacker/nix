@@ -139,11 +139,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1717052710,
-        "narHash": "sha256-LRhOxzXmOza5SymhOgnEzA8EAQp+94kkeUYWKKpLJ/U=",
+        "lastModified": 1717097707,
+        "narHash": "sha256-HC5vJ3oYsjwsCaSbkIPv80e4ebJpNvFKQTBOGlHvjLs=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "29c69d9a466e41d46fd3a7a9d0591ef9c113c2ae",
+        "rev": "0eb314b4f0ba337e88123e0b1e57ef58346aafd9",
         "type": "github"
       },
       "original": {
@@ -320,11 +320,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-s+PEYvD90nr0Oxx3VWEJLHNTNw+lP/v8lRIy4Jxb7l0=",
-        "path": "/nix/store/2i8dc0jkn4ijxgrcds2gpdlmmyq41z8h-source/flakes/inputmodule-rs",
+        "path": "/nix/store/vj72316ffl9mim38xb1m9f1d0ibn6bd3-source/flakes/inputmodule-rs",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/2i8dc0jkn4ijxgrcds2gpdlmmyq41z8h-source/flakes/inputmodule-rs",
+        "path": "/nix/store/vj72316ffl9mim38xb1m9f1d0ibn6bd3-source/flakes/inputmodule-rs",
         "type": "path"
       }
     },
