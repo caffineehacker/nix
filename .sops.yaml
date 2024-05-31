@@ -2,9 +2,11 @@ keys:
     - &laptop age1ecreqx6f0kmytv5le3tvct2ynqgdf7gs4szpcq92zx8sr0e4vuesmerzgj
     - &homelab age12qz7s8glnfh4xllcyxz6xx9yeqq8xaslzx68v6h9pzedhyuxnscsg7x6c2
     - &me age1tenwdwz4g06pzhy4mg3hh5tjc9850l2q9z5j0pucsu90uz30vy9qdwv9w4
+    - &cloud age1v0fmwtm34x4qjmefpypvvwlhal99qmpvyep8dsj9vy65xwvgwdtslu8rr7
 creation_rules:
     - key_groups:
         - age:
             - *me
             - *homelab
             - *laptop
+            - *cloud

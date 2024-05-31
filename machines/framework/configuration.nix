@@ -207,6 +207,8 @@ in {
   boot.kernelModules = [ "cros_ec" "cros_ec_lpcs" ];
   # We have plenty of ram
   boot.kernel.sysctl = { "vm.swappiness" = 10; };
+  # Allow building of aarch64-linux binaries. This is slow, but works better than using the remote host.
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   tw.system.tpm-unlock.enable = true;
   tw.services.ssh.enable = true;
