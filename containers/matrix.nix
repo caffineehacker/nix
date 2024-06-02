@@ -2,6 +2,7 @@
   cfg = config.tw.containers.matrix;
   tunnelFile = config.sops.secrets."cloudflare/tunnels/matrix.json".path;
   matrixSharedSecretFile = config.sops.secrets."matrix/sharedSecret".path;
+  wireguardPrivateKeyFile = config.sops.secrets."matrix/wireguard/clientKey".path;
 in {
   options = {
     tw.containers.matrix.enable = lib.mkOption {
@@ -25,6 +26,8 @@ in {
         # Load the cloudflare secret
         "--load-credential=tunnel.json:${tunnelFile}"
         "--load-credential=matrix-shared-secret:${matrixSharedSecretFile}"
+        # This is a special name to automatically load this secret as the private key
+        "--load-credential=network.wireguard.private.10-wg0:${wireguardPrivateKeyFile}"
       ];
 
       config = {config, pkgs, lib, ...}: {
@@ -32,7 +35,48 @@ in {
 
         imports = [
           ./cloudflared.nix
+          ../programs/systemd.nix
         ];
+
+        tw.programs.systemd.nextVersion.enable = true;
+
+        boot.extraModulePackages = [config.boot.kernelPackages.wireguard];
+        systemd.network = {
+          enable = true;
+          netdevs = {
+            "10-wg0" = {
+              netdevConfig = {
+                Kind = "wireguard";
+                Name = "wg0";
+                MTUBytes = "1300";
+              };
+              wireguardConfig = {
+              };
+              wireguardPeers = [
+              {
+                wireguardPeerConfig = {
+                  PublicKey = "ecv9aiMiBB4FymTEjN+VMMAYJVaFUvUkBUTp8CIfhRo=";
+                  AllowedIPs = ["10.100.0.1"];
+                  Endpoint = "129.153.214.198:51820";
+                };
+              }
+            ];
+            };
+          };
+          networks.wg0 = {
+            matchConfig.Name = "wg0";
+            address = [
+              "10.100.0.2/24"
+            ];
+            DHCP = "no";
+            gateway = [
+              "10.100.0.1"
+            ];
+            networkConfig = {
+              IPv6AcceptRA = false;
+            };
+          };
+        };
 
         services.matrix-synapse = {
           enable = true;

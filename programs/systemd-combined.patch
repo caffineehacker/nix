@@ -1,0 +1,553 @@
+diff --git a/man/localtime.xml b/man/localtime.xml
+index 3a13e04a27..4fd58068a1 100644
+--- a/man/localtime.xml
++++ b/man/localtime.xml
+@@ -20,7 +20,7 @@
+   </refnamediv>
+ 
+   <refsynopsisdiv>
+-    <para><filename>/etc/localtime</filename> -&gt; <filename>../usr/share/zoneinfo/…</filename></para>
++    <para><filename>/etc/localtime</filename> -&gt; <filename>zoneinfo/…</filename></para>
+   </refsynopsisdiv>
+ 
+   <refsect1>
+@@ -30,7 +30,7 @@
+     system-wide timezone of the local system that is used by
+     applications for presentation to the user. It should be an
+     absolute or relative symbolic link pointing to
+-    <filename>/usr/share/zoneinfo/</filename>, followed by a timezone
++    <filename>/etc/zoneinfo/</filename>, followed by a timezone
+     identifier such as <literal>Europe/Berlin</literal> or
+     <literal>Etc/UTC</literal>. The resulting link should lead to the
+     corresponding binary
+diff --git a/meson.build b/meson.build
+index dfea903b60..c71c15ebac 100644
+--- a/meson.build
++++ b/meson.build
+@@ -2683,7 +2683,6 @@ install_data('LICENSE.GPL2',
+ install_subdir('LICENSES',
+                install_dir : docdir)
+ 
+-install_emptydir(systemdstatedir)
+ 
+ #####################################################################
+ 
+diff --git a/rules.d/99-systemd.rules.in b/rules.d/99-systemd.rules.in
+index ad0c7e2fb5..79f3086e78 100644
+--- a/rules.d/99-systemd.rules.in
++++ b/rules.d/99-systemd.rules.in
+@@ -26,10 +26,6 @@ SUBSYSTEM=="block", ACTION=="add", KERNEL=="dm-*", ENV{DM_NAME}!="?*", ENV{SYSTE
+ # Import previous SYSTEMD_READY state.
+ SUBSYSTEM=="block", ENV{DM_UDEV_DISABLE_OTHER_RULES_FLAG}=="1", ENV{SYSTEMD_READY}=="", IMPORT{db}="SYSTEMD_READY"
+ 
+-# Ignore encrypted devices with no identified superblock on it, since
+-# we are probably still calling mke2fs or mkswap on it.
+-SUBSYSTEM=="block", ENV{DM_UUID}=="CRYPT-*", ENV{ID_PART_TABLE_TYPE}=="", ENV{ID_FS_USAGE}=="", ENV{SYSTEMD_READY}="0"
+-
+ # add symlink to GPT root disk
+ SUBSYSTEM=="block", ENV{ID_PART_GPT_AUTO_ROOT}=="1", ENV{ID_FS_TYPE}!="crypto_LUKS", SYMLINK+="gpt-auto-root"
+ SUBSYSTEM=="block", ENV{ID_PART_GPT_AUTO_ROOT}=="1", ENV{ID_FS_TYPE}=="crypto_LUKS", SYMLINK+="gpt-auto-root-luks"
+diff --git a/src/basic/constants.h b/src/basic/constants.h
+index e70817c51f..c72095e8a0 100644
+--- a/src/basic/constants.h
++++ b/src/basic/constants.h
+@@ -62,13 +62,15 @@
+         "/etc/" n "\0"                          \
+         "/run/" n "\0"                          \
+         "/usr/local/lib/" n "\0"                \
+-        "/usr/lib/" n "\0"
++        "/usr/lib/" n "\0"                      \
++	 PREFIX "/lib" n "\0"
+ 
+ #define CONF_PATHS(n)                           \
+         "/etc/" n,                              \
+         "/run/" n,                              \
+         "/usr/local/lib/" n,                    \
+-        "/usr/lib/" n
++        "/usr/lib/" n,                          \
++	 PREFIX "/lib" n
+ 
+ #define CONF_PATHS_STRV(n)                      \
+         STRV_MAKE(CONF_PATHS(n))
+diff --git a/src/basic/path-lookup.c b/src/basic/path-lookup.c
+index 540256b73b..a115ec09a3 100644
+--- a/src/basic/path-lookup.c
++++ b/src/basic/path-lookup.c
+@@ -123,11 +123,7 @@ int runtime_directory(char **ret, RuntimeScope scope, const char *suffix) {
+ }
+ 
+ static const char* const user_data_unit_paths[] = {
+-        "/usr/local/lib/systemd/user",
+-        "/usr/local/share/systemd/user",
+         USER_DATA_UNIT_DIR,
+-        "/usr/lib/systemd/user",
+-        "/usr/share/systemd/user",
+         NULL
+ };
+ 
+@@ -634,16 +630,13 @@ int lookup_paths_init(
+                                         persistent_config,
+                                         SYSTEM_CONFIG_UNIT_DIR,
+                                         "/etc/systemd/system",
++                                        "/nix/var/nix/profiles/default/lib/systemd/system",
+                                         STRV_IFNOTNULL(persistent_attached),
+                                         runtime_config,
+                                         "/run/systemd/system",
+                                         STRV_IFNOTNULL(runtime_attached),
+                                         STRV_IFNOTNULL(generator),
+-                                        "/usr/local/lib/systemd/system",
+                                         SYSTEM_DATA_UNIT_DIR,
+-                                        "/usr/lib/systemd/system",
+-                                        /* To be used ONLY for images which might be legacy split-usr */
+-                                        STRV_IFNOTNULL(flags & LOOKUP_PATHS_SPLIT_USR ? "/lib/systemd/system" : NULL),
+                                         STRV_IFNOTNULL(generator_late));
+                         break;
+ 
+@@ -659,14 +652,11 @@ int lookup_paths_init(
+                                         persistent_config,
+                                         USER_CONFIG_UNIT_DIR,
+                                         "/etc/systemd/user",
++                                        "/nix/var/nix/profiles/default/lib/systemd/user",
+                                         runtime_config,
+                                         "/run/systemd/user",
+                                         STRV_IFNOTNULL(generator),
+-                                        "/usr/local/share/systemd/user",
+-                                        "/usr/share/systemd/user",
+-                                        "/usr/local/lib/systemd/user",
+                                         USER_DATA_UNIT_DIR,
+-                                        "/usr/lib/systemd/user",
+                                         STRV_IFNOTNULL(generator_late));
+                         break;
+ 
+@@ -825,7 +815,6 @@ char **generator_binary_paths(RuntimeScope scope) {
+                 case RUNTIME_SCOPE_SYSTEM:
+                         add = strv_new("/run/systemd/system-generators",
+                                        "/etc/systemd/system-generators",
+-                                       "/usr/local/lib/systemd/system-generators",
+                                        SYSTEM_GENERATOR_DIR);
+                         break;
+ 
+@@ -833,7 +822,6 @@ char **generator_binary_paths(RuntimeScope scope) {
+                 case RUNTIME_SCOPE_USER:
+                         add = strv_new("/run/systemd/user-generators",
+                                        "/etc/systemd/user-generators",
+-                                       "/usr/local/lib/systemd/user-generators",
+                                        USER_GENERATOR_DIR);
+                         break;
+ 
+@@ -872,14 +860,12 @@ char **env_generator_binary_paths(RuntimeScope runtime_scope) {
+                 case RUNTIME_SCOPE_SYSTEM:
+                         add = strv_new("/run/systemd/system-environment-generators",
+                                         "/etc/systemd/system-environment-generators",
+-                                        "/usr/local/lib/systemd/system-environment-generators",
+                                         SYSTEM_ENV_GENERATOR_DIR);
+                         break;
+ 
+                 case RUNTIME_SCOPE_USER:
+                         add = strv_new("/run/systemd/user-environment-generators",
+                                        "/etc/systemd/user-environment-generators",
+-                                       "/usr/local/lib/systemd/user-environment-generators",
+                                        USER_ENV_GENERATOR_DIR);
+                         break;
+ 
+diff --git a/src/basic/path-util.h b/src/basic/path-util.h
+index 792b8ff2cb..6d002049c6 100644
+--- a/src/basic/path-util.h
++++ b/src/basic/path-util.h
+@@ -17,10 +17,10 @@
+ #define PATH_MERGED_BIN(x) x "bin"
+ #define PATH_MERGED_BIN_NULSTR(x) x "bin\0"
+ 
+-#define DEFAULT_PATH_WITH_SBIN PATH_SPLIT_BIN("/usr/local/") ":" PATH_SPLIT_BIN("/usr/")
+-#define DEFAULT_PATH_WITHOUT_SBIN PATH_MERGED_BIN("/usr/local/") ":" PATH_MERGED_BIN("/usr/")
++#define DEFAULT_PATH_WITH_SBIN "@defaultPathNormal@" 
++#define DEFAULT_PATH_WITHOUT_SBIN "@defaultPathNormal@"
+ 
+-#define DEFAULT_PATH_COMPAT PATH_SPLIT_BIN("/usr/local/") ":" PATH_SPLIT_BIN("/usr/") ":" PATH_SPLIT_BIN("/")
++#define DEFAULT_PATH_COMPAT "@defaultPathNormal@"
+ 
+ const char* default_PATH(void);
+ 
+diff --git a/src/basic/time-util.c b/src/basic/time-util.c
+index b94f37c31c..bb30beec21 100644
+--- a/src/basic/time-util.c
++++ b/src/basic/time-util.c
+@@ -1412,7 +1412,7 @@ static int get_timezones_from_zone1970_tab(char ***ret) {
+ 
+         assert(ret);
+ 
+-        f = fopen("/usr/share/zoneinfo/zone1970.tab", "re");
++        f = fopen("/etc/zoneinfo/zone1970.tab", "re");
+         if (!f)
+                 return -errno;
+ 
+@@ -1453,7 +1453,7 @@ static int get_timezones_from_tzdata_zi(char ***ret) {
+ 
+         assert(ret);
+ 
+-        f = fopen("/usr/share/zoneinfo/tzdata.zi", "re");
++        f = fopen("/etc/zoneinfo/tzdata.zi", "re");
+         if (!f)
+                 return -errno;
+ 
+@@ -1565,7 +1565,7 @@ int verify_timezone(const char *name, int log_level) {
+         if (p - name >= PATH_MAX)
+                 return -ENAMETOOLONG;
+ 
+-        t = strjoina("/usr/share/zoneinfo/", name);
++        t = strjoina("/etc/zoneinfo/", name);
+ 
+         fd = open(t, O_RDONLY|O_CLOEXEC);
+         if (fd < 0)
+diff --git a/src/core/manager.c b/src/core/manager.c
+index 90e72b0c02..704f16d5f1 100644
+--- a/src/core/manager.c
++++ b/src/core/manager.c
+@@ -1611,7 +1611,8 @@ static unsigned manager_dispatch_stop_when_bound_queue(Manager *m) {
+                 if (!unit_is_bound_by_inactive(u, &culprit))
+                         continue;
+ 
+-                log_unit_debug(u, "Unit is stopped because bound to inactive unit %s.", culprit->id);
++                if (u->type != UNIT_MOUNT || detect_container() <= 0)
++                        log_unit_debug(u, "Unit is stopped because bound to inactive unit %s.", culprit->id);
+ 
+                 /* If stopping a unit fails continuously we might enter a stop loop here, hence stop acting on the
+                  * service being unnecessary after a while. */
+@@ -4034,9 +4035,17 @@ static int build_generator_environment(Manager *m, char ***ret) {
+          * adjust generated units to that. Let's pass down some bits of information that are easy for us to
+          * determine (but a bit harder for generator scripts to determine), as environment variables. */
+ 
++        // On NixOS we must propagate PATH to generators so they are
++        // able to find binaries such as `fsck.${fstype}` and
++        // `mkfs.${fstype}`. That is why we ignore transient_environment that
++        // overrides the PATH variable. This propagates systemd's
++        // environment (e.g. PATH) that was setup
++        // before calling systemd from stage-2-init.sh.
++#if 0
+         nl = strv_copy(m->transient_environment);
+         if (!nl)
+                 return -ENOMEM;
++#endif
+ 
+         r = strv_env_assign(&nl, "SYSTEMD_SCOPE", runtime_scope_to_string(m->runtime_scope));
+         if (r < 0)
+diff --git a/src/core/systemd.pc.in b/src/core/systemd.pc.in
+index f3b85b0190..8ae544b495 100644
+--- a/src/core/systemd.pc.in
++++ b/src/core/systemd.pc.in
+@@ -43,10 +43,10 @@ systemdsystemconfdir=${systemd_system_conf_dir}
+ systemd_user_conf_dir=${sysconfdir}/systemd/user
+ systemduserconfdir=${systemd_user_conf_dir}
+ 
+-systemd_system_unit_path=${systemd_system_conf_dir}:/etc/systemd/system:/run/systemd/system:/usr/local/lib/systemd/system:${systemd_system_unit_dir}:/usr/lib/systemd/system:/lib/systemd/system
++systemd_system_unit_path=${systemd_system_conf_dir}:/etc/systemd/system:/nix/var/nix/profiles/default/lib/systemd/system:/run/systemd/system:${systemdsystemunitdir}
+ systemdsystemunitpath=${systemd_system_unit_path}
+ 
+-systemd_user_unit_path=${systemd_user_conf_dir}:/etc/systemd/user:/run/systemd/user:/usr/local/lib/systemd/user:/usr/local/share/systemd/user:${systemd_user_unit_dir}:/usr/lib/systemd/user:/usr/share/systemd/user
++systemd_user_unit_path=${systemd_user_conf_dir}:/etc/systemd/user:/nix/var/nix/profiles/default/lib/systemd/user:/run/systemd/user:${systemduserunitdir}
+ systemduserunitpath=${systemd_user_unit_path}
+ 
+ systemd_system_generator_dir=${prefix}/lib/systemd/system-generators
+@@ -55,10 +55,10 @@ systemdsystemgeneratordir=${systemd_system_generator_dir}
+ systemd_user_generator_dir=${prefix}/lib/systemd/user-generators
+ systemdusergeneratordir=${systemd_user_generator_dir}
+ 
+-systemd_system_generator_path=/run/systemd/system-generators:/etc/systemd/system-generators:/usr/local/lib/systemd/system-generators:${systemd_system_generator_dir}
++systemd_system_generator_path=/run/systemd/system-generators:/etc/systemd/system-generators:${systemd_system_generator_dir}
+ systemdsystemgeneratorpath=${systemd_system_generator_path}
+ 
+-systemd_user_generator_path=/run/systemd/user-generators:/etc/systemd/user-generators:/usr/local/lib/systemd/user-generators:${systemd_user_generator_dir}
++systemd_user_generator_path=/run/systemd/user-generators:/etc/systemd/user-generators:${systemd_user_generator_dir}
+ systemdusergeneratorpath=${systemd_user_generator_path}
+ 
+ systemd_sleep_dir=${prefix}/lib/systemd/system-sleep
+diff --git a/src/firstboot/firstboot.c b/src/firstboot/firstboot.c
+index 6afabef430..c1e3af77e1 100644
+--- a/src/firstboot/firstboot.c
++++ b/src/firstboot/firstboot.c
+@@ -648,7 +648,7 @@ static int process_timezone(int rfd) {
+         if (isempty(arg_timezone))
+                 return 0;
+ 
+-        e = strjoina("../usr/share/zoneinfo/", arg_timezone);
++        e = strjoina("zoneinfo/", arg_timezone);
+ 
+         r = symlinkat_atomic_full(e, pfd, f, /* make_relative= */ false);
+         if (r < 0)
+diff --git a/src/hostname/hostnamed.c b/src/hostname/hostnamed.c
+index 82d08803fa..8e40b77eba 100644
+--- a/src/hostname/hostnamed.c
++++ b/src/hostname/hostnamed.c
+@@ -1116,6 +1116,9 @@ static int method_set_static_hostname(sd_bus_message *m, void *userdata, sd_bus_
+         if (r < 0)
+                 return r;
+ 
++        return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
++            "Changing system settings via systemd is not supported on NixOS.");
++
+         name = empty_to_null(name);
+ 
+         context_read_etc_hostname(c);
+@@ -1178,6 +1181,9 @@ static int set_machine_info(Context *c, sd_bus_message *m, int prop, sd_bus_mess
+         if (r < 0)
+                 return r;
+ 
++        return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
++            "Changing system settings via systemd is not supported on NixOS.");
++
+         name = empty_to_null(name);
+ 
+         context_read_machine_info(c);
+diff --git a/src/locale/localectl.c b/src/locale/localectl.c
+index 32354027f1..1d231f1afc 100644
+--- a/src/locale/localectl.c
++++ b/src/locale/localectl.c
+@@ -297,7 +297,7 @@ static int list_x11_keymaps(int argc, char **argv, void *userdata) {
+         } state = NONE, look_for;
+         int r;
+ 
+-        f = fopen("/usr/share/X11/xkb/rules/base.lst", "re");
++        f = fopen("/etc/X11/xkb/rules/base.lst", "re");
+         if (!f)
+                 return log_error_errno(errno, "Failed to open keyboard mapping list. %m");
+ 
+diff --git a/src/locale/localed.c b/src/locale/localed.c
+index c0d104578d..51a714ee23 100644
+--- a/src/locale/localed.c
++++ b/src/locale/localed.c
+@@ -226,6 +226,9 @@ static int method_set_locale(sd_bus_message *m, void *userdata, sd_bus_error *er
+ 
+         use_localegen = locale_gen_check_available();
+ 
++        return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
++            "Changing system settings via systemd is not supported on NixOS.");
++
+         /* If single locale without variable name is provided, then we assume it is LANG=. */
+         if (strv_length(l) == 1 && !strchr(l[0], '=')) {
+                 if (!locale_is_valid(l[0]))
+@@ -343,6 +346,9 @@ static int method_set_vc_keyboard(sd_bus_message *m, void *userdata, sd_bus_erro
+         if (r < 0)
+                 return bus_log_parse_error(r);
+ 
++        return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
++            "Changing system settings via systemd is not supported on NixOS.");
++
+         vc_context_empty_to_null(&in);
+ 
+         r = vc_context_verify_and_warn(&in, LOG_ERR, error);
+@@ -460,6 +466,9 @@ static int method_set_x11_keyboard(sd_bus_message *m, void *userdata, sd_bus_err
+         if (r < 0)
+                 return bus_log_parse_error(r);
+ 
++        return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
++            "Changing system settings via systemd is not supported on NixOS.");
++
+         x11_context_empty_to_null(&in);
+ 
+         r = x11_context_verify_and_warn(&in, LOG_ERR, error);
+diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
+index 5842d3ba8f..ba42f10d9f 100644
+--- a/src/nspawn/nspawn.c
++++ b/src/nspawn/nspawn.c
+@@ -1862,8 +1862,8 @@ int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t uid, gid
+ static const char *timezone_from_path(const char *path) {
+         return PATH_STARTSWITH_SET(
+                         path,
+-                        "../usr/share/zoneinfo/",
+-                        "/usr/share/zoneinfo/");
++                        "../etc/zoneinfo/",
++                        "/etc/zoneinfo/");
+ }
+ 
+ static bool etc_writable(void) {
+@@ -6028,6 +6028,7 @@ static int run(int argc, char *argv[]) {
+                                 goto finish;
+                         }
+                 } else {
++#if 0
+                         _cleanup_free_ char *p = NULL;
+ 
+                         if (arg_pivot_root_new)
+@@ -6044,6 +6045,7 @@ static int run(int argc, char *argv[]) {
+                                                     "Directory %s doesn't look like it has an OS tree (/usr/ directory is missing). Refusing.", arg_directory);
+                                 goto finish;
+                         }
++#endif
+                 }
+ 
+         } else {
+diff --git a/src/shared/fstab-util.c b/src/shared/fstab-util.c
+index eac5bb8d3b..d8187bfa99 100644
+--- a/src/shared/fstab-util.c
++++ b/src/shared/fstab-util.c
+@@ -66,6 +66,8 @@ bool fstab_is_extrinsic(const char *mount, const char *opts) {
+         /* Don't bother with the OS data itself */
+         if (PATH_IN_SET(mount,
+                         "/",
++                        "/nix",
++                        "/nix/store",
+                         "/usr",
+                         "/etc"))
+                 return true;
+diff --git a/src/shared/tpm2-util.c b/src/shared/tpm2-util.c
+index a64c2738bf..d47d5a19bb 100644
+--- a/src/shared/tpm2-util.c
++++ b/src/shared/tpm2-util.c
+@@ -685,7 +685,7 @@ int tpm2_context_new(const char *device, Tpm2Context **ret_context) {
+                 fn = strjoina("libtss2-tcti-", driver, ".so.0");
+ 
+                 /* Better safe than sorry, let's refuse strings that cannot possibly be valid driver early, before going to disk. */
+-                if (!filename_is_valid(fn))
++                if (!path_is_valid(fn))
+                         return log_debug_errno(SYNTHETIC_ERRNO(EINVAL), "TPM2 driver name '%s' not valid, refusing.", driver);
+ 
+                 context->tcti_dl = dlopen(fn, RTLD_NOW);
+diff --git a/src/shutdown/shutdown.c b/src/shutdown/shutdown.c
+index 67f44e16e9..dda6614561 100644
+--- a/src/shutdown/shutdown.c
++++ b/src/shutdown/shutdown.c
+@@ -358,6 +358,7 @@ static void notify_supervisor(void) {
+ int main(int argc, char *argv[]) {
+         static const char* const dirs[] = {
+                 SYSTEM_SHUTDOWN_PATH,
++                "/etc/systemd/system-shutdown",
+                 NULL
+         };
+         _cleanup_free_ char *cgroup = NULL;
+diff --git a/src/shutdown/umount.c b/src/shutdown/umount.c
+index ca6d36e054..0a9227c9a8 100644
+--- a/src/shutdown/umount.c
++++ b/src/shutdown/umount.c
+@@ -170,8 +170,10 @@ int mount_points_list_get(const char *mountinfo, MountPoint **head) {
+ static bool nonunmountable_path(const char *path) {
+         assert(path);
+ 
+-        return PATH_IN_SET(path, "/", "/usr") ||
+-                path_startswith(path, "/run/initramfs");
++        return PATH_IN_SET(path, "/", "/usr")
++                || path_equal(path, "/nix")
++                || path_equal(path, "/nix/store")
++                || path_startswith(path, "/run/initramfs");
+ }
+ 
+ static void log_umount_blockers(const char *mnt) {
+diff --git a/src/sleep/sleep.c b/src/sleep/sleep.c
+index c96207428d..1e95eec7f1 100644
+--- a/src/sleep/sleep.c
++++ b/src/sleep/sleep.c
+@@ -217,6 +217,7 @@ static int execute(
+         };
+         static const char* const dirs[] = {
+                 SYSTEM_SLEEP_PATH,
++                "/etc/systemd/system-sleep",
+                 NULL
+         };
+ 
+diff --git a/src/systemctl/systemctl-edit.c b/src/systemctl/systemctl-edit.c
+index 15398f8364..8d440cee59 100644
+--- a/src/systemctl/systemctl-edit.c
++++ b/src/systemctl/systemctl-edit.c
+@@ -322,6 +322,9 @@ int verb_edit(int argc, char *argv[], void *userdata) {
+         sd_bus *bus;
+         int r;
+ 
++        if (!arg_runtime && arg_runtime_scope == RUNTIME_SCOPE_SYSTEM)
++                return log_error_errno(SYNTHETIC_ERRNO(EINVAL), "The unit-directory '/etc/systemd/system' is read-only on NixOS, so it's not possible to edit system-units directly. Use 'systemctl edit --runtime' instead.");
++
+         if (!on_tty() && !arg_stdin)
+                 return log_error_errno(SYNTHETIC_ERRNO(EINVAL), "Cannot edit units if not on a tty.");
+ 
+diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
+index e3b4367ec0..2161e09579 100644
+--- a/src/timedate/timedated.c
++++ b/src/timedate/timedated.c
+@@ -280,7 +280,7 @@ static int context_read_data(Context *c) {
+ 
+         r = get_timezone(&t);
+         if (r == -EINVAL)
+-                log_warning_errno(r, "/etc/localtime should be a symbolic link to a time zone data file in /usr/share/zoneinfo/.");
++                log_warning_errno(r, "/etc/localtime should be a symbolic link to a time zone data file in /etc/zoneinfo/.");
+         else if (r < 0)
+                 log_warning_errno(r, "Failed to get target of /etc/localtime: %m");
+ 
+@@ -304,7 +304,7 @@ static int context_write_data_timezone(Context *c) {
+ 
+         if (isempty(c->zone) || streq(c->zone, "UTC")) {
+ 
+-                if (access("/usr/share/zoneinfo/UTC", F_OK) < 0) {
++                if (access("/etc/zoneinfo/UTC", F_OK) < 0) {
+ 
+                         if (unlink("/etc/localtime") < 0 && errno != ENOENT)
+                                 return -errno;
+@@ -312,9 +312,9 @@ static int context_write_data_timezone(Context *c) {
+                         return 0;
+                 }
+ 
+-                source = "../usr/share/zoneinfo/UTC";
++                source = "../etc/zoneinfo/UTC";
+         } else {
+-                p = path_join("../usr/share/zoneinfo", c->zone);
++                p = path_join("../etc/zoneinfo", c->zone);
+                 if (!p)
+                         return -ENOMEM;
+ 
+@@ -673,6 +673,10 @@ static int method_set_timezone(sd_bus_message *m, void *userdata, sd_bus_error *
+         if (r < 0)
+                 return r;
+ 
++        if (getenv("NIXOS_STATIC_TIMEZONE"))
++                return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
++                    "Changing timezone via systemd is not supported when it is set in NixOS configuration.");
++
+         if (!timezone_is_valid(z, LOG_DEBUG))
+                 return sd_bus_error_setf(error, SD_BUS_ERROR_INVALID_ARGS, "Invalid or not installed time zone '%s'", z);
+ 
+@@ -750,6 +754,9 @@ static int method_set_local_rtc(sd_bus_message *m, void *userdata, sd_bus_error
+         if (r < 0)
+                 return r;
+ 
++        return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
++            "Changing system settings via systemd is not supported on NixOS.");
++
+         if (lrtc == c->local_rtc && !fix_system)
+                 return sd_bus_reply_method_return(m, NULL);
+ 
+@@ -928,6 +935,9 @@ static int method_set_ntp(sd_bus_message *m, void *userdata, sd_bus_error *error
+         if (r < 0)
+                 return r;
+ 
++        return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
++            "Changing system settings via systemd is not supported on NixOS.");
++
+         r = context_update_ntp_status(c, bus, m);
+         if (r < 0)
+                 return r;
+diff --git a/src/timesync/timesyncd.c b/src/timesync/timesyncd.c
+index 5c308a04bc..81aa3d3334 100644
+--- a/src/timesync/timesyncd.c
++++ b/src/timesync/timesyncd.c
+@@ -21,6 +21,11 @@
+ #include "timesyncd-conf.h"
+ #include "timesyncd-manager.h"
+ #include "user-util.h"
++#include "env-util.h"
++
++struct traced_file;
++extern void __nss_disable_nscd(void (*)(size_t, struct traced_file *));
++static void register_traced_file(size_t dbidx, struct traced_file *finfo) {}
+ 
+ static int advance_tstamp(int fd, const struct stat *st) {
+         assert_se(fd >= 0);
+@@ -198,6 +203,12 @@ static int run(int argc, char *argv[]) {
+         if (r < 0)
+                 return log_error_errno(r, "Failed to parse fallback server strings: %m");
+ 
++        r = secure_getenv_bool("SYSTEMD_NSS_RESOLVE_VALIDATE");
++        if (r == 0) {
++                log_info("Disabling NSCD because DNSSEC validation is turned off");
++                __nss_disable_nscd(register_traced_file);
++        }
++
+         log_debug("systemd-timesyncd running as pid " PID_FMT, getpid_cached());
+ 
+         notify_message = notify_start("READY=1\n"

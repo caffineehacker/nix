@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   nix = {
     package = pkgs.nixFlakes;
@@ -11,6 +11,8 @@
   nixpkgs.hostPlatform = {
     system = "x86_64-linux";
   };
+
+  tw.programs.systemd.nextVersion.enable = true;
 
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.systemd-boot.memtest86.enable = true;

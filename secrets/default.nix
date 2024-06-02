@@ -8,6 +8,8 @@
       "cloudflare/tunnels/matrix.json" = {};
       "cloudflare/tunnels/vaultwarden.json" = {};
       "matrix/sharedSecret" = {};
+      "matrix/wireguard/clientKey" = {};
+      "matrix/wireguard/serverKey" = {};
     };
   };
 }
