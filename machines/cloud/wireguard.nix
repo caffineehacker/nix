@@ -1,4 +1,4 @@
-{config, ...}:{
+{config, pkgs, ...}:{
   systemd.network = {
     enable = true;
     netdevs = {
@@ -22,5 +22,20 @@
         ];
       };
     };
+    networks.matrixwg = {
+      matchConfig.Name = "matrixwg";
+      address = [
+        "10.100.0.1/24"
+      ];
+      networkConfig = {
+        IPMasquerade = "ipv4";
+        IPForward = true;
+      };
+    };
   };
+  networking.firewall = {
+    allowedUDPPorts = [ 51820 ];
+  };
+
+  environment.systemPackages = with pkgs; [ wireguard-tools ];
 }

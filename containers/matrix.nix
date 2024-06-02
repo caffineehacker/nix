@@ -77,6 +77,7 @@ in {
             };
           };
         };
+        environment.systemPackages = with pkgs; [ wireguard-tools ];
 
         services.matrix-synapse = {
           enable = true;

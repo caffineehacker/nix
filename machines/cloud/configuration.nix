@@ -1,4 +1,13 @@
-{config, ...}:{
+{config, pkgs, ...}:{
+  nix = {
+    package = pkgs.nixFlakes;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+    settings.trusted-users = ["root" "tim"];
+    settings.show-trace = true;
+  };
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
