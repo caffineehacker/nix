@@ -55,6 +55,19 @@ in {
           vscode-extensions.catppuccin.catppuccin-vsc
         ];
       };
+
+      services.gnome-keyring.enable = true;
+
+      programs.gpg.enable = true;
     };
+
+    programs.gnupg.agent = {
+      enable = true;
+      pinentryPackage = pkgs.pinentry-gnome3;
+    };
+
+    environment.systemPackages = with pkgs; [
+      pinentry-gnome3
+    ];
   };
 }

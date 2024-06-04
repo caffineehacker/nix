@@ -64,6 +64,11 @@ in
           enable = true;
           userName = "Tim Waterhouse";
           userEmail = "tim@timwaterhouse.com";
+
+          extraConfig = {
+            commit.gpgsign = true;
+            user.signingKey = "0BA5979146BB1B42";
+          };
         };
 
         programs.fish = {
