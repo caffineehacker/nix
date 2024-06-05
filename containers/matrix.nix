@@ -95,9 +95,26 @@ in {
                 } ];
               }
             ];
+            modules = [
+              {
+                module = "mjolnir.Module";
+                config = {
+                  block_invites = true;
+                  block_messages = true;
+                  block_usernames = true;
+                  ban_lists = [
+                    "!matrix-org-coc-bl:matrix.org"
+                    "!matrix-org-hs-tos-bl:matrix.org"
+                  ];
+                };
+              }
+            ];
           };
           extraConfigFiles = [
             "${config.services.matrix-synapse.dataDir}/matrix-shared-secret"
+          ];
+          plugins = with pkgs; [
+            matrix-synapse-plugins.matrix-synapse-mjolnir-antispam
           ];
         };
 
