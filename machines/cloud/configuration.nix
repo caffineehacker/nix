@@ -16,17 +16,12 @@
   systemd.network.enable = true;
   networking.networkmanager.enable = false;
   networking.useNetworkd = true;
+  services.fail2ban.enable = true;
 
   services.openssh.enable = true;
 
   tw.users.tim.enable = true;
   users.users.root.openssh.authorizedKeys.keys = config.users.users.tim.openssh.authorizedKeys.keys;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
