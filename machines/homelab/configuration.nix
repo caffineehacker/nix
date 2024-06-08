@@ -12,8 +12,6 @@
     system = "x86_64-linux";
   };
 
-  tw.programs.systemd.nextVersion.enable = true;
-
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.systemd-boot.memtest86.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -25,7 +23,7 @@
     # I get random hangs / crashes, trying lots of things
     "acpi=off"
     "noapic"
-    "processor.max_cstate=1"
+    "processor.max_cstate=2"
   ];
 
   tw.services.ssh.enable = true;
@@ -34,6 +32,7 @@
   systemd.network.enable = true;
   networking.networkmanager.enable = false;
   networking.useNetworkd = true;
+  services.fail2ban.enable = true;
 
   networking.networkmanager.unmanaged = [ "interface-name:ve-*" ];
 
