@@ -68,14 +68,53 @@ in {
               "10.100.0.2/24"
             ];
             DHCP = "no";
-            gateway = [
-              "10.100.0.1"
+            routes = [
+              {
+                Destination = "10.100.0.1/24";
+                Gateway = "10.100.0.1";
+              }
             ];
             networkConfig = {
               IPv6AcceptRA = false;
             };
           };
         };
+
+        environment.etc = {
+          "fail2ban/filter.d/matrix.local".text = ''
+            [Definition]
+            failregex = ^matrix synapse\[\d+\]: synapse.access.http.\d+: \[(POST|GET)\-\d+\] <ADDR> - \d+ - .* <F-ERRCODE>403</F-ERRCODE> "(POST|GET) .*$
+            backend = systemd
+            journalmatch = _SYSTEMD_UNIT=matrix-synapse.service
+          '';
+        };
+        services.fail2ban = {
+          enable = true;
+          # Ban IP after 5 failures
+          maxretry = 5;
+          bantime = "1h";
+          bantime-increment = {
+            # Enable increment of bantime after each violation
+            enable = true;
+            multipliers = "1 2 4 8 16 32 64";
+            # Do not ban for more than 1 week
+            maxtime = "168h";
+            # Calculate the bantime based on all the violations
+            overalljails = true;
+          };
+          ignoreIP = [
+            "10.0.0.0/24"
+            "10.100.0.0/24"
+          ];
+          jails = {
+            matrix.settings = {
+              enabled = true;
+              filter = "matrix";
+              backend = "systemd";
+            };
+          };
+        };
+
         environment.systemPackages = with pkgs; [ wireguard-tools ];
 
         services.matrix-synapse = {
