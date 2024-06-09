@@ -24,7 +24,8 @@
           enabled = true;
           port = "http,https";
           filter = "caddy-status";
-          logpath = "/var/log/caddy/*.access.log";
+          logpath = "/var/log/caddy/access*.log";
+          backend = "auto";
           maxretry = 10;
         };
       };
