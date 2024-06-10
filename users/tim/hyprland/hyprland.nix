@@ -217,12 +217,6 @@
               "swww img ${wallpaper}"
             ];
 
-            # Temporary fix for https://github.com/Alexays/Waybar/issues/2666
-            # Should be fixed in next swaybar release
-            general = {
-              no_cursor_warps = true;
-            };
-
             plugin = {
               split-monitor-workspaces = {
                 count = 10;

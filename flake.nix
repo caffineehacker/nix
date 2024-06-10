@@ -7,7 +7,7 @@
       owner = "NixOS";
       repo = "nixpkgs";
       # Make sure we pick a rev with hydra builds
-      rev = "e8057b67ebf307f01bdcc8fba94d94f75039d1f6"; ### REPLACE_NIXPKGS_REV
+      rev = "c7b821ba2e1e635ba5a76d299af62821cbcb09f3"; ### REPLACE_NIXPKGS_REV
     };
     lanzaboote = {
       url = "github:nix-community/lanzaboote";
@@ -28,11 +28,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprland = {
-      type = "github";
-      owner = "hyprwm";
-      repo = "Hyprland";
+      type = "git";
+      url = "https://github.com/hyprwm/Hyprland";
       # Current head changed a lot of protocols and doesn't work properly with everything.
-      ref = "v0.40.0"; ### REPLACE_HYPRLAND_TAG
+      ref = "refs/tags/v0.41.0"; ### REPLACE_HYPRLAND_TAG
+      submodules = true;
       inputs.nixpkgs.follows = "nixpkgs";
     };
     split-monitor-workspaces = {
@@ -40,13 +40,13 @@
       owner = "Duckonaut";
       repo = "split-monitor-workspaces";
       inputs.hyprland.follows = "hyprland";
-      rev = "b40147d96d62a9e9bbc56b18ea421211ee598357";
+      rev = "2b57b5706cde7577c9cbb4de9e1f9a14777d09af";
     };
     hyprland-plugins = {
       type = "github";
       owner = "hyprwm";
       repo = "hyprland-plugins";
-      rev = "18daf37b7c4e6e51ca2bf8953ce4cff1c38ca725";
+      rev = "8571aa9badf7db9c4911018a5611c038cc776256";
       inputs.hyprland.follows = "hyprland";
     };
     nix-colors = {
