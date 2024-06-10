@@ -162,6 +162,8 @@ in {
       "nodejs-slim"
       "electron"
       "electron_29"
+      "electron_30"
+      "electron-unwrapped"
       "firefox"
       "firefox-bin"
       "webkitgtk"
