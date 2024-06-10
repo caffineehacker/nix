@@ -91,6 +91,42 @@ in {
           };
         };
 
+        services.fail2ban = {
+          enable = true;
+          # Ban IP after 5 failures
+          maxretry = 5;
+          bantime = "1h";
+          bantime-increment = {
+            # Enable increment of bantime after each violation
+            enable = true;
+            multipliers = "1 2 4 8 16 32 64";
+            # Do not ban for more than 1 week
+            maxtime = "168h";
+            # Calculate the bantime based on all the violations
+            overalljails = true;
+          };
+          jails = {
+            caddy-status = {
+              settings = {
+                enabled = true;
+                port = "http,https";
+                filter = "caddy-status";
+                logpath = "/var/log/caddy/access*.log";
+                backend = "auto";
+                maxretry = 10;
+              };
+            };
+          };
+        };
+        # This regex ignores all json and ensures we're not in a string when we find the remote_ip and status fields
+        environment.etc."fail2ban/filter.d/caddy-status.local" = {
+          text = ''
+            [Definition]
+            failregex = ^([^"]|"([^"]|\\")*")*"Cf-Connecting-Ip":\["<ADDR>"\]([^"]|"([^"]|\\")*")*"status":(0|403|404)([^"]|"([^"]|\\")*")*$
+            datepattern = LongEpoch
+          '';
+        };
+
         networking = {
           firewall = {
             enable = true;
