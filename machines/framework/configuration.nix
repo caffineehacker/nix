@@ -221,6 +221,16 @@ in {
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
+  # Disable touchpad while typingq
+  environment.etc = {
+    "libinput/local-overrides.quirks".text = ''
+      [Keyboard]
+      MatchUdevType=keyboard
+      MatchName=Framework Laptop 16 Keyboard Module - ANSI Keyboard
+      AttrKeyboardIntegration=internal
+    '';
+  };
+
 
   # Enable the GNOME Desktop Environment.
   # services.xserver.displayManager.gdm.enable = true;
@@ -244,6 +254,7 @@ in {
     nixpkgs-unoptimized.linuxKernel.packages.linux_zen.framework-laptop-kmod
     fw-inputmodule
     sops
+    amdgpu_top
   ];
 
   tw.programs.games.enable = true;
@@ -255,14 +266,6 @@ in {
     openFirewall = true;
   };
   tw.programs.hyprland.enable = true;
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
 
   services.fwupd.enable = true;
 
