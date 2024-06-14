@@ -352,11 +352,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-s+PEYvD90nr0Oxx3VWEJLHNTNw+lP/v8lRIy4Jxb7l0=",
-        "path": "/nix/store/yry7l4q2z36ra8d1gp70g5ssnyknkqlf-source/flakes/inputmodule-rs",
+        "path": "/nix/store/9f1gv34mrrakzz3skvas9y02iljw7b18-source/flakes/inputmodule-rs",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/yry7l4q2z36ra8d1gp70g5ssnyknkqlf-source/flakes/inputmodule-rs",
+        "path": "/nix/store/9f1gv34mrrakzz3skvas9y02iljw7b18-source/flakes/inputmodule-rs",
         "type": "path"
       }
     },
@@ -616,17 +616,17 @@
         "nix-filter": "nix-filter"
       },
       "locked": {
-        "lastModified": 1717967427,
-        "narHash": "sha256-ltR6Svr220r008dqQw4IJNmr4Pas///qLPVQ4NNto4A=",
+        "lastModified": 1718385099,
+        "narHash": "sha256-qoo+gM44g/kvyVmT5hKpY1H+948Us3DP9zXdguDo4bM=",
         "owner": "Duckonaut",
         "repo": "split-monitor-workspaces",
-        "rev": "2b57b5706cde7577c9cbb4de9e1f9a14777d09af",
+        "rev": "81adb1c51b2db8a9073dd24f8ac3cb23c9d96dac",
         "type": "github"
       },
       "original": {
         "owner": "Duckonaut",
         "repo": "split-monitor-workspaces",
-        "rev": "2b57b5706cde7577c9cbb4de9e1f9a14777d09af",
+        "rev": "81adb1c51b2db8a9073dd24f8ac3cb23c9d96dac",
         "type": "github"
       }
     },

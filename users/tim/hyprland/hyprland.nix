@@ -228,18 +228,8 @@
             };
           };
 
-          plugins = let 
-            # Temporary fix until this is merged into the main split-monitor-workspaces repository
-            split-monitor-workspaces = inputs.split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces.overrideAttrs (attrs: {
-              patches = [
-                (pkgs.fetchpatch {
-                  url = "https://patch-diff.githubusercontent.com/raw/Duckonaut/split-monitor-workspaces/pull/96.patch";
-                  hash = "sha256-X10zzx4fo6TfQeq99ctMKROfxIBUYsXlGUAObFscjPw=";
-                })
-              ];
-            });
-          in [
-            split-monitor-workspaces
+          plugins = [
+            inputs.split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces
             inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars
           ];
         };

@@ -40,7 +40,7 @@
       owner = "Duckonaut";
       repo = "split-monitor-workspaces";
       inputs.hyprland.follows = "hyprland";
-      rev = "2b57b5706cde7577c9cbb4de9e1f9a14777d09af";
+      rev = "81adb1c51b2db8a9073dd24f8ac3cb23c9d96dac";
     };
     hyprland-plugins = {
       type = "github";
