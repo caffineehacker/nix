@@ -7,7 +7,7 @@
       owner = "NixOS";
       repo = "nixpkgs";
       # Make sure we pick a rev with hydra builds
-      rev = "c7b821ba2e1e635ba5a76d299af62821cbcb09f3"; ### REPLACE_NIXPKGS_REV
+      rev = "57d6973abba7ea108bac64ae7629e7431e0199b6"; ### REPLACE_NIXPKGS_REV
     };
     lanzaboote = {
       url = "github:nix-community/lanzaboote";
@@ -31,7 +31,7 @@
       type = "git";
       url = "https://github.com/hyprwm/Hyprland";
       # Current head changed a lot of protocols and doesn't work properly with everything.
-      ref = "refs/tags/v0.41.0"; ### REPLACE_HYPRLAND_TAG
+      ref = "refs/tags/v0.41.1"; ### REPLACE_HYPRLAND_TAG
       submodules = true;
       inputs.nixpkgs.follows = "nixpkgs";
     };
