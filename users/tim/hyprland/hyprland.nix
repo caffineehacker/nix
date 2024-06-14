@@ -222,6 +222,10 @@
                 count = 10;
               };
             };
+
+            cursor = {
+              no_warps = true;
+            };
           };
 
           plugins = let 
