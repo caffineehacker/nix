@@ -7,7 +7,7 @@
       owner = "NixOS";
       repo = "nixpkgs";
       # Make sure we pick a rev with hydra builds
-      rev = "e9ee548d90ff586a6471b4ae80ae9cfcbceb3420"; ### REPLACE_NIXPKGS_REV
+      rev = "c00d587b1a1afbf200b1d8f0b0e4ba9deb1c7f0e"; ### REPLACE_NIXPKGS_REV
     };
     lanzaboote = {
       url = "github:nix-community/lanzaboote";
@@ -56,11 +56,9 @@
       type = "github";
       owner = "NixOS";
       repo = "nixos-hardware";
-      # Temporary fix for issue with AMD GPU options (see https://github.com/NixOS/nixos-hardware/pull/977 and https://github.com/NixOS/nixpkgs/pull/318175)
-      rev = "291c3ee610d94e39fa40f1051ebb14b56a57a5d9";
     };
     inputmodule-control = {
-      url = "./flakes/inputmodule-rs";
+      url = "github:caffineehacker/nix?dir=flakes/inputmodule-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
