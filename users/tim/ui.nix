@@ -60,10 +60,26 @@ in {
           "editor.formatOnSave" = true;
           "files.autoSave" = "onFocusChange";
         };
-        extensions = with pkgs; [
-          vscode-extensions.jnoortheen.nix-ide
-          vscode-extensions.catppuccin.catppuccin-vsc
-        ];
+        extensions = let
+          continue-dev = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
+            mktplcRef = {
+              name = "continue";
+              publisher = "Continue";
+              version = "0.9.163";
+              hash = "sha256-jZ8MOOrkZ9tJq6qxzoveZnJmNQQg/vbnBBxxeJx2O8A=";
+            };
+            meta = {
+              changelog = "https://marketplace.visualstudio.com/items?itemName=Continue.continue/changelog";
+              description = "Ollama frontend";
+              downloadPage = "https://marketplace.visualstudio.com/items?itemName=Continue.continue";
+              homepage = "https://continue.dev";
+            };
+           };
+          in with pkgs; [
+            vscode-extensions.jnoortheen.nix-ide
+            vscode-extensions.catppuccin.catppuccin-vsc
+            continue-dev
+          ];
       };
 
       services.gnome-keyring.enable = true;
