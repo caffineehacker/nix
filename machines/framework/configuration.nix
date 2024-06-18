@@ -54,7 +54,7 @@ in {
     useUnoptimizedHaskell-x64 = super: pkgs: lib.lists.foldr (a: b: (lib.attrsets.setAttrByPath [a] (lib.attrsets.getAttrFromPath [a] nixpkgs-unoptimized.pkgs.haskellPackages)) // b) { } pkgs;
     useUnoptimizedHaskell-i686 = super: pkgs: lib.lists.foldr (a: b: (lib.attrsets.setAttrByPath [a] (lib.attrsets.getAttrFromPath [a] nixpkgs-unoptimized-i686.pkgs.haskellPackages)) // b) { } pkgs;
     useUnoptimizedHaskell = super: pkgs: {
-      haskellPackages = super.haskellPackages.override{
+      haskellPackages = super.haskellPackages.override {
         overrides = (new: old: (if (super.stdenv.system == "x86_64-linux") then (useUnoptimizedHaskell-x64 super pkgs) else (useUnoptimizedHaskell-i686 super pkgs)));
       };
     };
@@ -94,16 +94,14 @@ in {
         doCheck = false;
         pytestCheckPhase = "true";
       };
-      # A test fails due to being too slow while building everything else - 4/24/2024
-      python3 = super.python3.override {
-        packageOverrides = pfinal: pprev: {
-          h2 = pprev.h2.overridePythonAttrs {
-            doCheck = false;
-            pytestCheckPhase = "true";
-            disabledTests = pprev.h2.disabledTests ++ ["test_flow_control_window"];
-          };
-        };
-      };
+      pythonPackagesExtensions = super.pythonPackagesExtensions ++ [
+        (pyfinal: pysuper: {
+          scipy = pysuper.scipy.overridePythonAttrs (oldAttrs: {
+            # Tests fail due to floating point precision due to optimizations
+            disabledTests = pysuper.scipy.disabledTests ++ ["test_equal_bounds"];
+          });
+        })
+      ];
       # A test seg faults - 4/24/2024
       libsndfile = super.libsndfile.override(old: {
         stdenv = old.stdenv // {hostPlatform = lib.systems.elaborate { system = "x86_64-linux"; };};
@@ -155,6 +153,8 @@ in {
             });
         });
       });
+      # Rocblas takes forever to build and just overriding it does not update the dependency for other packages unfortuntately.
+      rocmPackages_6 = nixpkgs-unoptimized.pkgs.rocmPackages_6;
     })
     (final: super: (useUnoptimized super [
       # These are here because they can be very slow to build
@@ -173,8 +173,9 @@ in {
       "llvm"
       # Build failure - 5/8/2024
       "dav1d"
-      # Test failure if too many builds are happening at once
-      "fprintd"]))
+      # Crashes - 6/17/2024
+      "mono"
+    ]))
     (final: super: (useUnoptimizedHaskell super [
       # Test failure - 5/8/2024
       "crypton"
