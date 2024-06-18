@@ -12,6 +12,7 @@ in
     inputs.nix-colors.homeManagerModules.default
     ./hyprland
     ./ui.nix
+    ./llm.nix
   ];
 
   options = {

@@ -1,10 +1,20 @@
 {config, lib, inputs, pkgs, ...}:
 let
   cfg = config.tw.users.tim;
-  uiEnabled = config.services.xserver.enable || config.tw.programs.hyprland.enable;
+  uiEnabled = cfg.ui.enable;
   inherit (inputs.nix-colors.lib.contrib { inherit pkgs; })
     gtkThemeFromScheme;
 in {
+  options = {
+    tw.users.tim.ui.enable = lib.mkOption {
+      default = (config.services.xserver.enable || config.tw.programs.hyprland.enable) && cfg.enable;
+      example = true;
+      description = ''
+        Enable UI based settings
+      '';
+      type = lib.types.bool;
+    };
+  };
   config = lib.mkIf (uiEnabled && cfg.enable) {
     fonts.packages = with pkgs; [
       noto-fonts-emoji
