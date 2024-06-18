@@ -59,6 +59,7 @@ in {
 
           "editor.formatOnSave" = true;
           "files.autoSave" = "onFocusChange";
+          "continue.telemetryEnabled" = false;
         };
         extensions = let
           continue-dev = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
