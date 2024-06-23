@@ -82,6 +82,15 @@ in
         programs.btop.enable = true;
 
         programs.home-manager.enable = true;
+
+        programs.ssh = {
+          enable = true;
+          matchBlocks = lib.mkIf config.tw.services.ssh.enable {
+            "homelab.timwaterhouse.com" = {
+              proxyCommand = "${pkgs.cloudflared}/bin/cloudflared access ssh --hostname %h";
+            };
+          };
+        };
       };
     };
 
