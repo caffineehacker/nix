@@ -4,17 +4,6 @@
   matrixSharedSecretFile = config.sops.secrets."matrix/sharedSecret".path;
   wireguardPrivateKeyFile = config.sops.secrets."matrix/wireguard/clientKey".path;
 in {
-  options = {
-    tw.containers.matrix.enable = lib.mkOption {
-      default = false;
-      example = true;
-      description = ''
-        Enable Matrix Synapse container
-      '';
-      type = lib.types.bool;
-    };
-  };
-
   config = lib.mkIf cfg.enable {
     containers.matrix = {
       autoStart = true;

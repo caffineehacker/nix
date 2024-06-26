@@ -2,17 +2,6 @@
   cfg = config.tw.containers.vaultwarden;
   tunnelFile = config.sops.secrets."cloudflare/tunnels/vaultwarden.json".path;
 in {
-  options = {
-    tw.containers.vaultwarden.enable = lib.mkOption {
-      default = false;
-      example = true;
-      description = ''
-        Enable Vaultwarden container
-      '';
-      type = lib.types.bool;
-    };
-  };
-
   config = lib.mkIf cfg.enable {
     containers.vaultwarden = {
       autoStart = true;
