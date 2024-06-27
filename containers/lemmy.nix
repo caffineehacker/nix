@@ -6,7 +6,7 @@ in helpers.mkContainer cfg {
     services.lemmy = {
       enable = true;
       settings = {
-        hostname = "lemmy.timwaterhouse.com";
+        hostname = cfg.hostname;
       };
       database = {
         createLocally = true;
