@@ -1,27 +1,29 @@
 {lib, ...}: {
   mkContainer = cfg: attrs: {
     config = lib.mkIf cfg.enable {
-      containers."${cfg.name}" = {
-        autoStart = true;
-        privateNetwork = true;
-        hostAddress = cfg.hostIp;
-        localAddress = cfg.containerIp;
+      containers."${cfg.name}" = let 
+        merged = {
+          autoStart = true;
+          privateNetwork = true;
+          hostAddress = cfg.hostIp;
+          localAddress = cfg.containerIp;
 
-        extraFlags = if cfg.cloudflare.tunnelFile != null then [
-          # Load the cloudflare secret
-          "--load-credential=tunnel.json:${cfg.cloudflare.tunnelFile}"
-        ] else [];
-
-        config = {config, pkgs, lib, ...}: {
+          extraFlags = if cfg.cloudflare.tunnelFile != null then [
+            # Load the cloudflare secret
+            "--load-credential=tunnel.json:${cfg.cloudflare.tunnelFile}"
+          ] else [];
+        } // attrs;
+      in merged // {
+        config = {config, pkgs, lib, ...}@inputs: {
           system.stateVersion = "23.11";
 
-          imports = if cfg.tunnelFile != null then [
+          imports = if cfg.cloudflare.tunnelFile != null then [
             ./cloudflared.nix
           ] else [];
 
-          tw.containers.cloudflared = lib.mkIf cfg.cloudflare.tunnelFile != null {
+          tw.containers.cloudflared = lib.mkIf (cfg.cloudflare.tunnelFile != null) {
             tunnelId = cfg.cloudflare.tunnelId;
-            hostname = cfg.cloudflare.hostname;
+            hostname = cfg.hostname;
             port = cfg.cloudflare.port;
           };
 
@@ -36,8 +38,8 @@
           };
 
           services.resolved.enable = true;
-        };
-      } // attrs;
+        } // merged.config inputs;
+      };
     };
   };
 }
