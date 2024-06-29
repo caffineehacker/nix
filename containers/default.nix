@@ -63,6 +63,7 @@
       tw.containers.lemmy = mkContainerOptions "lemmy" 10;
       tw.containers.matrix = mkContainerOptions "matrix" 41;
       tw.containers.vaultwarden = mkContainerOptions "vaultwarden" 20;
+      tw.containers.obsidian-sync = mkContainerOptions "obsidian-sync" 20;
   };
 
   config = {
@@ -86,6 +87,7 @@
   imports = [
     ./lemmy.nix
     ./matrix.nix
+    ./obsidian-livesync.nix
     ./vaultwarden.nix
   ];
 }

@@ -6,6 +6,7 @@
       "cloudflare/tunnels/homelab.json" = {};
       "cloudflare/tunnels/lemmy.json" = {};
       "cloudflare/tunnels/matrix.json" = {};
+      "cloudflare/tunnels/obsidian-sync.json" = {};
       "cloudflare/tunnels/vaultwarden.json" = {};
       "matrix/sharedSecret" = {};
       "matrix/wireguard/clientKey" = {};
