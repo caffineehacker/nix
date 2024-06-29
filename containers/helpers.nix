@@ -36,9 +36,10 @@
             # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
             useHostResolvConf = lib.mkForce false;
           };
-
+        } // merged.config inputs // {
+          # We apply these settings after the above settings since some of these seem to get incorrectly overwritten otherwise
           services.resolved.enable = true;
-        } // merged.config inputs;
+        };
       };
     };
   };
