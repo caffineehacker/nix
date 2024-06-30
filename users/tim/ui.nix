@@ -34,6 +34,7 @@ in {
         firefox-bin
         discord
         element-desktop
+        obsidian
       ];
 
       programs.kitty = {
