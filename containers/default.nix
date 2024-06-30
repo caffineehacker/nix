@@ -51,7 +51,7 @@
             type = lib.types.str;
           };
           port = lib.mkOption {
-            default = 80;
+            default = 8080;
             description = ''
               Port of the container
              '';

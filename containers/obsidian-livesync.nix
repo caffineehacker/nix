@@ -1,4 +1,4 @@
-# WARNING!!!! You should configure the username and password manually in the config file or else nothing will work. The config file will be created on first launch.
+# WARNING!!!! You should configure the username and password manually in the config file or else nothing will work. The config file will be created on first launch in /var/lib/couchdb.
 
 {config, lib, ...}: let
   cfg = config.tw.containers.obsidian-sync;
@@ -16,7 +16,7 @@ in {
         # https://github.com/vrtmrz/obsidian-livesync/blob/main/docs/setup_own_server.md#configure
         extraConfig = ''
           [couchdb]
-          single_node=true
+          single_node = true
           max_document_size = 50000000
 
           [chttpd]
