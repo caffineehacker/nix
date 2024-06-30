@@ -34,7 +34,7 @@ in {
 
           [cors]
           credentials = true
-          origins = "app://obsidian.md,capacitor://localhost,http://localhost"
+          origins = app://obsidian.md,capacitor://localhost,http://localhost
         '';
       };
     };
