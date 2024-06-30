@@ -61,9 +61,9 @@
       };
     in {
       tw.containers.lemmy = mkContainerOptions "lemmy" 10;
-      tw.containers.matrix = mkContainerOptions "matrix" 41;
       tw.containers.vaultwarden = mkContainerOptions "vaultwarden" 20;
-      tw.containers.obsidian-sync = mkContainerOptions "obsidian-sync" 20;
+      tw.containers.obsidian-sync = mkContainerOptions "obsidian-sync" 30;
+      tw.containers.matrix = mkContainerOptions "matrix" 41;
   };
 
   config = {
@@ -80,6 +80,11 @@
           port = 8222;
         };
         hostname = "vault.timwaterhouse.com";
+      };
+      obsidian-sync = {
+        cloudflare = {
+          tunnelId = "fd12b516-c8ac-4861-bbc5-24d38659e8f0";
+        };
       };
     };
   };
