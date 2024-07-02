@@ -146,6 +146,14 @@
               "$mod, F, togglefloating,"
               "$mod, SPACE, exec, wofi"
               "$mod SHIFT, F, fullscreen"
+
+              # Screenshots
+              # Screenshot a window
+              "$mod, PRINT, exec, ${pkgs.hyprshot}/bin/hyprshot -m window"
+              # Screenshot a monitor
+              ", PRINT, exec, ${pkgs.hyprshot}/bin/hyprshot -m output"
+              # Screenshot a region
+              "$mod SHIFT, PRINT, exec, ${pkgs.hyprshot}/bin/hyprshot -m region"
               # clipboard manager
               "ALT, V, exec, cliphist list | wofi -dmenu | cliphist decode | wl-copy"
 
