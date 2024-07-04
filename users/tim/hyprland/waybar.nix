@@ -2,9 +2,7 @@
 , config
 , pkgs
 , ...
-}: let 
- cfgTim = config.home-manager.users.tim;
- in {
+}: {
   config = lib.mkIf config.tw.programs.hyprland.enable {
     tw.users.tim.wlogout.enable = true;
     home-manager = {
@@ -117,10 +115,10 @@
               pulseaudio = {
                 format = "{icon} {volume}%";
                 format-muted = "";
-                on-click = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --toggle";
+                on-click = "${pkgs.tw.hypr.volume}/bin/volume --toggle";
                 on-click-right = "pavucontrol";
-                on-scroll-up = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --inc";
-                on-scroll-down = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --dec";
+                on-scroll-up = "${pkgs.tw.hypr.volume}/bin/volume --inc";
+                on-scroll-down = "${pkgs.tw.hypr.volume}/bin/volume --dec";
                 scroll-step = 5;
                 format-icons = {
                   headphone = "";
@@ -139,7 +137,7 @@
                   tooltip = true;
                   format = "{}";
                   interval = 30;
-                  exec = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/waybar-wttr.py";
+                  exec = "${pkgs.tw.hypr.waybar-weather}/bin/waybar-wttr.py";
                   return-type = "json";
               };
 
@@ -162,8 +160,8 @@
               backlight = {
                 format = "{icon} {percent}%";
                 format-icons = [ "󰃞" "󰃟" "󰃠" ];
-                on-scroll-up = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/brightness --inc";
-                on-scroll-down = "${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/brightness --dec";
+                on-scroll-up = "${pkgs.tw.hypr.brightness}/bin/brightness --inc";
+                on-scroll-down = "${pkgs.tw.hypr.brightness}/bin/brightness --dec";
               };
 
               tray = {

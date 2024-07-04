@@ -3,30 +3,21 @@
 , config
 , inputs
 , ...
-}: let 
- cfgTim = config.home-manager.users.tim;
- in {
-  imports = [ ./wofi.nix ./waybar.nix ./swaylock.nix ./mako.nix ./wlogout.nix ];
+}: {
+  imports = [ ./wofi.nix ./waybar.nix ./swaylock.nix ./mako.nix ./wlogout.nix ./scripts ];
   config = lib.mkIf config.tw.programs.hyprland.enable {
     fonts.packages = with pkgs; [
       noto-fonts-emoji
       nerdfonts
     ];
 
-    # Enable swaylock to authenticate with pam
-    security.pam.services.swaylock = { };
-
     home-manager = {
       users.tim = {
         home.packages = with pkgs; [
+          # Even though this is only referred to as $pkgs.networkmanagerapplet, we need to install it for the icons to appear
           networkmanagerapplet
-          wl-clipboard
-          swww
           pamixer
-          cliphist
           xfce.thunar
-          brightnessctl
-          swayidle
         ];
 
         xdg.mimeApps = {
@@ -34,11 +25,6 @@
           associations.added = {
             "inode/directory" = ["thunar.desktop"];
           };
-        };
-
-        xdg.configFile."hypr/scripts" = {
-          recursive = true;
-          source = ./hyprv4/scripts;
         };
 
         services.wlsunset = {
@@ -142,7 +128,6 @@
               "$mod, Q, exit,"
               "$mod, L, exec, swaylock"
               "$mod, L, exec, sleep 1 && hyprctl dispatch dpms off"
-              "$mod, E, exec, $fileManager"
               "$mod, F, togglefloating,"
               "$mod, SPACE, exec, wofi"
               "$mod SHIFT, F, fullscreen"
@@ -155,7 +140,7 @@
               # Screenshot a region
               "$mod SHIFT, PRINT, exec, ${pkgs.hyprshot}/bin/hyprshot -m region"
               # clipboard manager
-              "ALT, V, exec, cliphist list | wofi -dmenu | cliphist decode | wl-copy"
+              "$mod, V, exec, ${pkgs.cliphist}/bin/cliphist list | wofi -dmenu | ${pkgs.cliphist}/bin/cliphist decode | ${pkgs.wl-clipboard}/bin/wl-copy"
 
               "$mod, left, movefocus, l"
               "$mod, right, movefocus, r"
@@ -163,15 +148,15 @@
               "$mod, down, movefocus, d"
 
               # Media key binds
-              ", xf86audioraisevolume, exec, ${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --inc"
-              ", xf86audiolowervolume, exec, ${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --dec"
-              ", xf86AudioMicMute, exec, ${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --toggle-mic"
-              ", xf86audioMute, exec, ${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/volume --toggle"
+              ", xf86audioraisevolume, exec, ${pkgs.tw.hypr.volume}/bin/volume --inc"
+              ", xf86audiolowervolume, exec, ${pkgs.tw.hypr.volume}/bin/volume --dec"
+              ", xf86AudioMicMute, exec, ${pkgs.tw.hypr.volume}/bin/volume --toggle-mic"
+              ", xf86audioMute, exec, ${pkgs.tw.hypr.volume}/bin/volume --toggle"
 
-              ", xf86KbdBrightnessDown, exec, ${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/kb-brightness --dec"
-              ", xf86KbdBrightnessUp, exec, ${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/kb-brightness --inc"
-              ", xf86MonBrightnessDown, exec, ${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/brightness --dec"
-              ", xf86MonBrightnessUp, exec, ${cfgTim.home.homeDirectory}/${cfgTim.xdg.configFile."hypr/scripts".target}/brightness --inc"
+              ", xf86KbdBrightnessDown, exec, ${pkgs.tw.hypr.kb-brightness}/bin/kb-brightness --dec"
+              ", xf86KbdBrightnessUp, exec, ${pkgs.tw.hypr.kb-brightness}/bin/kb-brightness --inc"
+              ", xf86MonBrightnessDown, exec, ${pkgs.tw.hypr.brightness}/bin/brightness --dec"
+              ", xf86MonBrightnessUp, exec, ${pkgs.tw.hypr.brightness}/bin/brightness --inc"
             ] ++ (
               # workspaces
               # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}
@@ -202,15 +187,16 @@
 
             exec-once = [
               "firefox"
-              "swww-daemon"
+              "${pkgs.swww}/bin/swww-daemon"
               "mako"
-              "blueman-applet"
-              "nm-applet --indicator"
-              "wl-paste --watch cliphist store"
+              "${pkgs.blueman}/bin/blueman-applet"
+              "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator"
+              "${pkgs.wl-clipboard}/bin/wl-paste --watch ${pkgs.cliphist}/bin/cliphist store"
               "waybar"
               "steam"
+              "obsidian"
               # Enable sway lock when the system sleeps
-              "swayidle -w before-sleep \"swaylock -f\""
+              "${pkgs.swayidle}/bin/swayidle -w before-sleep \"swaylock -f\""
             ];
 
             exec = let
