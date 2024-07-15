@@ -232,13 +232,35 @@ in {
     '';
   };
 
+  # Disable the internal monitor and fingerprint sensor when lid is closed
+  services.acpid = {
+    enable = true;
+    handlers.lidClosed = {
+      event = "button/lid \\w+ close";
+      action = ''
+        echo "Lid closed. Disabling fprintd."
+        systemctl stop fprintd
+        ln -s /dev/null /run/systemd/transient/fprintd.service
+        systemctl daemon-reload
+      '';
+    };
+    handlers.lidOpen = {
+      event = "button/lid \\w+ open";
+      action = ''
+        if ! $(systemctl is-active --quiet fprintd); then
+          echo "Lid open. Enabling fprintd."
+          rm -f /run/systemd/transient/fprintd.service
+          systemctl daemon-reload
+          systemctl start fprintd
+        fi
+      '';
+    };
+  };
 
   # Enable the GNOME Desktop Environment.
   # services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
-  # Enable sound.
-  sound.enable = true;
   hardware.pulseaudio.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
