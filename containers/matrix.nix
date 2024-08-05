@@ -24,7 +24,6 @@ in {
 
         imports = [
           ./cloudflared.nix
-          ../programs/systemd.nix
         ];
 
         tw.programs.systemd.nextVersion.enable = true;
