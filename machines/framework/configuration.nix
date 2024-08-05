@@ -25,6 +25,7 @@ in {
     gcc.arch = "znver4";
     gcc.tune = "znver4";
   };
+  nixpkgs.config.rocmSupport = true;
   nixpkgs.overlays =
     let 
     # This comes from nixpkgs/pkgs/stdenv/adapters.nix. The primary change is that we don't make a default mkDerivationFromStdenv if stdenvSuperArgs.mkDerivationFromStdenv doesn't exist.
@@ -264,7 +265,7 @@ in {
   hardware.pulseaudio.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.libinput.enable = true;
+  services.libinput.enable = true;
 
   tw.users.tim.enable = true;
 
