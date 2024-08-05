@@ -30,7 +30,8 @@
       type = "git";
       url = "https://github.com/hyprwm/Hyprland";
       # Current head changed a lot of protocols and doesn't work properly with everything.
-      ref = "refs/tags/v0.41.2"; ### REPLACE_HYPRLAND_TAG
+      #ref = "refs/tags/v0.41.2"; ### REPLACE_HYPRLAND_TAG
+      rev = "bd526822deb9ed47c0b51b534817aa8541fff07b";
       submodules = true;
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -45,7 +46,8 @@
       type = "github";
       owner = "hyprwm";
       repo = "hyprland-plugins";
-      ref = "refs/tags/v0.41.2"; ### REPLACE_HYPRLAND_PLUGINS_TAG
+      #ref = "refs/tags/v0.41.2"; ### REPLACE_HYPRLAND_PLUGINS_TAG
+      rev = "928164d6d2560a20328c74b6b3e5da271e8e0b5a";
       inputs.hyprland.follows = "hyprland";
     };
     nix-colors = {
