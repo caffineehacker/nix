@@ -6,8 +6,7 @@
       type = "github";
       owner = "NixOS";
       repo = "nixpkgs";
-      # Make sure we pick a rev with hydra builds
-      rev = "0aeab749216e4c073cece5d34bc01b79e717c3e0"; ### REPLACE_NIXPKGS_REV
+      ref = "nixpkgs-unstable";
     };
     lanzaboote = {
       url = "github:nix-community/lanzaboote";
