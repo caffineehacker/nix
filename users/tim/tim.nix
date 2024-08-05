@@ -53,6 +53,7 @@ in
           (lib.mkIf config.tw.programs.games.enable protonup)
           (lib.mkIf config.tw.services.ssh.enable byobu)
           (lib.mkIf config.tw.services.ssh.enable tmux)
+          killall
         ];
 
         home.sessionVariables = lib.mkIf config.tw.programs.games.enable {
