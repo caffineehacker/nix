@@ -1,10 +1,10 @@
-{config, pkgs, ...}:{
+{ config, pkgs, ... }: {
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
-    settings.trusted-users = ["root" "tim"];
+    settings.trusted-users = [ "root" "tim" ];
     settings.show-trace = true;
   };
 

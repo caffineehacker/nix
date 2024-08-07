@@ -4,9 +4,11 @@
 ## `cat ~/.cloudflared/<tunnel_id>.json`
 ## `sops secrets/secrets.yaml` and add paste the above json in single quotes to a key
 ## `cloudflared tunnel route dns <name> <hostname>`
-{pkgs, lib, config, ...}: let
+{ pkgs, lib, config, ... }:
+let
   cfg = config.tw.containers.cloudflared;
-in {
+in
+{
   options = {
     tw.containers.cloudflared.tunnelId = lib.mkOption {
       type = lib.types.str;
@@ -44,7 +46,7 @@ in {
       };
     };
 
-    systemd.services."cloudflared-tunnel-${cfg.tunnelId}" = 
+    systemd.services."cloudflared-tunnel-${cfg.tunnelId}" =
       let
         filterConfig = lib.attrsets.filterAttrsRecursive (_: v: ! builtins.elem v [ null [ ] { } ]);
 

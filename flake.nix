@@ -64,19 +64,21 @@
     };
   };
 
-  outputs = inputs: let
-    commonModules = [
-      inputs.lanzaboote.nixosModules.lanzaboote
-      inputs.sops-nix.nixosModules.sops
-      ./system
-      ./programs
-      ./users
-      ./services
-      ./containers
-      ./secrets
-      ./flakes/kitchenowl
-    ];
-    in {
+  outputs = inputs:
+    let
+      commonModules = [
+        inputs.lanzaboote.nixosModules.lanzaboote
+        inputs.sops-nix.nixosModules.sops
+        ./system
+        ./programs
+        ./users
+        ./services
+        ./containers
+        ./secrets
+        ./flakes/kitchenowl
+      ];
+    in
+    {
       nixosConfigurations = {
         framework =
           let
@@ -94,7 +96,8 @@
             # };
             # nixosSystem = import (nixpkgs + "/nixos/lib/eval-config.nix");
             nixosSystem = inputs.nixpkgs.lib.nixosSystem;
-          in nixosSystem {
+          in
+          nixosSystem {
             inherit system;
             specialArgs = { inherit inputs system; };
             modules = commonModules ++ [
@@ -110,7 +113,8 @@
         homelab =
           let
             system = "x86_64-linux";
-          in inputs.nixpkgs.lib.nixosSystem {
+          in
+          inputs.nixpkgs.lib.nixosSystem {
             inherit system;
             specialArgs = { inherit inputs system; };
             modules = commonModules ++ [
@@ -120,7 +124,8 @@
         cloud =
           let
             system = "aarch64-linux";
-          in inputs.nixpkgs.lib.nixosSystem {
+          in
+          inputs.nixpkgs.lib.nixosSystem {
             inherit system;
             specialArgs = { inherit inputs system; };
             modules = commonModules ++ [

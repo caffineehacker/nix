@@ -1,12 +1,13 @@
-{lib, config, ...}:{
-  options = let 
+{ lib, config, ... }: {
+  options =
+    let
       mkContainerOptions = name: ipNumber: {
         name = lib.mkOption {
           default = name;
           example = "foo";
           description = ''
             Name of the container
-           '';
+          '';
           type = lib.types.str;
         };
 
@@ -23,7 +24,7 @@
           example = "10.0.0.10";
           description = ''
             IP address of the container from the host
-           '';
+          '';
           type = lib.types.str;
         };
         hostname = lib.mkOption {
@@ -31,7 +32,7 @@
           example = "example.com";
           description = ''
             Hostname of the container
-           '';
+          '';
           type = lib.types.str;
         };
         enable = lib.mkEnableOption name;
@@ -54,17 +55,18 @@
             default = 8080;
             description = ''
               Port of the container
-             '';
+            '';
             type = lib.types.int;
           };
         };
       };
-    in {
+    in
+    {
       tw.containers.lemmy = mkContainerOptions "lemmy" 10;
       tw.containers.vaultwarden = mkContainerOptions "vaultwarden" 20;
       tw.containers.obsidian-sync = mkContainerOptions "obsidian-sync" 30;
       tw.containers.matrix = mkContainerOptions "matrix" 41;
-  };
+    };
 
   config = {
     tw.containers = {

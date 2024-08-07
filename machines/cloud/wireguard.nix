@@ -1,4 +1,4 @@
-{config, pkgs, ...}:{
+{ config, pkgs, ... }: {
   systemd.network = {
     enable = true;
     netdevs = {

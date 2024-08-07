@@ -22,7 +22,7 @@
         textColor = "#" + config.tw.users.tim.colorScheme.palette.base05;
         borderColor = "#" + config.tw.users.tim.colorScheme.palette.base01;
         progressColor = "over #${config.tw.users.tim.colorScheme.palette.base06}";
-        
+
         icons = true;
         maxIconSize = 48;
         markup = true;

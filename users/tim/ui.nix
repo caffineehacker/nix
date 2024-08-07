@@ -1,10 +1,11 @@
-{config, lib, inputs, pkgs, ...}:
+{ config, lib, inputs, pkgs, ... }:
 let
   cfg = config.tw.users.tim;
   uiEnabled = cfg.ui.enable;
   inherit (inputs.nix-colors.lib.contrib { inherit pkgs; })
     gtkThemeFromScheme;
-in {
+in
+{
   options = {
     tw.users.tim.ui.enable = lib.mkOption {
       default = (config.services.xserver.enable || config.tw.programs.hyprland.enable) && cfg.enable;
@@ -62,22 +63,24 @@ in {
           "files.autoSave" = "onFocusChange";
           "continue.telemetryEnabled" = false;
         };
-        extensions = let
-          continue-dev = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
-            mktplcRef = {
-              name = "continue";
-              publisher = "Continue";
-              version = "0.9.163";
-              hash = "sha256-jZ8MOOrkZ9tJq6qxzoveZnJmNQQg/vbnBBxxeJx2O8A=";
+        extensions =
+          let
+            continue-dev = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
+              mktplcRef = {
+                name = "continue";
+                publisher = "Continue";
+                version = "0.9.163";
+                hash = "sha256-jZ8MOOrkZ9tJq6qxzoveZnJmNQQg/vbnBBxxeJx2O8A=";
+              };
+              meta = {
+                changelog = "https://marketplace.visualstudio.com/items?itemName=Continue.continue/changelog";
+                description = "Ollama frontend";
+                downloadPage = "https://marketplace.visualstudio.com/items?itemName=Continue.continue";
+                homepage = "https://continue.dev";
+              };
             };
-            meta = {
-              changelog = "https://marketplace.visualstudio.com/items?itemName=Continue.continue/changelog";
-              description = "Ollama frontend";
-              downloadPage = "https://marketplace.visualstudio.com/items?itemName=Continue.continue";
-              homepage = "https://continue.dev";
-            };
-           };
-          in with pkgs; [
+          in
+          with pkgs; [
             vscode-extensions.jnoortheen.nix-ide
             vscode-extensions.catppuccin.catppuccin-vsc
             continue-dev

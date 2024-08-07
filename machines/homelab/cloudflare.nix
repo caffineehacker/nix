@@ -1,7 +1,8 @@
-{config, ...}:
+{ config, ... }:
 let
   tunnelFile = config.sops.secrets."cloudflare/tunnels/homelab.json".path;
-in {
+in
+{
   sops.secrets."cloudflare/tunnels/homelab.json" = {
     owner = config.services.cloudflared.user;
     inherit (config.services.cloudflared) group;

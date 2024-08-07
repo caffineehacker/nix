@@ -1,11 +1,13 @@
-{config, lib, ...}: let
+{ config, lib, ... }:
+let
   cfg = config.tw.containers.lemmy;
   helpers = import ./helpers.nix { inherit lib; };
-in {
+in
+{
   imports = [ (helpers.module cfg) ];
 
   config = lib.mkIf cfg.enable {
-    containers."${cfg.name}".config = {...}: {
+    containers."${cfg.name}".config = { ... }: {
       imports = [ (helpers.containerConfigModule cfg) ];
       services.lemmy = {
         enable = true;

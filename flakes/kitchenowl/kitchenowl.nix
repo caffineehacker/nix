@@ -7,12 +7,13 @@ python3Packages.buildPythonApplication rec {
   pname = "kitchenowl";
   version = "0.5.1";
 
-  src = fetchFromGitHub {
-    owner = "TomBursch";
-    repo = "kitchenowl";
-    rev = "v${version}";
-    hash = "sha256-8lWUFnsRnrqcZmIxw6OJ4QSsH0sSsRLM+Uwc/NpQM+c=";
-  } + "/backend";
+  src = fetchFromGitHub
+    {
+      owner = "TomBursch";
+      repo = "kitchenowl";
+      rev = "v${version}";
+      hash = "sha256-8lWUFnsRnrqcZmIxw6OJ4QSsH0sSsRLM+Uwc/NpQM+c=";
+    } + "/backend";
 
   format = "other";
 

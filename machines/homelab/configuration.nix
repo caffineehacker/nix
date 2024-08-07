@@ -5,7 +5,7 @@
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
-    settings.trusted-users = ["root" "tim"];
+    settings.trusted-users = [ "root" "tim" ];
     settings.show-trace = true;
   };
   nixpkgs.hostPlatform = {

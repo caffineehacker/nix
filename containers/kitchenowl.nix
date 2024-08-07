@@ -1,7 +1,9 @@
-{config, lib, ...}: let
+{ config, lib, ... }:
+let
   cfg = config.tw.containers.kitchenowl;
   tunnelFile = config.sops.secrets."cloudflare/tunnels/kitchenowl.json".path;
-in {
+in
+{
   options = {
     tw.containers.kitchenowl.enable = lib.mkOption {
       default = false;
@@ -25,7 +27,7 @@ in {
         "--load-credential=tunnel.json:${tunnelFile}"
       ];
 
-      config = {config, pkgs, lib, ...}: {
+      config = { config, pkgs, lib, ... }: {
         system.stateVersion = "23.11";
 
         imports = [

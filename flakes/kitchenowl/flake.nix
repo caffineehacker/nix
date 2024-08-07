@@ -7,14 +7,12 @@
 
   outputs = { self, nixpkgs }: {
     overlays = {
-      default = (final: prev: {
-        
-      });
+      default = (final: prev: { });
     };
     packages = {
-        default = import 
-      });
+      default = import
+        });
 
-    legacyPackages.x86_64-linux.fw-inputmodule = self.packages.x86_64-linux.default;
-  };
-}
+      legacyPackages.x86_64-linux.fw-inputmodule = self.packages.x86_64-linux.default;
+    };
+  }

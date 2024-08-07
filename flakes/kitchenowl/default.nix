@@ -1,7 +1,7 @@
-{pkgs, ...}:{
+{ pkgs, ... }: {
   nixpkgs.overlays = [
     (self: super: {
-      kitchenowl = pkgs.callPackage ./kitchenowl.nix {};
+      kitchenowl = pkgs.callPackage ./kitchenowl.nix { };
     })
   ];
 }

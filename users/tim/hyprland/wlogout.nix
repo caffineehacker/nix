@@ -55,56 +55,56 @@ in
           }
         ];
         programs.wlogout.style = ''
-* {
-  font-family: monospace;
-  font-size: 15px;
-  font-weight: bold;
-}
+          * {
+            font-family: monospace;
+            font-size: 15px;
+            font-weight: bold;
+          }
 
-window {
-  background-color: #${config.tw.users.tim.colorScheme.palette.base00};
-  opacity: 0.9;
-}
+          window {
+            background-color: #${config.tw.users.tim.colorScheme.palette.base00};
+            opacity: 0.9;
+          }
 
-button {
-  background-size: 20%;
-  border: 2px solid #${config.tw.users.tim.colorScheme.palette.base08};
-  border-radius: 3rem;
-  background-color: #${config.tw.users.tim.colorScheme.palette.base01};
-  margin: 10px;
-  color: #${config.tw.users.tim.colorScheme.palette.base05};
-}
+          button {
+            background-size: 20%;
+            border: 2px solid #${config.tw.users.tim.colorScheme.palette.base08};
+            border-radius: 3rem;
+            background-color: #${config.tw.users.tim.colorScheme.palette.base01};
+            margin: 10px;
+            color: #${config.tw.users.tim.colorScheme.palette.base05};
+          }
 
-button:hover,
-button:focus {
-  background-color: #${config.tw.users.tim.colorScheme.palette.base05};
-  color: #${config.tw.users.tim.colorScheme.palette.base01};
-}
+          button:hover,
+          button:focus {
+            background-color: #${config.tw.users.tim.colorScheme.palette.base05};
+            color: #${config.tw.users.tim.colorScheme.palette.base01};
+          }
 
-#lock {
-    background-image: image(url("${cfgWlogout.package}/share/wlogout/icons/lock.png"), url("${cfgWlogout.package}/local/share/wlogout/icons/lock.png"));
-}
+          #lock {
+              background-image: image(url("${cfgWlogout.package}/share/wlogout/icons/lock.png"), url("${cfgWlogout.package}/local/share/wlogout/icons/lock.png"));
+          }
 
-#logout {
-    background-image: image(url("${cfgWlogout.package}/share/wlogout/icons/logout.png"), url("${cfgWlogout.package}/local/share/wlogout/icons/logout.png"));
-}
+          #logout {
+              background-image: image(url("${cfgWlogout.package}/share/wlogout/icons/logout.png"), url("${cfgWlogout.package}/local/share/wlogout/icons/logout.png"));
+          }
 
-#suspend {
-    background-image: image(url("${cfgWlogout.package}/share/wlogout/icons/suspend.png"), url("${cfgWlogout.package}/local/share/wlogout/icons/suspend.png"));
-}
+          #suspend {
+              background-image: image(url("${cfgWlogout.package}/share/wlogout/icons/suspend.png"), url("${cfgWlogout.package}/local/share/wlogout/icons/suspend.png"));
+          }
 
-#hibernate {
-    background-image: image(url("${cfgWlogout.package}/share/wlogout/icons/hibernate.png"), url("${cfgWlogout.package}/local/share/wlogout/icons/hibernate.png"));
-}
+          #hibernate {
+              background-image: image(url("${cfgWlogout.package}/share/wlogout/icons/hibernate.png"), url("${cfgWlogout.package}/local/share/wlogout/icons/hibernate.png"));
+          }
 
-#shutdown {
-    background-image: image(url("${cfgWlogout.package}/share/wlogout/icons/shutdown.png"), url("${cfgWlogout.package}/local/share/wlogout/icons/shutdown.png"));
-}
+          #shutdown {
+              background-image: image(url("${cfgWlogout.package}/share/wlogout/icons/shutdown.png"), url("${cfgWlogout.package}/local/share/wlogout/icons/shutdown.png"));
+          }
 
-#reboot {
-    background-image: image(url("${cfgWlogout.package}/share/wlogout/icons/reboot.png"), url("${cfgWlogout.package}/local/share/wlogout/icons/reboot.png"));
-}
-    '';
+          #reboot {
+              background-image: image(url("${cfgWlogout.package}/share/wlogout/icons/reboot.png"), url("${cfgWlogout.package}/local/share/wlogout/icons/reboot.png"));
+          }
+        '';
       };
     };
   };

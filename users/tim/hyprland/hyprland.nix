@@ -23,7 +23,7 @@
         xdg.mimeApps = {
           enable = true;
           associations.added = {
-            "inode/directory" = ["thunar.desktop"];
+            "inode/directory" = [ "thunar.desktop" ];
           };
         };
 
@@ -199,17 +199,20 @@
               "${pkgs.swayidle}/bin/swayidle -w before-sleep \"swaylock -f\""
             ];
 
-            exec = let
-              inherit (inputs.nix-colors.lib.contrib { inherit pkgs; })
-                nixWallpaperFromScheme;
-              wallpaper = nixWallpaperFromScheme {
-                scheme = config.tw.users.tim.colorScheme;
-                width = 2560;
-                height = 1600;
-                logoScale = 5.0;
-              }; in [
-              "swww img ${wallpaper}"
-            ];
+            exec =
+              let
+                inherit (inputs.nix-colors.lib.contrib { inherit pkgs; })
+                  nixWallpaperFromScheme;
+                wallpaper = nixWallpaperFromScheme {
+                  scheme = config.tw.users.tim.colorScheme;
+                  width = 2560;
+                  height = 1600;
+                  logoScale = 5.0;
+                };
+              in
+              [
+                "swww img ${wallpaper}"
+              ];
 
             plugin = {
               split-monitor-workspaces = {

@@ -1,4 +1,4 @@
-{...}: {
+{ ... }: {
   nixpkgs.overlays = [
     (self: super: {
       tw.hypr.brightness = super.writeShellApplication {
