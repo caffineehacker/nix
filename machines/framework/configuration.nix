@@ -292,6 +292,8 @@ in {
   tw.programs.hyprland.enable = true;
 
   services.fwupd.enable = true;
+  # Framework puts updates here for quite a while.
+  services.fwupd.extraRemotes = [ "lvfs-testing" ];
 
   # AMD has better battery life with PPD over TLP:
   # https://community.frame.work/t/responded-amd-7040-sleep-states/38101/13
