@@ -26,8 +26,6 @@ in {
           ./cloudflared.nix
         ];
 
-        tw.programs.systemd.nextVersion.enable = true;
-
         boot.extraModulePackages = [config.boot.kernelPackages.wireguard];
         systemd.network = {
           enable = true;
