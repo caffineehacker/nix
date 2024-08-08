@@ -13,4 +13,6 @@
     enable = true;
     defaultEditor = true;
   };
+
+  hardware.enableAllFirmware = true;
 }
