@@ -30,8 +30,7 @@
       type = "git";
       url = "https://github.com/hyprwm/Hyprland";
       # Current head changed a lot of protocols and doesn't work properly with everything.
-      #ref = "refs/tags/v0.41.2"; ### REPLACE_HYPRLAND_TAG
-      rev = "bd526822deb9ed47c0b51b534817aa8541fff07b";
+      ref = "refs/tags/v0.42.0"; ### REPLACE_HYPRLAND_TAG
       submodules = true;
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -40,14 +39,13 @@
       owner = "Duckonaut";
       repo = "split-monitor-workspaces";
       inputs.hyprland.follows = "hyprland";
-      rev = "a03a32c6e0f64c05c093ced864a326b4ab58eabf"; ### REPLACE_SPLIT_MONITOR_REV
+      rev = "625f3f730cb392a5005144051bd9dcb25525fea0"; ### REPLACE_SPLIT_MONITOR_REV
     };
     hyprland-plugins = {
       type = "github";
       owner = "hyprwm";
       repo = "hyprland-plugins";
-      #ref = "refs/tags/v0.41.2"; ### REPLACE_HYPRLAND_PLUGINS_TAG
-      rev = "928164d6d2560a20328c74b6b3e5da271e8e0b5a";
+      ref = "refs/tags/v0.42.0"; ### REPLACE_HYPRLAND_PLUGINS_TAG
       inputs.hyprland.follows = "hyprland";
     };
     nix-colors = {

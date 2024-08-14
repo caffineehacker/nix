@@ -2,7 +2,7 @@
 #!nix-shell -i bash -p nh
 set -e
 
-# ./find-hyprland-updates.sh
+./find-hyprland-updates.sh
 nh os switch --ask --update $(dirname "$0") -- --keep-failed --keep-going
 echo "Press enter to continue..."
 read
