@@ -6,7 +6,9 @@
       type = "github";
       owner = "NixOS";
       repo = "nixpkgs";
-      ref = "nixpkgs-unstable";
+      # ref = "nixpkgs-unstable";
+      # To pick up the warning removal for element-desktop
+      rev = "0c52d6e0daef503697bcc54e9c51385b90ad9d19";
     };
     lanzaboote = {
       url = "github:nix-community/lanzaboote";
