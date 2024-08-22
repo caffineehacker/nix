@@ -169,6 +169,7 @@ in
         "electron"
         "electron_29"
         "electron_30"
+        "electron_31"
         "electron-unwrapped"
         "firefox"
         "firefox-bin"
@@ -181,6 +182,8 @@ in
         "dav1d"
         # Crashes - 6/17/2024
         "mono"
+        # Fails to build due to expecting BPF support that is apparently not available in clang?? - 8/21/2024
+        "systemd"
       ]))
       (final: super: (useUnoptimizedHaskell super [
         # Test failure - 5/8/2024
