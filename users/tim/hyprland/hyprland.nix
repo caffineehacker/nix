@@ -18,6 +18,7 @@
           networkmanagerapplet
           pamixer
           xfce.thunar
+          nordzy-cursor-theme
         ];
 
         xdg.mimeApps = {
@@ -186,6 +187,7 @@
             ];
 
             exec-once = [
+              "hyprctl setcursor Nordzy-cursors 24"
               "firefox"
               "${pkgs.swww}/bin/swww-daemon"
               "mako"
