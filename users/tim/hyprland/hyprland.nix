@@ -6,6 +6,13 @@
 }: {
   imports = [ ./wofi.nix ./waybar.nix ./swaylock.nix ./mako.nix ./wlogout.nix ./scripts ];
   config = lib.mkIf config.tw.programs.hyprland.enable {
+    nixpkgs.overlays = [
+      (self: super: {
+        gtk4-layer-shell = super.gtk4-layer-shell.overrideAttrs (oldAttrs: {
+          nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ super.wayland-protocols ];
+        });
+      })
+    ];
     fonts.packages = with pkgs; [
       noto-fonts-emoji
       nerdfonts
