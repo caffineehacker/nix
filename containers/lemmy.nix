@@ -19,6 +19,8 @@ in
         };
       };
 
+      systemd.services.lemmy.serviceConfig.Restart = "always";
+
       services.caddy = {
         enable = true;
         globalConfig = ''
