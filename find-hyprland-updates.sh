@@ -4,7 +4,9 @@
 # This will get the latest release of hyprland
 HYPRLAND_TAG=$(curl https://api.github.com/repos/hyprwm/Hyprland/releases/latest | jq -r .tag_name)
 sed -i "s/^\(\s*\).*\( ### REPLACE_HYPRLAND_TAG$\)/\1ref = \"refs\/tags\/$HYPRLAND_TAG\";\2/g" flake.nix
-sed -i "s/^\(\s*\).*\( ### REPLACE_HYPRLAND_PLUGINS_TAG$\)/\1ref = \"refs\/tags\/$HYPRLAND_TAG\";\2/g" flake.nix
+
+HYPRLAND_PLUGINS_TAG=$(curl https://api.github.com/repos/hyprwm/hyprland-plugins/tags | jq -r .[0].name)
+sed -i "s/^\(\s*\).*\( ### REPLACE_HYPRLAND_PLUGINS_TAG$\)/\1ref = \"refs\/tags\/$HYPRLAND_PLUGINS_TAG\";\2/g" flake.nix
 
 TAG_SHA=$(curl https://api.github.com/repos/hyprwm/Hyprland/tags | jq -r ".[] | select(.name | contains(\"$HYPRLAND_TAG\")).commit.sha")
 
