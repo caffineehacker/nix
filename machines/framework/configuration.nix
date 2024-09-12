@@ -271,7 +271,15 @@ in
   # services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
-  hardware.pulseaudio.enable = true;
+  services.pipewire = {
+    alsa = {
+      enable = true;
+      support32Bit = true;
+    };
+    pulse = {
+      enable = true;
+    };
+  };
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
