@@ -44,7 +44,7 @@ in
     ];
 
     environment.systemPackages = with pkgs; [
-      xdg-desktop-portal-hyprland
+      inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland
       xwayland
       meson
       wayland-protocols
