@@ -45,7 +45,7 @@
       type = "github";
       owner = "hyprwm";
       repo = "hyprland-plugins";
-      ref = "refs/tags/v0.42.0"; ### REPLACE_HYPRLAND_PLUGINS_TAG
+      ref = "refs/tags/v0.43.0"; ### REPLACE_HYPRLAND_PLUGINS_TAG
       inputs.hyprland.follows = "hyprland";
     };
     nix-colors = {
