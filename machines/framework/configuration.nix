@@ -10,7 +10,7 @@ let
 in
 {
   nix = {
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.stable;
     extraOptions = ''
       experimental-features = nix-command flakes
       # This ensures garbage collection won't collect build dependencies
@@ -170,6 +170,7 @@ in
         "electron_29"
         "electron_30"
         "electron_31"
+        "electron_32"
         "electron-unwrapped"
         "firefox"
         "firefox-bin"
