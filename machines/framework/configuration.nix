@@ -185,6 +185,8 @@ in
         "mono"
         # Fails to build due to expecting BPF support that is apparently not available in clang?? - 8/21/2024
         "systemd"
+        # Fails to build due to aggressive size checks - 11/12/2024
+        "libtpms"
       ]))
       (final: super: (useUnoptimizedHaskell super [
         # Test failure - 5/8/2024
