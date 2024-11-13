@@ -11,7 +11,6 @@
     lanzaboote = {
       url = "github:nix-community/lanzaboote";
 
-      # Optional but recommended to limit the size of your system closure.
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
@@ -30,7 +29,7 @@
       type = "git";
       url = "https://github.com/hyprwm/Hyprland";
       # Current head changed a lot of protocols and doesn't work properly with everything.
-      ref = "refs/tags/v0.43.0"; ### REPLACE_HYPRLAND_TAG
+      ref = "refs/tags/v0.45.0"; ### REPLACE_HYPRLAND_TAG
       submodules = true;
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -39,13 +38,13 @@
       owner = "Duckonaut";
       repo = "split-monitor-workspaces";
       inputs.hyprland.follows = "hyprland";
-      rev = "b6bc0c26c8ad9e08f5f29249f8511e6f01e92e09"; ### REPLACE_SPLIT_MONITOR_REV
+      rev = "131bc5bd02d7f558a66d1a6c4d0013d8545823e0"; ### REPLACE_SPLIT_MONITOR_REV
     };
     hyprland-plugins = {
       type = "github";
       owner = "hyprwm";
       repo = "hyprland-plugins";
-      ref = "refs/tags/v0.43.0"; ### REPLACE_HYPRLAND_PLUGINS_TAG
+      ref = "refs/tags/v0.45.0"; ### REPLACE_HYPRLAND_PLUGINS_TAG
       inputs.hyprland.follows = "hyprland";
     };
     nix-colors = {
