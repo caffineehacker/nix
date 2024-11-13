@@ -206,6 +206,8 @@
               "obsidian"
               # Enable sway lock when the system sleeps
               "${pkgs.swayidle}/bin/swayidle -w before-sleep \"swaylock -f\""
+              "${pkgs.element-desktop}/bin/element-desktop"
+              "${pkgs.discord}/bin/discord"
             ];
 
             exec =
