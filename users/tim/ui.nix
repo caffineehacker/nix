@@ -19,8 +19,9 @@ in
   config = lib.mkIf (uiEnabled && cfg.enable) {
     fonts.packages = with pkgs; [
       noto-fonts-emoji
-      nerdfonts
-    ];
+    ] ++ (builtins.filter
+      lib.attrsets.isDerivation
+      (builtins.attrValues pkgs.nerd-fonts));
 
     home-manager.users.tim = {
       gtk = {
