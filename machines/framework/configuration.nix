@@ -171,6 +171,7 @@ in
         "electron_30"
         "electron_31"
         "electron_32"
+        "electron_33"
         "electron-unwrapped"
         "firefox"
         "firefox-bin"
@@ -187,6 +188,8 @@ in
         "systemd"
         # Fails to build due to aggressive size checks - 11/12/2024
         "libtpms"
+        # Fails due to warning as error about a possibly uninitialized variable - 11/20/2024
+        "mbedtls"
       ]))
       (final: super: (useUnoptimizedHaskell super [
         # Test failure - 5/8/2024

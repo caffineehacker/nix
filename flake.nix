@@ -29,7 +29,7 @@
       type = "git";
       url = "https://github.com/hyprwm/Hyprland";
       # Current head changed a lot of protocols and doesn't work properly with everything.
-      ref = "refs/tags/v0.45.0"; ### REPLACE_HYPRLAND_TAG
+      ref = "refs/tags/v0.45.2"; ### REPLACE_HYPRLAND_TAG
       submodules = true;
       inputs.nixpkgs.follows = "nixpkgs";
     };
