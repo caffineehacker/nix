@@ -190,6 +190,13 @@ in
         "libtpms"
         # Fails due to warning as error about a possibly uninitialized variable - 11/20/2024
         "mbedtls"
+        # Fails a test for unknown reason - 12/21/2024
+        "lib2geom"
+        # Fails to compile due to format overflow
+        "efivar"
+        # Temporary opt outs due to rocm-llvm failing to build. Remove once https://github.com/NixOS/nixpkgs/issues/375359 is fixed.
+        "ollama-rocm"
+        "btop"
       ]))
       (final: super: (useUnoptimizedHaskell super [
         # Test failure - 5/8/2024
@@ -210,16 +217,6 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.systemd.enable = true;
   boot.kernelPackages = kernelPkgs;
-  boot.kernelPatches = [
-    (lib.mkIf (lib.versionOlder kernelPkgs.kernel.version "6.9")
-      {
-        name = "cros_ec_lpc";
-        patch = (pkgs.fetchpatch {
-          url = "https://patchwork.kernel.org/series/840830/mbox/";
-          sha256 = "sha256-7jSEAGInFC+a+ozCyD4dFz3Qgh2JrHskwz7UfswizFw=";
-        });
-      })
-  ];
   boot.extraModulePackages = [
     kernelPkgs.framework-laptop-kmod
   ];

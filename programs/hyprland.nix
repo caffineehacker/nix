@@ -19,10 +19,13 @@ in
     };
   };
 
-  imports = [ inputs.hyprland.nixosModules.default ];
-
   config = lib.mkIf cfg.enable {
-    programs.hyprland.enable = true;
+    programs.hyprland = {
+      enable = true;
+      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+      # make sure to also set the portal package, so that they are in sync
+      portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+    };
     environment.sessionVariables = {
       # Try to get Electron apps to use Wayland
       NIXOS_OZONE_WL = "1";
@@ -44,7 +47,6 @@ in
     ];
 
     environment.systemPackages = with pkgs; [
-      inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland
       xwayland
       meson
       wayland-protocols

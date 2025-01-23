@@ -25,26 +25,34 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Temporary fix for the fact that the XDPH in the current Hyprland release uses the wrong compiler version
+    xdg-desktop-portal-hyprland = {
+      type = "git";
+      url = "https://github.com/hyprwm/xdg-desktop-portal-hyprland";
+      submodules = true;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     hyprland = {
       type = "git";
       url = "https://github.com/hyprwm/Hyprland";
       # Current head changed a lot of protocols and doesn't work properly with everything.
-      ref = "refs/tags/v0.45.2"; ### REPLACE_HYPRLAND_TAG
+      ref = "refs/tags/v0.46.2"; ### REPLACE_HYPRLAND_TAG
       submodules = true;
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.xdph.follows = "xdg-desktop-portal-hyprland";
     };
     split-monitor-workspaces = {
       type = "github";
       owner = "Duckonaut";
       repo = "split-monitor-workspaces";
       inputs.hyprland.follows = "hyprland";
-      rev = "131bc5bd02d7f558a66d1a6c4d0013d8545823e0"; ### REPLACE_SPLIT_MONITOR_REV
+      rev = "3012569a504446e1b234064f20babb897eacae75"; ### REPLACE_SPLIT_MONITOR_REV
     };
     hyprland-plugins = {
       type = "github";
       owner = "hyprwm";
       repo = "hyprland-plugins";
-      ref = "refs/tags/v0.45.0"; ### REPLACE_HYPRLAND_PLUGINS_TAG
+      ref = "refs/tags/v0.46.0"; ### REPLACE_HYPRLAND_PLUGINS_TAG
       inputs.hyprland.follows = "hyprland";
     };
     nix-colors = {
