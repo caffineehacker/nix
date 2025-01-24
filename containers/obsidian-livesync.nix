@@ -16,28 +16,32 @@ in
         enable = true;
         port = cfg.cloudflare.port;
         # https://github.com/vrtmrz/obsidian-livesync/blob/main/docs/setup_own_server.md#configure
-        extraConfig = ''
-          [couchdb]
-          single_node = true
-          max_document_size = 50000000
+        extraConfig = {
+          couchdb = {
+            single_node = true;
+            max_document_size = 50000000;
+          };
+          chttpd = {
+            require_valid_user = true;
+            max_http_request_size = 4294967296;
+            enable_cors = true;
+          };
 
-          [chttpd]
-          require_valid_user = true
-          max_http_request_size = 4294967296
-          enable_cors = true
+          chttpd_auth = {
+            require_valid_user = true;
+            authentication_redirect = "/_utils/session.html";
+          };
 
-          [chttpd_auth]
-          require_valid_user = true
-          authentication_redirect = /_utils/session.html
+          httpd = {
+            WWW-Authenticate = "Basic realm=\"couchdb\"";
+            enable_cors = true;
+          };
 
-          [httpd]
-          WWW-Authenticate = Basic realm="couchdb"
-          enable_cors = true
-
-          [cors]
-          credentials = true
-          origins = app://obsidian.md,capacitor://localhost,http://localhost
-        '';
+          cors = {
+            credentials = true;
+            origins = "app://obsidian.md,capacitor://localhost,http://localhost";
+          };
+        };
       };
     };
   };
