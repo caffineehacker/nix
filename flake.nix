@@ -25,13 +25,18 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Temporary fix for Hyprland using an old version of hyprutils
+    hyprutils = {
+      type = "git";
+      url = "https://github.com/hyprwm/hyprutils";
+    };
     hyprland = {
       type = "git";
       url = "https://github.com/hyprwm/Hyprland";
-      # Current head changed a lot of protocols and doesn't work properly with everything.
-      ref = "refs/tags/v0.47.0"; ### REPLACE_HYPRLAND_TAG
+      ref = "refs/tags/v0.47.2"; ### REPLACE_HYPRLAND_TAG
       submodules = true;
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.hyprutils.follows = "hyprutils";
     };
     split-monitor-workspaces = {
       type = "github";
@@ -44,7 +49,7 @@
       type = "github";
       owner = "hyprwm";
       repo = "hyprland-plugins";
-      ref = "refs/tags/v0.46.0"; ### REPLACE_HYPRLAND_PLUGINS_TAG
+      ref = "refs/tags/v0.47.0"; ### REPLACE_HYPRLAND_PLUGINS_TAG
       inputs.hyprland.follows = "hyprland";
     };
     nix-colors = {

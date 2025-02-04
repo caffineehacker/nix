@@ -3,9 +3,11 @@ let
   kernelPkgs = nixpkgs-unoptimized.linuxPackages_zen;
   nixpkgs-unoptimized = import inputs.nixpkgs {
     inherit (pkgs) system;
+    inherit (pkgs) config;
   };
   nixpkgs-unoptimized-i686 = import inputs.nixpkgs {
     system = "i686-linux";
+    inherit (pkgs) config;
   };
 in
 {
@@ -194,9 +196,14 @@ in
         "lib2geom"
         # Fails to compile due to format overflow
         "efivar"
-        # Temporary opt outs due to rocm-llvm failing to build. Remove once https://github.com/NixOS/nixpkgs/issues/375359 is fixed.
-        "ollama-rocm"
-        "btop"
+        # Fails a test - 02/04/2025
+        "graphene"
+        # Heroic, bottlesm and lutris use a version of openexr fails to build due to implicit declaration - 02/04/2025
+        "heroic"
+        "lutris"
+        "bottles"
+        # Fails to find some managed application when building dotnet - 02/04/2025
+        "ryujinx"
       ]))
       (final: super: (useUnoptimizedHaskell super [
         # Test failure - 5/8/2024
