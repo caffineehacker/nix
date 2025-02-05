@@ -198,18 +198,12 @@ in
         "efivar"
         # Fails a test - 02/04/2025
         "graphene"
-        # Heroic, bottlesm and lutris use a version of openexr fails to build due to implicit declaration - 02/04/2025
-        "heroic"
-        "lutris"
-        "bottles"
         # Fails to find some managed application when building dotnet - 02/04/2025
         "ryujinx"
+        # Fails to build a dependency, openexr, that is customized so an override doesn't use the cache - 02/04/2025
+        "gst_all_1"
       ]))
       (final: super: (useUnoptimizedHaskell super [
-        # Test failure - 5/8/2024
-        "crypton"
-        # Test failure - 5/8/2024
-        "cryptonite"
       ]))
     ];
 
