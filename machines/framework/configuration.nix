@@ -182,19 +182,15 @@ in
         "webkitgtk_5_0"
         "webkitgtk_6_0"
         "llvm"
-        # Build failure - 5/8/2024
+        # Test failure (checkasm) - 02/05/2025
         "dav1d"
-        # Crashes - 6/17/2024
-        "mono"
-        # Fails to build due to expecting BPF support that is apparently not available in clang?? - 8/21/2024
+        # Fails to build due to expecting BPF support that is apparently not available in clang?? - 02/05/2025
         "systemd"
-        # Fails to build due to aggressive size checks - 11/12/2024
+        # # Fails to build due to aggressive size checks - 02/05/2025
         "libtpms"
-        # Fails due to warning as error about a possibly uninitialized variable - 11/20/2024
-        "mbedtls"
-        # Fails a test for unknown reason - 12/21/2024
+        # Fails a test for unknown reason - 02/05/2025
         "lib2geom"
-        # Fails to compile due to format overflow
+        # Fails to compile due to format overflow - 02/05/2025
         "efivar"
         # Fails a test - 02/04/2025
         "graphene"
