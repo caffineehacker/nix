@@ -1,4 +1,5 @@
 { ... }: {
+  tw.containers.actual-budget.enable = true;
   tw.containers.lemmy.enable = true;
   tw.containers.matrix.enable = true;
   tw.containers.obsidian-sync.enable = true;

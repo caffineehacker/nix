@@ -62,6 +62,7 @@
       };
     in
     {
+      tw.containers.actual-budget = mkContainerOptions "actual-budget" 50;
       tw.containers.lemmy = mkContainerOptions "lemmy" 10;
       tw.containers.vaultwarden = mkContainerOptions "vaultwarden" 20;
       tw.containers.obsidian-sync = mkContainerOptions "obsidian-sync" 30;
@@ -70,6 +71,11 @@
 
   config = {
     tw.containers = {
+      actual-budget = {
+        cloudflare = {
+          tunnelId = "d87cd471-5e73-493c-8cef-ef9b3792322f";
+        };
+      };
       lemmy = {
         cloudflare = {
           tunnelId = "7abb4240-e222-48ae-a335-5557b3fe6b9c";
@@ -92,6 +98,7 @@
   };
 
   imports = [
+    ./actual-budget.nix
     ./lemmy.nix
     ./matrix.nix
     ./obsidian-livesync.nix
