@@ -2,12 +2,10 @@
 let
   kernelPkgs = nixpkgs-unoptimized.linuxPackages_zen;
   nixpkgs-unoptimized = import inputs.nixpkgs {
-    inherit (pkgs) system;
-    inherit (pkgs) config;
+    system = "x86_64-linux";
   };
   nixpkgs-unoptimized-i686 = import inputs.nixpkgs {
     system = "i686-linux";
-    inherit (pkgs) config;
   };
 in
 {
@@ -87,18 +85,21 @@ in
             }));
         });
         # Segfault in checks - 4/23/2024
-        libvorbis = super.libvorbis.override (old: {
-          stdenv = super.withCFlags [ "-march=x86-64 -mtune=generic" ] old.stdenv;
-        });
+        libvorbis = super.libvorbis.override
+          (old: {
+            stdenv = super.withCFlags [ "-march=x86-64 -mtune=generic" ] old.stdenv;
+          });
         # Compile error in AVX512 test - 4/23/2024
-        simde = super.simde.override (old: {
-          stdenv = super.withCFlags [ "-march=x86-64 -mtune=generic" ] old.stdenv;
-        });
+        simde = super.simde.override
+          (old: {
+            stdenv = super.withCFlags [ "-march=x86-64 -mtune=generic" ] old.stdenv;
+          });
         # A test fails due to being too slow while building everything else - 4/24/2024
-        pythonPackages.hypothesis = super.pythonPackages.hypothesis.overridePythonAttrs {
-          doCheck = false;
-          pytestCheckPhase = "true";
-        };
+        pythonPackages.hypothesis = super.pythonPackages.hypothesis.overridePythonAttrs
+          {
+            doCheck = false;
+            pytestCheckPhase = "true";
+          };
         pythonPackagesExtensions = super.pythonPackagesExtensions ++ [
           (pyfinal: pysuper: {
             scipy = pysuper.scipy.overridePythonAttrs (oldAttrs: {
@@ -108,17 +109,20 @@ in
           })
         ];
         # A test seg faults - 4/24/2024
-        libsndfile = super.libsndfile.override (old: {
-          stdenv = old.stdenv // { hostPlatform = lib.systems.elaborate { system = "x86_64-linux"; }; };
-        });
+        libsndfile = super.libsndfile.override
+          (old: {
+            stdenv = old.stdenv // { hostPlatform = lib.systems.elaborate { system = "x86_64-linux"; }; };
+          });
         # Floating point precision test failures - 4/28/2024
-        gsl = super.gsl.override (old: {
-          stdenv = super.withCFlags [ "-march=x86-64" "-mtune=generic" "-mno-fma" ] old.stdenv;
-        });
+        gsl = super.gsl.override
+          (old: {
+            stdenv = super.withCFlags [ "-march=x86-64" "-mtune=generic" "-mno-fma" ] old.stdenv;
+          });
         # Floating point precision test failures - 4/28/2024
-        lib2geom = super.lib2geom.override (old: {
-          stdenv = super.withCFlags [ "-march=x86-64" "-mtune=generic" "-mno-fma" ] old.stdenv;
-        });
+        lib2geom = super.lib2geom.override
+          (old: {
+            stdenv = super.withCFlags [ "-march=x86-64" "-mtune=generic" "-mno-fma" ] old.stdenv;
+          });
         # libgcrypt requires special logic on applying -O flags
         libgcrypt = super.libgcrypt.override (old: {
           stdenv = super.stdenv.override (old: {
@@ -169,11 +173,18 @@ in
         "nodejs"
         "nodejs-slim"
         "electron"
+        # Some of these don't exist yet, but will help prevent issues when they do
         "electron_29"
         "electron_30"
         "electron_31"
         "electron_32"
         "electron_33"
+        "electron_34"
+        "electron_35"
+        "electron_36"
+        "electron_37"
+        "electron_38"
+        "electron_39"
         "electron-unwrapped"
         "firefox"
         "firefox-bin"
@@ -198,6 +209,8 @@ in
         "ryujinx"
         # Fails to build a dependency, openexr, that is customized so an override doesn't use the cache - 02/04/2025
         "gst_all_1"
+        # Can't have a -march since it is targeting wasm32
+        "thunderbird-unwrapped"
       ]))
       (final: super: (useUnoptimizedHaskell super [
       ]))
@@ -209,6 +222,7 @@ in
   ];
 
   tw.system.secure-boot.enable = true;
+  security.tpm2.enable = true;
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.systemd-boot.memtest86.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;

@@ -10,11 +10,14 @@
     ];
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "thunderbolt" "usb_storage" "usbhid" "sd_mod" ];
-  boot.initrd.kernelModules = [ "dm-snapshot" ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  boot.initrd.luks.devices.cryptroot.device = "/dev/disk/by-uuid/79065fa0-1fdd-460c-8bd6-63c73d5ccc85";
+  boot.initrd.luks.devices.cryptroot = {
+    device = "/dev/disk/by-uuid/79065fa0-1fdd-460c-8bd6-63c73d5ccc85";
+    crypttabExtraOpts = [ "tpm2-device=auto" ];
+    allowDiscards = true;
+  };
 
   fileSystems."/" =
     {
