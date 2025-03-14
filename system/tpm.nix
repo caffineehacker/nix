@@ -29,7 +29,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    boot.initrd.kernelModules = [ "tpm_tis" ];
+    boot.initrd.kernelModules = [ "tpm_tis" "tpm_crb" ];
+    boot.initrd.systemd.tpm2.enable = true;
+    boot.kernelParams = [
+      "systemd.log_level=debug"
+    ];
+    boot.initrd.systemd.storePaths = [
+      pkgs.tpm2-tss
+    ];
 
     environment.systemPackages = with pkgs; [
       # For debugging and troubleshooting Secure Boot.

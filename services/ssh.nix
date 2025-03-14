@@ -1,5 +1,6 @@
 { lib
 , config
+, pkgs
 , ...
 }:
 let
@@ -29,5 +30,9 @@ in
     services.fail2ban.enable = true;
 
     programs.mosh.enable = true;
+
+    environment.systemPackages = [
+      pkgs.zellij
+    ];
   };
 }

@@ -54,13 +54,19 @@ in
           (lib.mkIf config.tw.services.ssh.enable byobu)
           (lib.mkIf config.tw.services.ssh.enable tmux)
           killall
+          thunderbird
+          ncdu
+          gitui
+          inputs.isd.packages.x86_64-linux.default
         ];
 
-        home.sessionVariables = lib.mkIf config.tw.programs.games.enable {
-          STEAM_EXTRA_COMPAT_TOOLS_PATHS =
-            "\\\${HOME}/.steam/root/compatibilitytools.d";
-          MANGOHUD = "1";
-        };
+        home.sessionVariables = lib.mkIf
+          config.tw.programs.games.enable
+          {
+            STEAM_EXTRA_COMPAT_TOOLS_PATHS =
+              "\\\${HOME}/.steam/root/compatibilitytools.d";
+            MANGOHUD = "1";
+          };
 
         programs.git = {
           enable = true;
