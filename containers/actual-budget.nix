@@ -12,7 +12,9 @@ in
 
       services.actual = {
         enable = true;
-        settings.port = cfg.cloudflare.port;
+        settings = {
+          port = cfg.cloudflare.port;
+        };
       };
     };
   };

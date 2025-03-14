@@ -75,6 +75,7 @@
         cloudflare = {
           tunnelId = "d87cd471-5e73-493c-8cef-ef9b3792322f";
         };
+        hostname = "budget.timwaterhouse.com";
       };
       lemmy = {
         cloudflare = {
