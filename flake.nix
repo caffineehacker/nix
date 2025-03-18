@@ -25,33 +25,6 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Temporary fix for Hyprland using an old version of hyprutils
-    hyprutils = {
-      type = "git";
-      url = "https://github.com/hyprwm/hyprutils";
-    };
-    hyprland = {
-      type = "git";
-      url = "https://github.com/hyprwm/Hyprland";
-      ref = "refs/tags/v0.47.2"; ### REPLACE_HYPRLAND_TAG
-      submodules = true;
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.hyprutils.follows = "hyprutils";
-    };
-    split-monitor-workspaces = {
-      type = "github";
-      owner = "Duckonaut";
-      repo = "split-monitor-workspaces";
-      inputs.hyprland.follows = "hyprland";
-      rev = "1d4742b30aa9f3d01ea227a9c726985ffa832368"; ### REPLACE_SPLIT_MONITOR_REV
-    };
-    hyprland-plugins = {
-      type = "github";
-      owner = "hyprwm";
-      repo = "hyprland-plugins";
-      ref = "refs/tags/v0.47.0"; ### REPLACE_HYPRLAND_PLUGINS_TAG
-      inputs.hyprland.follows = "hyprland";
-    };
     nix-colors = {
       url = "github:misterio77/nix-colors";
     };
@@ -109,7 +82,6 @@
             modules = commonModules ++ [
               ({ config, pkgs, ... }: {
                 nixpkgs.overlays = [
-                  inputs.hyprland.overlays.default
                   inputs.inputmodule-control.overlays.default
                 ];
               })

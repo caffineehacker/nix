@@ -45,8 +45,7 @@
         wayland.windowManager.hyprland = {
           enable = true;
           settings = {
-            # Temporarily disable vrr since it appears to be very broken right now
-            monitor = ",preferred,auto,1,vrr,0";
+            monitor = ",preferred,auto,1,vrr,2";
             "$terminal" = "kitty";
             env = [
               "XCURSOR_SIZE,48"
@@ -180,8 +179,8 @@
                     key = builtins.toString (if x < 9 then x + 1 else 0);
                   in
                   [
-                    "$mod, ${key}, split-workspace, ${ws}"
-                    "$mod SHIFT, ${key}, split-movetoworkspacesilent, ${ws}"
+                    "$mod, ${key}, split:workspace, ${ws}"
+                    "$mod SHIFT, ${key}, split:movetoworkspacesilent, ${ws}"
                   ]
                 )
                 10)
@@ -230,18 +229,21 @@
               ];
 
             plugin = {
-              split-monitor-workspaces = {
-                count = 10;
+              hyprsplit = {
+                num_workspaces = 10;
               };
             };
 
             cursor = {
               no_warps = true;
+              # Attempt to fix issue where games start to lag whenever the mouse moves.
+              no_hardware_cursors = 1;
+              no_break_fs_vrr = 1;
             };
           };
 
           plugins = [
-            inputs.split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces
+            pkgs.hyprlandPlugins.hyprsplit
           ];
         };
       };

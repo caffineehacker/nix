@@ -1,7 +1,6 @@
 { lib
 , pkgs
 , config
-, inputs
 , ...
 }:
 let
@@ -22,9 +21,6 @@ in
   config = lib.mkIf cfg.enable {
     programs.hyprland = {
       enable = true;
-      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-      # make sure to also set the portal package, so that they are in sync
-      portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
     };
     environment.sessionVariables = {
       # Try to get Electron apps to use Wayland
