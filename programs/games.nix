@@ -28,7 +28,6 @@ in
       bottles
       heroic
       lutris
-      mangohud
       ryujinx
     ];
   };

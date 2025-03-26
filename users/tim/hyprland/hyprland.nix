@@ -109,12 +109,10 @@
               workspace_swipe = true;
             };
             windowrule = [
-              "float,^(blueman-manager)$"
-              "float,^(nm-connection-editor)$"
-              "float, ^(pavucontrol)$"
-              "float, ^([t|T]hunar)$"
-            ];
-            windowrulev2 = [
+              "float,class:^(blueman-manager)$"
+              "float,class:^(nm-connection-editor)$"
+              "float,class:^(pavucontrol)$"
+              "float,class:^([t|T]hunar)$"
               "opacity 0.8 0.8,class:^(kitty)$"
               "animation popin,class:^(kitty)$,title:^(update-sys)$"
               "animation popin,class:^([t|T]hunar)$"
