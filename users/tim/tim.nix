@@ -57,7 +57,7 @@ in
           thunderbird
           ncdu
           gitui
-          inputs.isd.packages.x86_64-linux.default
+          isd
         ];
 
         home.sessionVariables = lib.mkIf

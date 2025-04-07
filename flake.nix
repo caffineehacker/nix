@@ -37,10 +37,6 @@
       url = "github:caffineehacker/nix?dir=flakes/inputmodule-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    isd = {
-      url = "github:isd-project/isd";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = inputs:
