@@ -213,6 +213,8 @@ in
         "thunderbird-unwrapped"
       ]))
       (final: super: (useUnoptimizedHaskell super [
+        # Test failures - 04/23/2025
+        "crypton-x509-validation"
       ]))
     ];
 
