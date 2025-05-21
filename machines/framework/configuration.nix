@@ -211,6 +211,8 @@ in
         "gst_all_1"
         # Can't have a -march since it is targeting wasm32
         "thunderbird-unwrapped"
+        # Causes a nix parsing stack overflow when using an override for some reason
+        "easyeffects"
       ]))
       (final: super: (useUnoptimizedHaskell super [
         # Test failures - 04/23/2025
@@ -312,6 +314,7 @@ in
     fw-inputmodule
     sops
     amdgpu_top
+    easyeffects
   ];
 
   tw.programs.games.enable = true;

@@ -209,6 +209,7 @@
               "${pkgs.swayidle}/bin/swayidle -w before-sleep \"swaylock -f\""
               "${pkgs.element-desktop}/bin/element-desktop"
               "${pkgs.discord}/bin/discord"
+              "${pkgs.easyeffects}/bin/easyeffects --gapplication-service"
             ];
 
             exec =
