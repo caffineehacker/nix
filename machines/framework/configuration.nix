@@ -211,8 +211,10 @@ in
         "gst_all_1"
         # Can't have a -march since it is targeting wasm32
         "thunderbird-unwrapped"
-        # Causes a nix parsing stack overflow when using an override for some reason
+        # Causes a nix parsing stack overflow when using an override for some reason - 5/22/2025
         "easyeffects"
+        # TLS dependency fails to build - 5/22/2025
+        "pandoc"
       ]))
       (final: super: (useUnoptimizedHaskell super [
         # Test failures - 04/23/2025
