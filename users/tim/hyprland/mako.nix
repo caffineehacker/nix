@@ -17,33 +17,31 @@
             height = 100;
             margin = "10";
             padding = "15";
-            borderSize = 2;
-            borderRadius = 10;
+            border-size = 2;
+            border-radius = 10;
 
-            backgroundColor = "#" + config.tw.users.tim.colorScheme.palette.base00;
-            textColor = "#" + config.tw.users.tim.colorScheme.palette.base05;
-            borderColor = "#" + config.tw.users.tim.colorScheme.palette.base01;
-            progressColor = "over #${config.tw.users.tim.colorScheme.palette.base06}";
+            background-color = "#" + config.tw.users.tim.colorScheme.palette.base00;
+            text-color = "#" + config.tw.users.tim.colorScheme.palette.base05;
+            border-color = "#" + config.tw.users.tim.colorScheme.palette.base01;
+            progress-color = "over #${config.tw.users.tim.colorScheme.palette.base06}";
 
             icons = true;
-            maxIconSize = 48;
+            max-icon-size = 48;
             markup = true;
             actions = true;
-            defaultTimeout = 5000;
-            ignoreTimeout = false;
-          };
+            default-timeout = 5000;
+            ignore-timeout = false;
 
-        criteria = {
-          "urgency = low" = {
-            defaultTimeout = 2000;
+            "urgency=low" = {
+              default-timeout = 2000;
+            };
+            "urgency=normal" = {
+              default-timeout = 5000;
+            };
+            "urgency=high" = {
+              default-timeout = 0;
+            };
           };
-          "urgency = normal" = {
-            defaultTimeout = 5000;
-          };
-          "urgency = high" = {
-            defaultTimeout = 0;
-          };
-        };
       };
     };
   };
