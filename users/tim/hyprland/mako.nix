@@ -9,7 +9,7 @@
 
         settings =
           {
-            maxVisible = 5;
+            max-visible = 5;
             layer = "overlay";
             anchor = "center";
             font = "Fantasque Sans Mono 14";
