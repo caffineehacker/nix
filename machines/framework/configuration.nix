@@ -358,6 +358,8 @@ in
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
 
+  hardware.xone.enable = true;
+
   services.blueman.enable = true;
 
   services.logind.extraConfig = ''
