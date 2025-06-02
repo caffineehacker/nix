@@ -1,8 +1,9 @@
-{ pkgs, lib, inputs, ... }:
+{ pkgs, lib, inputs, config, ... }:
 let
   kernelPkgs = nixpkgs-unoptimized.linuxPackages_zen;
   nixpkgs-unoptimized = import inputs.nixpkgs {
     system = "x86_64-linux";
+    config = config.nixpkgs.config;
   };
   nixpkgs-unoptimized-i686 = import inputs.nixpkgs {
     system = "i686-linux";
