@@ -37,7 +37,7 @@ in
       enable = true;
       tunnels = {
         "${cfg.tunnelId}" = {
-          credentialsFile = "@CREDENTIALS_FILE@";
+          credentialsFile = "/nonsense";
           ingress = {
             "${cfg.hostname}" = "http://localhost:${builtins.toString cfg.port}";
           };
@@ -52,7 +52,7 @@ in
 
         fullConfig = filterConfig {
           tunnel = "${cfg.tunnelId}";
-          "credentials-file" = "@CREDENTIALS_FILE@";
+          "credentials-file" = "/run/credentials/cloudflared-tunnel-${cfg.tunnelId}.service/tunnel.json";
           ingress = [
             {
               hostname = "${cfg.hostname}";
@@ -65,17 +65,25 @@ in
         mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
       in
       {
+        after = [
+          "network.target"
+          "network-online.target"
+        ];
+        wants = [
+          "network.target"
+          "network-online.target"
+        ];
+        wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-          LoadCredential = [
+          RuntimeDirectory = "cloudflared-tunnel-${cfg.tunnelId}";
+          RuntimeDirectoryMode = "0400";
+          LoadCredential = lib.mkForce [
             "tunnel.json"
           ];
-          RuntimeDirectory = "cloudflared-tunnel-${cfg.tunnelId}";
-          ExecStart = lib.mkForce "${pkgs.bash}/bin/bash -c '${pkgs.cloudflared}/bin/cloudflared tunnel --config=$RUNTIME_DIRECTORY/cloudflared.yml --no-autoupdate run'";
+          ExecStart = lib.mkForce "${pkgs.cloudflared}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
+          Restart = "on-failure";
+          DynamicUser = true;
         };
-        preStart = ''
-          install -m600 ${mkConfigFile} $RUNTIME_DIRECTORY/cloudflared.yml
-          ${pkgs.gnused}/bin/sed -i "s;@CREDENTIALS_FILE@;$CREDENTIALS_DIRECTORY/tunnel.json;g" $RUNTIME_DIRECTORY/cloudflared.yml
-        '';
       };
   };
 }

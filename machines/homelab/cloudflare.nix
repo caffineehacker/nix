@@ -3,11 +3,6 @@ let
   tunnelFile = config.sops.secrets."cloudflare/tunnels/homelab.json".path;
 in
 {
-  sops.secrets."cloudflare/tunnels/homelab.json" = {
-    owner = config.services.cloudflared.user;
-    inherit (config.services.cloudflared) group;
-  };
-
   services.cloudflared = {
     enable = true;
     tunnels = {
