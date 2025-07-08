@@ -216,6 +216,8 @@ in
         "easyeffects"
         # TLS dependency fails to build - 5/22/2025
         "pandoc"
+        # Test failures - 7/8/2025
+        "assimp"
       ]))
       (final: super: (useUnoptimizedHaskell super [
         # Test failures - 04/23/2025
