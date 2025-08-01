@@ -4,6 +4,7 @@
   tw.containers.matrix.enable = true;
   tw.containers.obsidian-sync.enable = true;
   tw.containers.vaultwarden.enable = true;
+  tw.containers.home-assistant.enable = true;
 
   networking = {
     nat = {

@@ -67,6 +67,7 @@
       tw.containers.vaultwarden = mkContainerOptions "vaultwarden" 20;
       tw.containers.obsidian-sync = mkContainerOptions "obsidian-sync" 30;
       tw.containers.matrix = mkContainerOptions "matrix" 41;
+      tw.containers.home-assistant = mkContainerOptions "home-assistant" 60;
     };
 
   config = {
@@ -95,6 +96,13 @@
           tunnelId = "fd12b516-c8ac-4861-bbc5-24d38659e8f0";
         };
       };
+      home-assistant = {
+        cloudflare = {
+          tunnelId = "5e4d88cc-1579-4c8d-a602-e7d985036d79";
+          port = 8123;
+        };
+        hostname = "home.timwaterhouse.com";
+      };
     };
   };
 
@@ -104,5 +112,6 @@
     ./matrix.nix
     ./obsidian-livesync.nix
     ./vaultwarden.nix
+    ./home-assistant.nix
   ];
 }

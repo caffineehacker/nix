@@ -5,6 +5,7 @@
     secrets = {
       "cloudflare/tunnels/actual-budget.json" = { };
       "cloudflare/tunnels/homelab.json" = { };
+      "cloudflare/tunnels/home-assistant.json" = { };
       "cloudflare/tunnels/lemmy.json" = { };
       "cloudflare/tunnels/matrix.json" = { };
       "cloudflare/tunnels/obsidian-sync.json" = { };
