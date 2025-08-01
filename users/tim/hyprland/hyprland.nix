@@ -57,6 +57,8 @@
             input = {
               kb_layout = "us";
               follow_mouse = 1;
+              # Focus under mouse when closing a window
+              focus_on_close = 1;
               touchpad = {
                 natural_scroll = false;
               };
@@ -121,6 +123,7 @@
               "move cursor -3% -105%,class:^(wofi)$"
               "noanim,class:^(wofi)$"
               "opacity 0.8 0.6,class:^(wofi)$"
+              "noinitialfocus,class:steam"
             ];
             misc = {
               force_default_wallpaper = 0;

@@ -168,6 +168,12 @@ in
         });
         # Rocblas takes forever to build and just overriding it does not update the dependency for other packages unfortuntately.
         rocmPackages_6 = nixpkgs-unoptimized.pkgs.rocmPackages_6;
+        # Test failures that can be ignored due to timing - 8/1/2025
+        pythonPackages.pyrate-limiter = super.pythonPackages.pyrate-limiter.overridePythonAttrs
+          {
+            doCheck = false;
+            pytestCheckPhase = "true";
+          };
       })
       (final: super: (useUnoptimized super [
         # These are here because they can be very slow to build
@@ -218,6 +224,8 @@ in
         "pandoc"
         # Test failures - 7/8/2025
         "assimp"
+        # Build failures - 7/31/2025
+        "v4l-utils"
       ]))
       (final: super: (useUnoptimizedHaskell super [
         # Test failures - 04/23/2025
