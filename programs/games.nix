@@ -28,7 +28,7 @@ in
       bottles
       heroic
       lutris
-      ryujinx
+      ryubing
     ];
   };
 }
