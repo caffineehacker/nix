@@ -226,6 +226,8 @@ in
         "assimp"
         # Build failures - 7/31/2025
         "v4l-utils"
+        # Infinite recursion in call depth for nix configs - 8/12/2025
+        "php"
       ]))
       (final: super: (useUnoptimizedHaskell super [
         # Test failures - 04/23/2025
@@ -372,10 +374,10 @@ in
 
   services.blueman.enable = true;
 
-  services.logind.extraConfig = ''
-    # don't shutdown when power button is short-pressed
-    HandlePowerKey=suspend
-  '';
+  # services.logind.extraConfig = ''
+  #   # don't shutdown when power button is short-pressed
+  #   HandlePowerKey=suspend
+  # '';
 
   system.stateVersion = "24.05";
 }

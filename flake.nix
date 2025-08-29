@@ -7,6 +7,8 @@
       owner = "NixOS";
       repo = "nixpkgs";
       ref = "nixpkgs-unstable";
+      # Use this for homelab since z-wave JS server is out of date for newest version
+      # rev = "d3d513cd00b8263042e30a5794dd2c35c58e249e";
     };
     lanzaboote = {
       url = "github:nix-community/lanzaboote";
