@@ -53,11 +53,6 @@
   # Trim ssd for longer life and better storage
   services.fstrim.enable = true;
 
-  services.logind.extraConfig = ''
-    # don't shutdown when power button is short-pressed
-    HandlePowerKey=suspend
-  '';
-
   system.stateVersion = "23.11";
 }
 
