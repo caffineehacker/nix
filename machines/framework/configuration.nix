@@ -374,6 +374,9 @@ in
 
   services.blueman.enable = true;
 
+  # Automatically deduplicate files
+  nix.settings.auto-optimise-store = true;
+
   # services.logind.extraConfig = ''
   #   # don't shutdown when power button is short-pressed
   #   HandlePowerKey=suspend
