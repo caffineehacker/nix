@@ -108,7 +108,9 @@
               new_status = true;
             };
             gestures = {
-              workspace_swipe = true;
+              gesture = [
+                "3, horizontal, workspace"
+              ];
             };
             windowrule = [
               "float,class:^(blueman-manager)$"
