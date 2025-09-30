@@ -54,7 +54,6 @@ in
           (lib.mkIf config.tw.services.ssh.enable byobu)
           (lib.mkIf config.tw.services.ssh.enable tmux)
           killall
-          thunderbird
           ncdu
           gitui
           isd

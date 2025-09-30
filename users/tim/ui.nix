@@ -37,6 +37,7 @@ in
         discord
         element-desktop
         obsidian
+        thunderbird
       ];
 
       programs.kitty = {
