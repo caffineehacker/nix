@@ -95,36 +95,6 @@
                   })
                 ];
               })
-              # Patch https://github.com/NixOS/nixpkgs/pull/446833
-              ({ config, pkgs, lib, ... }: {
-                nixpkgs.overlays = [
-                  (final: prev: {
-                    kitty = prev.kitty.overrideAttrs
-                      (old: rec {
-                        version = if lib.assertMsg (old.version == "0.42.2") "Remove overlay now that kitty is updated" then "0.43.0" else old.version;
-                        src = prev.fetchFromGitHub {
-                          owner = "kovidgoyal";
-                          repo = "kitty";
-                          tag = "v0.43.0";
-                          hash = "sha256-wPLXuZWhaA51J7jGHffh/xnXzWDKCXV2G3Uvrg7G8Kg=";
-                        };
-                        goModules =
-                          (prev.buildGo124Module {
-                            pname = "kitty-go-modules";
-                            inherit src version;
-                            vendorHash = "sha256-bjtzvEQmpsrwD0BArw9N6/HqMB3T5xeqxpx89FV7p2A=";
-                          }).goModules;
-                        patches = old.patches ++
-                          [
-                            (pkgs.fetchpatch {
-                              url = "https://github.com/kovidgoyal/kitty/commit/2f991691f9dca291c52bd619c800d3c2f3eb0d66.patch";
-                              hash = "sha256-LIQz3e2qgiwpsMd5EbEcvd7ePEEPJvIH4NmNpxydQiU=";
-                            })
-                          ];
-                      });
-                  })
-                ];
-              })
               ./machines/framework
             ];
           };
