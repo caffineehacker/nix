@@ -81,18 +81,6 @@
               ({ config, pkgs, lib, ... }: {
                 nixpkgs.overlays = [
                   inputs.inputmodule-control.overlays.default
-                  (final: prev: {
-                    hyprlandPlugins.hyprsplit = prev.hyprlandPlugins.hyprsplit.overrideAttrs
-                      (old: {
-                        version = if lib.assertMsg (old.version == "0.50.1") "Remove overlay now that hyprsplit is updated" then "0.51.0" else old.version;
-                        src = prev.fetchFromGitHub {
-                          owner = "shezdy";
-                          repo = "hyprsplit";
-                          tag = "v0.51.0";
-                          hash = "sha256-h6vDtBKTfyuA/6frSFcTrdjoAKhwlGBT+nzjoWf9sQE=";
-                        };
-                      });
-                  })
                 ];
               })
               ./machines/framework
