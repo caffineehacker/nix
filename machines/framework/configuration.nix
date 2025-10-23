@@ -168,12 +168,6 @@ in
         });
         # Rocblas takes forever to build and just overriding it does not update the dependency for other packages unfortuntately.
         rocmPackages_6 = nixpkgs-unoptimized.pkgs.rocmPackages_6;
-        # Test failures that can be ignored due to timing - 8/1/2025
-        pythonPackages.pyrate-limiter = super.pythonPackages.pyrate-limiter.overridePythonAttrs
-          {
-            doCheck = false;
-            pytestCheckPhase = "true";
-          };
       })
       (final: super: (useUnoptimized super [
         # These are here because they can be very slow to build
@@ -228,6 +222,10 @@ in
         "v4l-utils"
         # Infinite recursion in call depth for nix configs - 8/12/2025
         "php"
+        # Takes forever to build
+        "ollama"
+        # Dependencies have some issues - 10/23/2025
+        "lutris"
       ]))
       (final: super: (useUnoptimizedHaskell super [
         # Test failures - 04/23/2025
