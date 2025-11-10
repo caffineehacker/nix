@@ -50,7 +50,7 @@ in
           nil
           # Formatter for Nix code
           nixpkgs-fmt
-          (lib.mkIf config.tw.programs.games.enable protonup)
+          (lib.mkIf config.tw.programs.games.enable protonup-ng)
           (lib.mkIf config.tw.services.ssh.enable byobu)
           (lib.mkIf config.tw.services.ssh.enable tmux)
           killall

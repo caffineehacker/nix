@@ -263,7 +263,7 @@ in
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-  # Disable touchpad while typingq
+  # Disable touchpad while typing
   environment.etc = {
     "libinput/local-overrides.quirks".text = ''
       [Keyboard]
@@ -323,7 +323,6 @@ in
     # Framework specific bits
     framework-tool
     nixpkgs-unoptimized.linuxKernel.packages.linux_zen.framework-laptop-kmod
-    fw-inputmodule
     sops
     amdgpu_top
     easyeffects

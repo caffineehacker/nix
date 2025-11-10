@@ -38,10 +38,6 @@
 
   tw.users.tim.enable = true;
 
-  environment.systemPackages = with pkgs; [
-    kitchenowl
-  ];
-
   services.fwupd.enable = true;
   services.power-profiles-daemon.enable = true;
 
