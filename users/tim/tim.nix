@@ -68,10 +68,9 @@ in
 
         programs.git = {
           enable = true;
-          userName = "Tim Waterhouse";
-          userEmail = "tim@timwaterhouse.com";
-
-          extraConfig = {
+          settings.user = {
+            name = "Tim Waterhouse";
+            email = "tim@timwaterhouse.com";
             commit.gpgsign = true;
             user.signingKey = "0BA5979146BB1B42";
           };
@@ -90,7 +89,21 @@ in
 
         programs.ssh = {
           enable = true;
-          matchBlocks = lib.mkIf config.tw.services.ssh.enable {
+          enableDefaultConfig = false;
+          matchBlocks = {
+            "*" = {
+              forwardAgent = false;
+              addKeysToAgent = "no";
+              compression = false;
+              serverAliveInterval = 0;
+              serverAliveCountMax = 3;
+              hashKnownHosts = false;
+              userKnownHostsFile = "~/.ssh/known_hosts";
+              controlMaster = "no";
+              controlPath = "~/.ssh/master-%r@%n:%p";
+              controlPersist = "no";
+            };
+          } // lib.mkIf config.tw.services.ssh.enable {
             "homelab.timwaterhouse.com" = {
               proxyCommand = "${pkgs.cloudflared}/bin/cloudflared access ssh --hostname %h";
             };
