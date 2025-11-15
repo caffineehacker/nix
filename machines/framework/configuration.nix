@@ -5,6 +5,12 @@ let
     system = "x86_64-linux";
     config = config.nixpkgs.config;
   };
+  nixpkgs-without-rocm = import inputs.nixpkgs {
+    system = "x86_64-linux";
+    config = config.nixpkgs.config // {
+      rocmSupport = false;
+    };
+  };
   nixpkgs-unoptimized-i686 = import inputs.nixpkgs {
     system = "i686-linux";
   };
@@ -168,6 +174,8 @@ in
         });
         # Rocblas takes forever to build and just overriding it does not update the dependency for other packages unfortuntately.
         rocmPackages_6 = nixpkgs-unoptimized.pkgs.rocmPackages_6;
+        # This seems to customize the rocmPackages when built with rocm support (actually it's the onnxruntime dependency) - 11/14/2025
+        thunderbird = nixpkgs-without-rocm.thunderbird;
       })
       (final: super: (useUnoptimized super [
         # These are here because they can be very slow to build
@@ -210,8 +218,6 @@ in
         "ryujinx"
         # Fails to build a dependency, openexr, that is customized so an override doesn't use the cache - 02/04/2025
         "gst_all_1"
-        # Can't have a -march since it is targeting wasm32
-        "thunderbird-unwrapped"
         # Causes a nix parsing stack overflow when using an override for some reason - 5/22/2025
         "easyeffects"
         # TLS dependency fails to build - 5/22/2025
