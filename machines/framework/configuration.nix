@@ -232,6 +232,12 @@ in
         "ollama"
         # Dependencies have some issues - 10/23/2025
         "lutris"
+        # Fails tests - 11/20/2025
+        "ffmpeg-headless"
+        "ffmpeg"
+        # Takes too long to build
+        "qtwebengine"
+        "pyside6"
       ]))
       (final: super: (useUnoptimizedHaskell super [
         # Test failures - 04/23/2025
