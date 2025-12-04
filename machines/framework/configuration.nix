@@ -238,6 +238,11 @@ in
         # Takes too long to build
         "qtwebengine"
         "pyside6"
+        "rustc"
+        "rustc-wrapper"
+        "clang"
+        "ghc"
+        "ryubing"
       ]))
       (final: super: (useUnoptimizedHaskell super [
         # Test failures - 04/23/2025
@@ -276,14 +281,14 @@ in
   services.xserver.enable = true;
 
   # Disable touchpad while typing
-  environment.etc = {
-    "libinput/local-overrides.quirks".text = ''
-      [Keyboard]
-      MatchUdevType=keyboard
-      MatchName=Framework Laptop 16 Keyboard Module - ANSI Keyboard
-      AttrKeyboardIntegration=internal
-    '';
-  };
+  # environment.etc = {
+  #   "libinput/local-overrides.quirks".text = ''
+  #     [Keyboard]
+  #     MatchUdevType=keyboard
+  #     MatchName=Framework Laptop 16 Keyboard Module - ANSI Keyboard
+  #     AttrKeyboardIntegration=internal
+  #   '';
+  # };
 
   # Disable the internal monitor and fingerprint sensor when lid is closed
   services.acpid = {
@@ -357,6 +362,10 @@ in
   # AMD has better battery life with PPD over TLP:
   # https://community.frame.work/t/responded-amd-7040-sleep-states/38101/13
   services.power-profiles-daemon.enable = true;
+  # Allow fine grained power control
+  hardware.amdgpu.overdrive.enable = true;
+  services.lact.enable = true;
+  hardware.fw-fanctrl.enable = true;
 
   # For fingerprint support
   services.fprintd.enable = true;

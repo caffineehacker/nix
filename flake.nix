@@ -52,7 +52,6 @@
         ./services
         ./containers
         ./secrets
-        ./flakes/kitchenowl
       ];
     in
     {

@@ -5,6 +5,12 @@
 }:
 let
   cfg = config.tw.programs.fish;
+
+  notFoundScript = pkgs.writeScriptBin "not-found" ''
+    #!/usr/bin/env bash
+    source ${pkgs.nix-index}/etc/profile.d/command-not-found.sh
+    command_not_found_handle "$@"
+  '';
 in
 {
   options = {
@@ -19,7 +25,15 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    programs.fish.enable = true;
+    programs.fish = {
+      enable = true;
+
+      interactiveShellInit = ''
+        function fish_command_not_found
+            ${notFoundScript}/bin/not-found $argv
+          end
+      '';
+    };
 
     # Make fish run for interactive sessions
     programs.bash = {
@@ -31,6 +45,8 @@ in
         fi
       '';
     };
+
+    programs.nix-index.enable = true;
 
     environment.systemPackages = with pkgs; [
       fishPlugins.done

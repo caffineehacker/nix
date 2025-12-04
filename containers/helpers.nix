@@ -41,5 +41,7 @@
     };
 
     services.resolved.enable = true;
+
+    boot.isNspawnContainer = true;
   };
 }
