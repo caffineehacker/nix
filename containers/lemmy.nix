@@ -34,7 +34,7 @@ in
               root * ${config.services.lemmy.ui.package}/dist
               file_server
             }
-            handle_path /static/${config.services.lemmy.ui.package.passthru.commit_sha}/* {
+            handle_path /static/${config.services.lemmy.ui.package.version}/* {
               root * ${config.services.lemmy.ui.package}/dist
               file_server
             }
