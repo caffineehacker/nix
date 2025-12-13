@@ -138,7 +138,7 @@ in
                   (heatPump "Outdoor Office" "heatpump/outdooroffice")
                   (heatPump "Family Room" "heatpump/familyroom")
                   (heatPump "Bedroom" "heatpump/hpmasterbdrm")
-                  (heatPump "Connor's Office" "heatpump/hpconnorsroom")
+                  (heatPump "Connor's Room" "heatpump/hpconnorsroom")
                 ];
             };
             homeassistant = { };
