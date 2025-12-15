@@ -70,7 +70,7 @@ in
           configDir = "/var/lib/haas";
           config = {
             default_config = { };
-            automation = "!include automations.yaml";
+            "automation ui" = "!include automations.yaml";
             mqtt = {
               climate =
                 let
@@ -83,6 +83,7 @@ in
                       ];
                     };
                     unique_id = "${baseTopic}";
+                    default_entity_id = "climate." + (lib.strings.removePrefix "heatpump/" baseTopic);
                     optimistic = true;
                     current_temperature_topic = "${baseTopic}/status";
                     current_temperature_template = "{{ value_json.roomTemperature }}";
@@ -141,9 +142,80 @@ in
                   (heatPump "Connor's Room" "heatpump/hpconnorsroom")
                 ];
             };
+            "automation nix" =
+              let
+                heatPumpWithDisabledAtTime = name: baseTopic: time:
+                  let
+                    entityId = "climate." + (lib.strings.removePrefix "heatpump/" baseTopic);
+                  in
+                  [
+                    {
+                      alias = "${name} Heat Down";
+                      description = "";
+                      triggers = [
+                        {
+                          trigger = "time";
+                          at = time;
+                        }
+                      ];
+                      conditions = [
+                        {
+                          condition = "state";
+                          entity_id = entityId;
+                          state = "heat";
+                        }
+                      ];
+                      actions = [
+                        {
+                          action = "climate.set_temperature";
+                          target = {
+                            entity_id = entityId;
+                          };
+                          data = {
+                            temperature = 61;
+                          };
+                        }
+                      ];
+                    }
+                    {
+                      alias = "${name} A/C Off";
+                      description = "";
+                      triggers = [
+                        {
+                          trigger = "time";
+                          at = "22:00:00";
+                        }
+                      ];
+                      conditions = [
+                        {
+                          condition = "state";
+                          entity_id = entityId;
+                          state = "cool";
+                        }
+                      ];
+                      actions = [
+                        {
+                          action = "climate.set_hvac_mode";
+                          target = {
+                            entity_id = entityId;
+                          };
+                          data = {
+                            hvac_mode = "off";
+                          };
+                        }
+                      ];
+                    }
+                  ];
+                heatPumpWithDisabledEvening = name: baseTopic: heatPumpWithDisabledAtTime name baseTopic "22:00:00";
+              in
+              lib.lists.flatten [
+                (heatPumpWithDisabledEvening "Dining Room Heat Pump" "heatpump/hpdiningroom")
+                (heatPumpWithDisabledEvening "Family Room" "heatpump/familyroom")
+                (heatPumpWithDisabledAtTime "Tim's Office" "heatpump/timsoffice" "17:00:00")
+                (heatPumpWithDisabledAtTime "Bedroom" "heatpump/hpmasterbdrm" "07:00:00")
+              ];
             homeassistant = { };
             http = {
-              server_host = "::1";
               server_port = cfg.cloudflare.port;
               trusted_proxies = [ "::1" ];
               use_x_forwarded_for = true;
