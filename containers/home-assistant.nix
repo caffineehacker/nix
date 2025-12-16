@@ -93,9 +93,9 @@ in
                     swing_mode_state_topic = "${baseTopic}";
                     temperature_state_topic = "${baseTopic}";
                     temperature_command_topic = "${baseTopic}/set";
-                    fan_mode_state_topic = "${baseTopic}/status";
                     fan_mode_command_topic = "${baseTopic}/set";
                     fan_mode_command_template = "{{ {'fan': value}|to_json }}";
+                    fan_mode_state_topic = "${baseTopic}";
                     fan_mode_state_template = "{{ value_json.fan }}";
                     fan_modes = [
                       "AUTO"
