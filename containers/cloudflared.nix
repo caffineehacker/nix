@@ -10,6 +10,8 @@ let
 in
 {
   options = {
+    tw.containers.cloudflared.enable = lib.mkEnableOption "cloudflared";
+
     tw.containers.cloudflared.tunnelId = lib.mkOption {
       type = lib.types.str;
       default = "";
@@ -32,7 +34,7 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     services.cloudflared = {
       enable = true;
       tunnels = {

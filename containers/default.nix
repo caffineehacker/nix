@@ -37,6 +37,12 @@
         };
         enable = lib.mkEnableOption name;
         cloudflare = {
+          enable = lib.mkOption {
+            default = true;
+            example = true;
+            description = "Whether to enable CloudFlare.";
+            type = lib.types.bool;
+          };
           tunnelFile = lib.mkOption {
             default = config.sops.secrets."cloudflare/tunnels/${name}.json".path;
             description = ''
@@ -48,6 +54,34 @@
             default = "";
             description = ''
               ID of the cloudflare tunnel
+            '';
+            type = lib.types.str;
+          };
+          port = lib.mkOption {
+            default = 8080;
+            description = ''
+              Port of the container
+            '';
+            type = lib.types.int;
+          };
+        };
+        wireguard = {
+          enable = lib.mkEnableOption "wireguard";
+          privateKeyFile = lib.mkOption {
+            default = config.sops.secrets."wireguard/${name}Private".path;
+            description = ''
+              The private key for the WireGuard connection
+            '';
+            example = ''
+              privateKey = config.sops.secrets."wireguard/${name}";
+            '';
+            type = lib.types.str;
+          };
+          tunnelIp = lib.mkOption {
+            default = "10.100.0.${builtins.toString (ipNumber)}";
+            example = "10.100.0.10";
+            description = ''
+              IP address of the wireguard network interface in the container
             '';
             type = lib.types.str;
           };
@@ -97,8 +131,9 @@
         };
       };
       home-assistant = {
-        cloudflare = {
-          tunnelId = "5e4d88cc-1579-4c8d-a602-e7d985036d79";
+        cloudflare.enable = false;
+        wireguard = {
+          enable = true;
           port = 8123;
         };
         hostname = "home.timwaterhouse.com";

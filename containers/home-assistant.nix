@@ -34,7 +34,7 @@ in
           '';
         };
 
-        networking.firewall.allowedTCPPorts = [ 8091 ];
+        networking.firewall.allowedTCPPorts = [ 8091 cfg.wireguard.port ];
 
         services.zwave-js = {
           enable = true;
@@ -216,8 +216,8 @@ in
               ];
             homeassistant = { };
             http = {
-              server_port = cfg.cloudflare.port;
-              trusted_proxies = [ "::1" ];
+              server_port = cfg.wireguard.port;
+              trusted_proxies = [ "::1" "10.100.0.60" "10.100.0.1" ];
               use_x_forwarded_for = true;
               ip_ban_enabled = true;
               login_attempts_threshold = 5;
@@ -243,6 +243,10 @@ in
             # Calculate the bantime based on all the violations
             overalljails = true;
           };
+          ignoreIP = [
+            "10.0.0.0/24"
+            "10.100.0.0/24"
+          ];
           jails = {
             home-assistant = {
               settings = {

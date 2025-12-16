@@ -3,7 +3,7 @@ let
   cfg = config.tw.containers.matrix;
   tunnelFile = config.sops.secrets."cloudflare/tunnels/matrix.json".path;
   matrixSharedSecretFile = config.sops.secrets."matrix/sharedSecret".path;
-  wireguardPrivateKeyFile = config.sops.secrets."matrix/wireguard/clientKey".path;
+  wireguardPrivateKeyFile = config.sops.secrets."wireguard/matrixPrivate".path;
 in
 {
   config = lib.mkIf cfg.enable {
