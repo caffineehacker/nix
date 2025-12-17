@@ -10,7 +10,7 @@
       reverse_proxy /_matrix/* 10.100.0.2:8008
     '';
     virtualHosts."home.timwaterhouse.com".extraConfig = ''
-      reverse_proxy /* 10.100.0.60:8123
+      reverse_proxy 10.100.0.60:8123
     '';
     email = "tim@timwaterhouse.com";
   };
