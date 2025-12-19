@@ -365,7 +365,8 @@ in
   # https://community.frame.work/t/responded-amd-7040-sleep-states/38101/13
   services.power-profiles-daemon.enable = true;
   # Allow fine grained power control
-  hardware.amdgpu.overdrive.enable = true;
+  # Enabling overdrive causes the laptop screen backlight to not turn off during sleep
+  # hardware.amdgpu.overdrive.enable = true;
   services.lact.enable = true;
   hardware.fw-fanctrl.enable = true;
 
