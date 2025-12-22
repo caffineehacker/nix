@@ -58,13 +58,13 @@ in
           enable = true;
           package = (pkgs.home-assistant.override {
             extraComponents = [
-              # Components required to complete the onboarding
               "esphome"
               "met"
               "mqtt"
               "radio_browser"
               "zwave_me"
               "zwave_js"
+              "govee_light_local"
             ];
           });
           configDir = "/var/lib/haas";
