@@ -82,7 +82,8 @@
                   (final: prev: {
                     hyprlandPlugins.hyprsplit = prev.hyprlandPlugins.hyprsplit.overrideAttrs
                       (finalAttrs: previousAttrs: {
-                        version = "0.53.1";
+                        version =
+                          if previousAttrs.version == "0.52.2" then "0.53.1" else "REMOVE OVERRIDE!";
                         src = prev.fetchFromGitHub {
                           owner = "shezdy";
                           repo = "hyprsplit";
