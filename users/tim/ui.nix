@@ -48,6 +48,16 @@ in
         };
       };
 
+      programs.alacritty = {
+        enable = true;
+        theme = "solarized_dark";
+        settings = {
+          window = {
+            opacity = 0.8;
+          };
+        };
+      };
+
       programs.vscode = {
         enable = true;
         package = pkgs.vscodium-fhs;

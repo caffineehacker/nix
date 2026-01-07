@@ -79,7 +79,7 @@
                 interval = 10;
                 format = " {usage}%";
                 max-length = 10;
-                on-click = "kitty --start-as=fullscreen --title btop sh -c 'btop'";
+                on-click = "alacritty -o 'window.startup_mode=\"fullscreen\"' --title btop -e sh -c 'btop'";
               };
 
               memory = {
@@ -88,14 +88,14 @@
                 max-length = 10;
                 tooltip = true;
                 tooltip-format = "Memory - {used:0.1f}GB used";
-                on-click = "kitty --start-as=fullscreen --title btop sh -c 'btop'";
+                on-click = "alacritty -o 'window.startup_mode=\"fullscreen\"' --title btop -e sh -c 'btop'";
               };
 
               disk = {
                 interval = 30;
                 format = "󰋊 {percentage_used}%";
                 path = "/";
-                on-click = "kitty --start-as=fullscreen --title btop sh -c 'btop'";
+                on-click = "alacritty -o 'window.startup_mode=\"fullscreen\"' --title btop -e sh -c 'btop'";
               };
 
               battery = {
@@ -236,7 +236,6 @@
             #custom-launch_firefox,
             #custom-launch_thunderbird,
             #custom-launch_thunar,
-            #custom-launch_kitty,
             #custom-lock_screen,
             #custom-light_dark,
             #custom-power_btn,
@@ -278,16 +277,14 @@
             #custom-launch_firefox, 
             #custom-launch_thunderbird,
             #custom-launch_thunar,
-            #custom-launch_wofi,
-            #custom-launch_kitty {
+            #custom-launch_wofi {
                 margin-left: 0px;
                 border-right: 0px;
                 font-size: 24px;
                 margin-right: 20px;
             }
 
-            #custom-launch_firefox, 
-            #custom-launch_kitty {
+            #custom-launch_firefox {
                 font-size: 20px;
             }
           '';

@@ -25,7 +25,7 @@
           # Even though this is only referred to as $pkgs.networkmanagerapplet, we need to install it for the icons to appear
           networkmanagerapplet
           pamixer
-          xfce.thunar
+          thunar
           nordzy-cursor-theme
         ];
 
@@ -46,7 +46,7 @@
           enable = true;
           settings = {
             monitor = ",preferred,auto,1,vrr,2";
-            "$terminal" = "kitty";
+            "$terminal" = "alacritty";
             env = [
               "XCURSOR_SIZE,48"
               "QT_QPA_PLATFORMTHEME,qt6ct"
@@ -62,6 +62,7 @@
               touchpad = {
                 natural_scroll = false;
               };
+              numlock_by_default = true;
             };
             general = {
               gaps_in = 5;
@@ -79,7 +80,6 @@
                 passes = 4;
                 new_optimizations = true;
               };
-              blurls = "lockscreen";
 
               shadow = {
                 enabled = true;
@@ -113,19 +113,16 @@
               ];
             };
             windowrule = [
-              "float,class:^(blueman-manager)$"
-              "float,class:^(nm-connection-editor)$"
-              "float,class:^(pavucontrol)$"
-              "float,class:^([t|T]hunar)$"
-              "opacity 0.8 0.8,class:^(kitty)$"
-              "animation popin,class:^(kitty)$,title:^(update-sys)$"
-              "animation popin,class:^([t|T]hunar)$"
-              "opacity 0.8 0.8,class:^([t|T]hunar)$"
-              "opacity 0.8 0.8,class:^(VSCodium)$"
-              "move cursor -3% -105%,class:^(wofi)$"
-              "noanim,class:^(wofi)$"
-              "opacity 0.8 0.6,class:^(wofi)$"
-              "noinitialfocus,class:steam"
+              "float on, match:class ^(blueman-manager)$"
+              "float on, match:class ^(nm-connection-editor)$"
+              "float on, match:class ^(pavucontrol)$"
+              "float on, match:class ^([t|T]hunar)$"
+              "animation popin, match:class ^([t|T]hunar)$"
+              "opacity 0.8, match:class ^([t|T]hunar)$"
+              "opacity 0.8, match:class ^(VSCodium)$"
+              "move (cursor_x-(window_w*0.5)) (cursor_y-(window_h*0.5)), match:class ^(wofi)$"
+              "opacity 0.8 0.6, match:class ^(wofi)$"
+              "no_initial_focus true, match:class steam"
             ];
             misc = {
               force_default_wallpaper = 0;

@@ -7,8 +7,6 @@
       owner = "NixOS";
       repo = "nixpkgs";
       ref = "nixpkgs-unstable";
-      # Use this for homelab since z-wave JS server is out of date for newest version
-      # rev = "d3d513cd00b8263042e30a5794dd2c35c58e249e";
     };
     lanzaboote = {
       url = "github:nix-community/lanzaboote";
@@ -80,6 +78,19 @@
               ({ config, pkgs, lib, ... }: {
                 nixpkgs.overlays = [
                   inputs.inputmodule-control.overlays.default
+                  # Apply https://github.com/NixOS/nixpkgs/pull/476470 so we can build
+                  (final: prev: {
+                    hyprlandPlugins.hyprsplit = prev.hyprlandPlugins.hyprsplit.overrideAttrs
+                      (finalAttrs: previousAttrs: {
+                        version = "0.53.1";
+                        src = prev.fetchFromGitHub {
+                          owner = "shezdy";
+                          repo = "hyprsplit";
+                          tag = "v${finalAttrs.version}";
+                          hash = "sha256-seA9mz0Yej4yYZVgzd7yKoHwuueKhfQPu0CyB7EL8No=";
+                        };
+                      });
+                  })
                 ];
               })
               ./machines/framework
