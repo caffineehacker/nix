@@ -30,8 +30,10 @@ in
 
       interactiveShellInit = ''
         function fish_command_not_found
-            ${notFoundScript}/bin/not-found $argv
-          end
+          ${notFoundScript}/bin/not-found $argv
+        end
+
+        fish_config theme choose ayu-mirage
       '';
     };
 
