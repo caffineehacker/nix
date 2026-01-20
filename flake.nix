@@ -79,19 +79,19 @@
                 nixpkgs.overlays = [
                   inputs.inputmodule-control.overlays.default
                   # Apply https://github.com/NixOS/nixpkgs/pull/476470 so we can build
-                  (final: prev: {
-                    hyprlandPlugins.hyprsplit = prev.hyprlandPlugins.hyprsplit.overrideAttrs
-                      (finalAttrs: previousAttrs: {
-                        version =
-                          if previousAttrs.version == "0.52.2" then "0.53.1" else "REMOVE OVERRIDE!";
-                        src = prev.fetchFromGitHub {
-                          owner = "shezdy";
-                          repo = "hyprsplit";
-                          tag = "v${finalAttrs.version}";
-                          hash = "sha256-seA9mz0Yej4yYZVgzd7yKoHwuueKhfQPu0CyB7EL8No=";
-                        };
-                      });
-                  })
+                  # (final: prev: {
+                  #   hyprlandPlugins.hyprsplit = prev.hyprlandPlugins.hyprsplit.overrideAttrs
+                  #     (finalAttrs: previousAttrs: {
+                  #       version =
+                  #         if previousAttrs.version == "0.52.2" then "0.53.1" else "REMOVE OVERRIDE!";
+                  #       src = prev.fetchFromGitHub {
+                  #         owner = "shezdy";
+                  #         repo = "hyprsplit";
+                  #         tag = "v${finalAttrs.version}";
+                  #         hash = "sha256-seA9mz0Yej4yYZVgzd7yKoHwuueKhfQPu0CyB7EL8No=";
+                  #       };
+                  #     });
+                  # })
                 ];
               })
               ./machines/framework
