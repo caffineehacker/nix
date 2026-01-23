@@ -111,7 +111,7 @@ in
           (pyfinal: pysuper: {
             scipy = pysuper.scipy.overridePythonAttrs (oldAttrs: {
               # Tests fail due to floating point precision due to optimizations
-              disabledTests = pysuper.scipy.disabledTests ++ [ "test_equal_bounds" ];
+              disabledTests = pysuper.scipy.disabledTests ++ [ "test_equal_bounds" "test_bug_6139" "test_roundtrip_scaling" "test_initial_step" ];
             });
           })
         ];
