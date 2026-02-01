@@ -8,7 +8,7 @@ in
 {
   options = {
     tw.users.tim.ui.enable = lib.mkOption {
-      default = (config.services.xserver.enable || config.tw.programs.hyprland.enable) && cfg.enable;
+      default = config.tw.system.ui.enable && cfg.enable;
       example = true;
       description = ''
         Enable UI based settings
