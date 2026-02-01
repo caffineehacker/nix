@@ -226,7 +226,7 @@
                 };
               in
               [
-                "swww img ${wallpaper}"
+                "${pkgs.swww}/bin/swww img ${wallpaper}"
               ];
 
             plugin = {
