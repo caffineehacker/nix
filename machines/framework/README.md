@@ -13,7 +13,7 @@
 1. Format swap `mkswap -L swap /dev/vg/swap`
 1. Follow the rest of the Nix OS install guide making sure to mount with the UUIDs
 1. Reset / clear the secure boot keys in the bios
-1. Run `systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=7+8 /dev/your_encrypted_partition` to enable automatic unlock from the TPM
+1. Run `systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=7 /dev/your_encrypted_partition` to enable automatic unlock from the TPM
 1. Run `sudo sbctl create-keys`
 1. Run `sudo sbctl enroll-keys`
 1. Reboot and enable secure boot in the bios
