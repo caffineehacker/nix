@@ -65,6 +65,7 @@ in
               "zwave_me"
               "zwave_js"
               "govee_light_local"
+              "ambient_station"
             ];
           });
           configDir = "/var/lib/haas";
