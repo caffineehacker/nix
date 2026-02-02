@@ -243,6 +243,8 @@ in
         "clang"
         "ghc"
         "ryubing"
+        # Fails due to warning as error for string overflow - 02/02/2026
+        "gdb"
       ]))
       (final: super: (useUnoptimizedHaskell super [
         # Test failures - 04/23/2025
