@@ -334,6 +334,7 @@ in
   services.libinput.enable = true;
 
   tw.users.tim.enable = true;
+  tw.users.deanna.enable = true;
 
   environment.systemPackages = with pkgs; [
     # Necessary for Gnome to use the ambient light sensor
