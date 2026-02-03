@@ -42,5 +42,9 @@ in
         "input"
       ];
     };
+
+    services.desktopManager.plasma6.enable = true;
+    # Kde and Gnome conflict with this setting
+    programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.kdePackages.ksshaskpass.out}/bin/ksshaskpass";
   };
 }
