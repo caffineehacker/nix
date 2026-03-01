@@ -23,25 +23,13 @@ in
     programs.regreet = {
       enable = true;
       settings = {
-        background = {
-          path =
-            let
-              inherit (inputs.nix-colors.lib.contrib { inherit pkgs; })
-                nixWallpaperFromScheme;
-              wallpaper = nixWallpaperFromScheme {
-                scheme = config.tw.users.tim.colorScheme;
-                width = 2560;
-                height = 1600;
-                logoScale = 5.0;
-              };
-            in
-            wallpaper;
-        };
         "widget.clock" = {
           # Shows "Sunday June 1 - 1:04 PM"
           format = "%A %B %-d - %-I:%M %P";
         };
       };
+      # Make cage use the last monitor instead of spanning both monitors
+      cageArgs = [ "-m" "last" ];
     };
   };
 }

@@ -2,8 +2,6 @@
 let
   cfg = config.tw.users.tim;
   uiEnabled = cfg.ui.enable;
-  inherit (inputs.nix-colors.lib.contrib { inherit pkgs; })
-    gtkThemeFromScheme;
 in
 {
   options = {
@@ -17,20 +15,26 @@ in
     };
   };
   config = lib.mkIf (uiEnabled && cfg.enable) {
-    fonts.packages = with pkgs; [
-      noto-fonts-color-emoji
-    ] ++ (builtins.filter
-      lib.attrsets.isDerivation
-      (builtins.attrValues pkgs.nerd-fonts));
+    stylix.enable = true;
+    stylix.image = pkgs.fetchurl {
+      url = "https://getwallpapers.com/wallpaper/full/0/5/8/35975.jpg";
+      hash = "sha256-01hpirLNkEaJ1zACu8Km1v2VG3H7Rgnx3zErOuufTbY=";
+    };
+    stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-frappe.yaml";
+
+    fonts.packages = with pkgs;
+      [
+        noto-fonts-color-emoji
+      ] ++ (builtins.filter
+        lib.attrsets.isDerivation
+        (builtins.attrValues pkgs.nerd-fonts));
 
     home-manager.users.tim = {
       gtk = {
         enable = true;
-        theme = {
-          name = "${cfg.colorScheme.slug}";
-          package = gtkThemeFromScheme { scheme = cfg.colorScheme; };
-        };
       };
+
+      stylix.targets.gtk.enable = true;
 
       home.packages = with pkgs; [
         firefox-bin
@@ -42,10 +46,6 @@ in
 
       programs.kitty = {
         enable = true;
-        settings = {
-          foreground = "#${cfg.colorScheme.palette.base05}";
-          background = "#${cfg.colorScheme.palette.base00}";
-        };
       };
 
       programs.alacritty = {
@@ -53,7 +53,7 @@ in
         theme = "solarized_dark";
         settings = {
           window = {
-            opacity = 0.8;
+            opacity = lib.mkForce 0.8;
           };
         };
       };
@@ -63,8 +63,6 @@ in
         package = pkgs.vscodium-fhs;
         profiles.default = {
           userSettings = {
-            "workbench.colorTheme" = "Catppuccin Frappé";
-
             "git.autofetch" = true;
             "git.enableSmartCommit" = true;
             "git.confirmSync" = false;

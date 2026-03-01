@@ -36,8 +36,8 @@ in
         style = ''
           window {
               margin: 0px;
-              border: 5px solid #${config.tw.users.tim.colorScheme.palette.base01};
-              background-color: #${config.tw.users.tim.colorScheme.palette.base00};
+              border: 5px solid #${config.lib.stylix.colors.base01};
+              background-color: #${config.lib.stylix.colors.base00};
               border-radius: 0px;
           }
 
@@ -46,25 +46,25 @@ in
               margin: 4px;
               padding-left: 20px;
               border: none;
-              color: #${config.tw.users.tim.colorScheme.palette.base05};
+              color: #${config.lib.stylix.colors.base05};
               font-weight: bold;
-              background-color: #${config.tw.users.tim.colorScheme.palette.base01};
+              background-color: #${config.lib.stylix.colors.base01};
              	outline: none;
               border-radius: 15px;
               margin: 10px;
               margin-bottom: 2px;
           }
           #input:focus {
-              border: 0px solid #${config.tw.users.tim.colorScheme.palette.base01};
+              border: 0px solid #${config.lib.stylix.colors.base01};
               margin-bottom: 0px;
           }
 
           #inner-box {
               margin: 4px;
-              border: 10px solid #${config.tw.users.tim.colorScheme.palette.base01};
-              color: #${config.tw.users.tim.colorScheme.palette.base05};
+              border: 10px solid #${config.lib.stylix.colors.base01};
+              color: #${config.lib.stylix.colors.base05};
               font-weight: bold;
-              background-color: #${config.tw.users.tim.colorScheme.palette.base01};
+              background-color: #${config.lib.stylix.colors.base01};
               border-radius: 15px;
           }
 
@@ -72,7 +72,7 @@ in
               margin: 0px;
               border: none;
               border-radius: 15px;
-              background-color: #${config.tw.users.tim.colorScheme.palette.base01};
+              background-color: #${config.lib.stylix.colors.base01};
           }
 
           #scroll {
@@ -83,16 +83,16 @@ in
           }
 
           #img:selected {
-              background-color: #${config.tw.users.tim.colorScheme.palette.base02};
+              background-color: #${config.lib.stylix.colors.base02};
               border-radius: 15px;
           }
 
           #text:selected {
-              color: #${config.tw.users.tim.colorScheme.palette.base05};
+              color: #${config.lib.stylix.colors.base05};
               margin: 0px 0px;
               border: none;
               border-radius: 15px;
-              background-color: #${config.tw.users.tim.colorScheme.palette.base02};
+              background-color: #${config.lib.stylix.colors.base02};
           }
 
           #entry {
@@ -106,7 +106,7 @@ in
               margin: 0px 0px;
               border: none;
               border-radius: 15px;
-              background-color: #${config.tw.users.tim.colorScheme.palette.base02};
+              background-color: #${config.lib.stylix.colors.base02};
           }
         '';
       };

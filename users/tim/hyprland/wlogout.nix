@@ -62,23 +62,23 @@ in
           }
 
           window {
-            background-color: #${config.tw.users.tim.colorScheme.palette.base00};
+            background-color: #${config.lib.stylix.colors.base00};
             opacity: 0.9;
           }
 
           button {
             background-size: 20%;
-            border: 2px solid #${config.tw.users.tim.colorScheme.palette.base08};
+            border: 2px solid #${config.lib.stylix.colors.base08};
             border-radius: 3rem;
-            background-color: #${config.tw.users.tim.colorScheme.palette.base01};
+            background-color: #${config.lib.stylix.colors.base01};
             margin: 10px;
-            color: #${config.tw.users.tim.colorScheme.palette.base05};
+            color: #${config.lib.stylix.colors.base05};
           }
 
           button:hover,
           button:focus {
-            background-color: #${config.tw.users.tim.colorScheme.palette.base05};
-            color: #${config.tw.users.tim.colorScheme.palette.base01};
+            background-color: #${config.lib.stylix.colors.base05};
+            color: #${config.lib.stylix.colors.base01};
           }
 
           #lock {

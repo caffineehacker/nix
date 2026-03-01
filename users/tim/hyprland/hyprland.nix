@@ -68,8 +68,6 @@
               gaps_in = 5;
               gaps_out = 10;
               border_size = 2;
-              "col.active_border" = "rgb(cdd6f4)";
-              "col.inactive_border" = "rgba(595959aa)";
               layout = "dwindle";
             };
             decoration = {
@@ -85,7 +83,6 @@
                 enabled = true;
                 range = 4;
                 render_power = 3;
-                color = "rgba(1a1a1aee)";
               };
             };
             animations = {
@@ -214,20 +211,7 @@
               "${pkgs.easyeffects}/bin/easyeffects --gapplication-service"
             ];
 
-            exec =
-              let
-                inherit (inputs.nix-colors.lib.contrib { inherit pkgs; })
-                  nixWallpaperFromScheme;
-                wallpaper = nixWallpaperFromScheme {
-                  scheme = config.tw.users.tim.colorScheme;
-                  width = 2560;
-                  height = 1600;
-                  logoScale = 5.0;
-                };
-              in
-              [
-                "${pkgs.swww}/bin/swww img ${wallpaper}"
-              ];
+            exec = "${pkgs.swww}/bin/swww img ${config.stylix.image}";
 
             plugin = {
               hyprsplit = {

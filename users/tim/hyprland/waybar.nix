@@ -182,53 +182,29 @@
 
             window#waybar {
                 opacity: 1;
-                background: #${config.tw.users.tim.colorScheme.palette.base00};
-                color: #${config.tw.users.tim.colorScheme.palette.base05};
             }
 
             tooltip {
-                background: #${config.tw.users.tim.colorScheme.palette.base01};
                 opacity: 0.8;
                 border-radius: 10px;
                 border-width: 2px;
                 border-style: solid;
-                border-color: #${config.tw.users.tim.colorScheme.palette.base08};
-            }
-
-            tooltip label{
-                color: #${config.tw.users.tim.colorScheme.palette.base04};
-            }
-
-            #taskbar button {
-                color: #${config.tw.users.tim.colorScheme.palette.base05};
-            }
-
-            #taskbar button:hover {
-                background: #${config.tw.users.tim.colorScheme.palette.base05};
-                color: #${config.tw.users.tim.colorScheme.palette.base01};
             }
 
             #taskbar button.active {
-                color: #${config.tw.users.tim.colorScheme.palette.base05};
-                background: #${config.tw.users.tim.colorScheme.palette.base02};
                 border-radius: 10px;
             }
 
             #workspaces button {
                 padding: 5px;
-                color: #${config.tw.users.tim.colorScheme.palette.base05};
                 margin-right: 5px;
             }
 
             #workspaces button.active {
-                color: #${config.tw.users.tim.colorScheme.palette.base05};
-                background: #${config.tw.users.tim.colorScheme.palette.base02};
                 border-radius: 10px;
             }
 
             #workspaces button:hover {
-                background: #${config.tw.users.tim.colorScheme.palette.base05};
-                color: #${config.tw.users.tim.colorScheme.palette.base01};
                 border-radius: 10px;
             }
 
@@ -256,7 +232,6 @@
             #workspaces,
             #idle_inhibitor,
             #backlight {
-                background: #${config.tw.users.tim.colorScheme.palette.base00};
                 opacity: 1;
                 padding: 0px 8px;
                 margin: 0px 3px;

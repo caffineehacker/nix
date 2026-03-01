@@ -20,7 +20,13 @@ in
 
   config = lib.mkIf cfg.enable {
     programs.steam.enable = true;
-    programs.steam.gamescopeSession.enable = true;
+    # programs.steam.gamescopeSession.enable = true;
+
+    hardware.graphics.extraPackages = with pkgs; [
+      vulkan-loader
+      vulkan-validation-layers
+      vulkan-extension-layer
+    ];
 
     programs.gamemode.enable = true;
 

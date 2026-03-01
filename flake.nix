@@ -25,8 +25,9 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-colors = {
-      url = "github:misterio77/nix-colors";
+    stylix = {
+      url = "github:nix-community/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware = {
       type = "github";
@@ -75,6 +76,7 @@
             inherit system;
             specialArgs = { inherit inputs system; };
             modules = commonModules ++ [
+              inputs.stylix.nixosModules.stylix
               ({ config, pkgs, lib, ... }: {
                 nixpkgs.overlays = [
                   inputs.inputmodule-control.overlays.default

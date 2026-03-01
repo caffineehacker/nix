@@ -9,7 +9,6 @@ let
 in
 {
   imports = [
-    inputs.nix-colors.homeManagerModules.default
     ./hyprland
     ./ui.nix
     ./llm.nix
@@ -23,13 +22,6 @@ in
         Enable user tim
       '';
       type = lib.types.bool;
-    };
-
-    tw.users.tim.colorScheme = lib.mkOption {
-      default = inputs.nix-colors.colorSchemes.catppuccin-frappe;
-      description = ''
-        The Nix colors color scheme to use
-      '';
     };
   };
 
