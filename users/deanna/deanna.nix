@@ -28,7 +28,7 @@ in
         home.stateVersion = "23.05";
 
         home.packages = with pkgs; [
-          firefox
+          firefox-bin
         ];
 
         programs.home-manager.enable = true;
