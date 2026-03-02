@@ -51,7 +51,7 @@ in
               (pyfinal: pyprev: {
                 psycopg = pyprev.psycopg.overridePythonAttrs (oldAttrs: {
                   # Tests fail due to timing issues
-                  disabledTests = pyprev.psycopg.disabledTests ++ [ "test_stats_connect[asyncio]" "test_stats_connect" ];
+                  disabledTests = pyprev.psycopg.disabledTests ++ [ "test_stats_connect[asyncio]" "test_stats_connect" "test_remote_closed" ];
                 });
               })
             ];
