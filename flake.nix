@@ -45,6 +45,7 @@
       commonModules = [
         inputs.lanzaboote.nixosModules.lanzaboote
         inputs.sops-nix.nixosModules.sops
+        inputs.stylix.nixosModules.stylix
         ./system
         ./programs
         ./users
@@ -76,7 +77,6 @@
             inherit system;
             specialArgs = { inherit inputs system; };
             modules = commonModules ++ [
-              inputs.stylix.nixosModules.stylix
               ({ config, pkgs, lib, ... }: {
                 nixpkgs.overlays = [
                   inputs.inputmodule-control.overlays.default
