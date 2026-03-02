@@ -1,4 +1,4 @@
-{ config, lib, inputs, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.tw.users.tim;
   uiEnabled = cfg.ui.enable;
