@@ -66,9 +66,12 @@ in
               "zwave_js"
               "govee_light_local"
               "ambient_station"
+              # For some reason this is always being setup and failing to start since it isn't present if we don't declare it here
+              "google_translate"
             ];
           });
-          configDir = "/var/lib/haas";
+          extraPackages = python3Packages: with python3Packages; [ uv ];
+          configDir = "/var/lib/hass";
           config = {
             default_config = { };
             "automation ui" = "!include automations.yaml";
