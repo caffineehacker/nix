@@ -1,7 +1,6 @@
 { lib
 , pkgs
 , config
-, inputs
 , ...
 }: {
   imports = [ ./wofi.nix ./waybar.nix ./swaylock.nix ./mako.nix ./wlogout.nix ./scripts ];
@@ -18,6 +17,17 @@
     ] ++ (builtins.filter
       lib.attrsets.isDerivation
       (builtins.attrValues pkgs.nerd-fonts));
+
+    programs.dms-shell = {
+      enable = true;
+      systemd.enable = false;
+      enableSystemMonitoring = true;
+      enableVPN = false;
+      enableDynamicTheming = true;
+      enableAudioWavelength = false;
+      enableCalendarEvents = false;
+      enableClipboardPaste = true;
+    };
 
     home-manager = {
       users.tim = {
@@ -201,7 +211,7 @@
               "${pkgs.blueman}/bin/blueman-applet"
               "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator"
               "${pkgs.wl-clipboard}/bin/wl-paste --watch ${pkgs.cliphist}/bin/cliphist store"
-              "waybar"
+              "dms run -d"
               "steam"
               "obsidian"
               # Enable sway lock when the system sleeps
