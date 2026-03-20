@@ -9,7 +9,7 @@ in
 {
   options = {
     tw.users.deanna.enable = lib.mkOption {
-      default = true;
+      default = false;
       example = true;
       description = ''
         Enable user deanna
