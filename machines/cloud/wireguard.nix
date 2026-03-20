@@ -45,22 +45,19 @@
   environment.systemPackages = with pkgs; [ wireguard-tools ];
 
   # Ensure fail2ban doesn't ban the home network
-  services.cron =
-    let
-      allowWgIpScript = pkgs.writeShellApplication
-        {
-          name = "allow_wg_ip.sh";
-          runtimeInputs = [ pkgs.wireguard-tools pkgs.fail2ban ];
-          text = ''
-            #!/bin/sh
-            wg show | grep endpoint | sed 's/.*endpoint: //g' | sed 's/:.*//g' | xargs fail2ban-client unban
-          '';
-        };
-    in
-    {
-      enable = true;
-      systemCronJobs = [
-        "0 */5 * * * * root ${allowWgIpScript}/bin/allow_wg_ip.sh"
-      ];
+  systemd.timers."unban-home" = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "hourly";
+      Persistent = true;
+      Unit = "unban-home.service";
     };
+  };
+
+  systemd.services."unban-home" = {
+    script = ''
+      #!/bin/sh
+      ${pkgs.wireguard-tools}/bin/wg show | grep endpoint | sed 's/.*endpoint: //g' | sed 's/:.*//g' | xargs ${pkgs.fail2ban}/bin/fail2ban-client unban
+    '';
+  };
 }
