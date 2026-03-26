@@ -235,6 +235,12 @@
               no_hardware_cursors = 1;
               no_break_fs_vrr = 1;
             };
+
+            source = [
+              "~/.config/hypr/dms/colors.conf"
+              "~/.config/hypr/dms/layout.conf"
+              "~/.config/hypr/dms/outputs.conf"
+            ];
           };
 
           plugins = [
