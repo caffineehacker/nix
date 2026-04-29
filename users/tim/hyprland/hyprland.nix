@@ -206,7 +206,7 @@
             exec-once = [
               "hyprctl setcursor Nordzy-cursors 24"
               "firefox"
-              "${pkgs.swww}/bin/swww-daemon"
+              "${pkgs.awww}/bin/awww-daemon"
               "mako"
               "${pkgs.blueman}/bin/blueman-applet"
               "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator"
@@ -221,7 +221,7 @@
               "${pkgs.easyeffects}/bin/easyeffects --gapplication-service"
             ];
 
-            exec = "${pkgs.swww}/bin/swww img ${config.stylix.image}";
+            exec = "${pkgs.awww}/bin/awww img ${config.stylix.image}";
 
             plugin = {
               hyprsplit = {

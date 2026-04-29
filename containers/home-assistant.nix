@@ -187,7 +187,7 @@ in
                       triggers = [
                         {
                           trigger = "time";
-                          at = "22:00:00";
+                          at = time;
                         }
                       ];
                       conditions = [

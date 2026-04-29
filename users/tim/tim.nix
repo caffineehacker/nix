@@ -66,6 +66,7 @@ in
             commit.gpgsign = true;
             user.signingKey = "0BA5979146BB1B42";
           };
+          signing.format = "openpgp";
         };
 
         programs.fish = {

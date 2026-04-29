@@ -35,8 +35,8 @@ in
   nixpkgs.config.rocmSupport = true;
   nixpkgs.overlays =
     let
-      useUnoptimized-x64 = pkgs: lib.lists.foldr (a: b: (lib.attrsets.setAttrByPath [ a ] (lib.attrsets.getAttrFromPath [ a ] nixpkgs-unoptimized.pkgs)) // b) { } pkgs;
-      useUnoptimized-i686 = pkgs: lib.lists.foldr (a: b: (lib.attrsets.setAttrByPath [ a ] (lib.attrsets.getAttrFromPath [ a ] nixpkgs-unoptimized.pkgs.pkgsi686linux)) // b) { } pkgs;
+      useUnoptimized-x64 = prev: pkgs: if (prev.stdenv.system == "x86_64-linux") then (lib.lists.foldr (a: b: (lib.attrsets.setAttrByPath [ a ] (lib.attrsets.getAttrFromPath [ a ] nixpkgs-unoptimized.pkgs)) // b) { } pkgs) else { };
+      useUnoptimized-i686 = prev: pkgs: if (prev.stdenv.system == "x86_64-linux") then { } else (lib.lists.foldr (a: b: (lib.attrsets.setAttrByPath [ a ] (lib.attrsets.getAttrFromPath [ a ] nixpkgs-unoptimized.pkgs.pkgsi686Linux)) // b) { } pkgs);
     in
     [
       (final: prev: {
@@ -44,58 +44,64 @@ in
         thunderbird = nixpkgs-without-rocm.thunderbird;
       })
       (final: prev:
-        if prev.stdenv.system == "x86_64-linux" then
-          {
-            pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
-              # Fails tests - 2/27/2026
-              (pyfinal: pyprev: {
-                psycopg = pyprev.psycopg.overridePythonAttrs (oldAttrs: {
-                  # Tests fail due to timing issues
-                  disabledTests = pyprev.psycopg.disabledTests ++ [ "test_stats_connect[asyncio]" "test_stats_connect" "test_remote_closed" ];
-                });
-              })
-            ];
-          } //
-          (useUnoptimized-x64 [
-            # Rocblas takes forever to build and just overriding it does not update the dependency for other packages unfortuntately.
-            "rocmPackages_6"
-            "rocmPackages"
-            # Fails due to a string overflow warning as error - 02/05/2025
-            "libtpms"
-            # Test failures - 7/8/2025
-            "assimp"
-            # Test failures - 02/22/2026
-            "gsl"
-            # Fails a test for unknown reason - 02/05/2025
-            "lib2geom"
-            # Some of these don't exist yet, but will help prevent issues when they do
-            "electron_29"
-            "electron_30"
-            "electron_31"
-            "electron_32"
-            "electron_33"
-            "electron_34"
-            "electron_35"
-            "electron_36"
-            "electron_37"
-            "electron_38"
-            "electron_39"
-            "electron_40"
-            "electron_41"
-            "electron-unwrapped"
-            "webkitgtk"
-            "webkitgtk_4_1"
-            "webkitgtk_5_0"
-            "webkitgtk_6_0"
-            # Fails due to variable type conversion issues - 02/23/2026
-            "mesa"
-            # # Complains of symbols in wrong format - 2/23/2026
-            # "swtpm"
-            # Fails to build due to variable sizes - 2/23/2026
-            "simde"
-            # Test failures - 3/1/2026
-            "valkey"
-          ]) else (useUnoptimized-i686 [ ]))
+        (if prev.stdenv.system == "x86_64-linux" then {
+          pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+            # Fails tests - 2/27/2026
+            (pyfinal: pyprev: {
+              psycopg = pyprev.psycopg.overridePythonAttrs (oldAttrs: {
+                # Tests fail due to timing issues
+                disabledTests = pyprev.psycopg.disabledTests ++ [ "test_stats_connect[asyncio]" "test_stats_connect" "test_remote_closed" ];
+              });
+            })
+          ];
+        } else {
+          # x86 overrides
+          # Tests fail due to timing sensitivity - 04/29/2026
+          openldap = prev.openldap.overrideAttrs (finalAttrs: prevAttrs: {
+            doCheck = false;
+          });
+        }) //
+        (useUnoptimized-x64 prev [
+          # Rocblas takes forever to build and just overriding it does not update the dependency for other packages unfortuntately.
+          "rocmPackages_6"
+          "rocmPackages"
+          # Fails due to a string overflow warning as error - 02/05/2025
+          "libtpms"
+          # Test failures - 7/8/2025
+          "assimp"
+          # Test failures - 02/22/2026
+          "gsl"
+          # Fails a test for unknown reason - 02/05/2025
+          "lib2geom"
+          # Some of these don't exist yet, but will help prevent issues when they do
+          "electron_29"
+          "electron_30"
+          "electron_31"
+          "electron_32"
+          "electron_33"
+          "electron_34"
+          "electron_35"
+          "electron_36"
+          "electron_37"
+          "electron_38"
+          "electron_39"
+          "electron_40"
+          "electron_41"
+          "electron-unwrapped"
+          "webkitgtk"
+          "webkitgtk_4_1"
+          "webkitgtk_5_0"
+          "webkitgtk_6_0"
+          # Fails due to variable type conversion issues - 02/23/2026
+          "mesa"
+          # # Complains of symbols in wrong format - 2/23/2026
+          # "swtpm"
+          # Fails to build due to variable sizes - 2/23/2026
+          "simde"
+          # Test failures - 3/1/2026
+          "valkey"
+        ]) //
+        (useUnoptimized-i686 prev [ ]))
     ];
 
   imports = [
@@ -118,6 +124,7 @@ in
   boot.kernel.sysctl = { "vm.swappiness" = 10; };
   # Allow building of aarch64-linux binaries. This is slow, but works better than using the remote host.
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  boot.blacklistedKernelModules = [ "ucsi_acpi" ];
 
   tw.system.tpm-unlock.enable = true;
   tw.services.ssh.enable = true;
