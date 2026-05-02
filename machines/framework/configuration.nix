@@ -129,6 +129,7 @@ in
   tw.system.tpm-unlock.enable = true;
   tw.services.ssh.enable = true;
   tw.services.kdeconnect.enable = true;
+  tw.services.waydroid.enable = true;
 
   networking.hostName = "framework";
 
