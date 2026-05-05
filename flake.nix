@@ -123,6 +123,16 @@
                 ./machines/cloud
               ];
             };
+        homeauto =
+          let
+            system = "aarch64-linux";
+          in
+          inputs.nixpkgs.lib.nixosSystem
+            {
+              inherit system;
+              specialArgs = { inherit inputs system; };
+              modules = commonModules ++ [ ./machines/homeauto ];
+            };
       };
     };
 }

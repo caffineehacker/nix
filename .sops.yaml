@@ -3,6 +3,7 @@ keys:
     - &homelab age12qz7s8glnfh4xllcyxz6xx9yeqq8xaslzx68v6h9pzedhyuxnscsg7x6c2
     - &me age1tenwdwz4g06pzhy4mg3hh5tjc9850l2q9z5j0pucsu90uz30vy9qdwv9w4
     - &cloud age1v0fmwtm34x4qjmefpypvvwlhal99qmpvyep8dsj9vy65xwvgwdtslu8rr7
+    - &homeauto age1jwuj05yn7k0saymc34gm0j4sssw5vlrkygwl9u5h9rr06uygup3q895ajf
 creation_rules:
     - key_groups:
         - age:
@@ -10,3 +11,4 @@ creation_rules:
             - *homelab
             - *laptop
             - *cloud
+            - *homeauto
