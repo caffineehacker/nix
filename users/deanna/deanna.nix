@@ -1,5 +1,4 @@
 { lib
-, pkgs
 , config
 , ...
 }:
@@ -27,10 +26,6 @@ in
         home.homeDirectory = "/home/deanna";
         home.stateVersion = "23.05";
 
-        home.packages = with pkgs; [
-          firefox-bin
-        ];
-
         programs.home-manager.enable = true;
       };
     };
@@ -42,10 +37,6 @@ in
         "input"
       ];
     };
-
-    services.desktopManager.plasma6.enable = true;
-    # Kde and Gnome conflict with this setting
-    programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.kdePackages.ksshaskpass.out}/bin/ksshaskpass";
 
     stylix.autoEnable = false;
   };
