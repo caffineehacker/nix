@@ -25,7 +25,10 @@
 
   tw.services.ssh.enable = true;
   users.users.root.openssh.authorizedKeys.keys = config.users.users.tim.openssh.authorizedKeys.keys;
-  systemd.network.enable = true;
+  systemd.network = {
+    enable = true;
+    wait-online.anyInterface = true;
+  };
 
   tw.users.tim.enable = true;
 
