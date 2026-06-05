@@ -53,7 +53,10 @@
 
   tw.users.tim.enable = true;
 
-  services.fwupd.enable = true;
+  services.fwupd = {
+    enable = true;
+    daemonSettings.DisabledPlugins = [ "test" "test_ble" "invalid" "bios" ];
+  };
   services.power-profiles-daemon.enable = true;
 
   # Trim ssd for longer life and better storage
