@@ -186,8 +186,10 @@
                     key = builtins.toString (if x < 9 then x + 1 else 0);
                   in
                   [
-                    "$mod, ${key}, split:workspace, ${ws}"
-                    "$mod SHIFT, ${key}, split:movetoworkspacesilent, ${ws}"
+                    # "$mod, ${key}, split:workspace, ${ws}"
+                    # "$mod SHIFT, ${key}, split:movetoworkspacesilent, ${ws}"
+                    "$mod, ${key}, workspace, ${ws}"
+                    "$mod SHIFT, ${key}, movetoworkspacesilent, ${ws}"
                   ]
                 )
                 10)
@@ -224,9 +226,9 @@
             exec = "${pkgs.awww}/bin/awww img ${config.stylix.image}";
 
             plugin = {
-              hyprsplit = {
-                num_workspaces = 10;
-              };
+              # hyprsplit = {
+              #   num_workspaces = 10;
+              # };
             };
 
             cursor = {
@@ -244,7 +246,7 @@
           };
 
           plugins = [
-            pkgs.hyprlandPlugins.hyprsplit
+            # pkgs.hyprlandPlugins.hyprsplit
           ];
         };
       };
