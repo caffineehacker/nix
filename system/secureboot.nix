@@ -19,8 +19,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    boot.bootspec.enable = true;
-
     environment.systemPackages = with pkgs; [
       # For debugging and troubleshooting Secure Boot.
       sbctl
