@@ -10,6 +10,7 @@
       "cloudflare/tunnels/matrix.json" = { };
       "cloudflare/tunnels/obsidian-sync.json" = { };
       "cloudflare/tunnels/vaultwarden.json" = { };
+      "cloudflare/tunnels/airplane.json" = { };
       "matrix/sharedSecret" = { };
       "wireguard/serverPrivate" = {
         owner = config.users.users.systemd-network.name;

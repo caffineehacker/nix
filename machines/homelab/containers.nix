@@ -5,6 +5,7 @@
   tw.containers.obsidian-sync.enable = true;
   tw.containers.vaultwarden.enable = true;
   tw.containers.home-assistant.enable = true;
+  tw.containers.airplane.enable = true;
 
   networking = {
     nat = {

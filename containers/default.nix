@@ -102,6 +102,7 @@
       tw.containers.obsidian-sync = mkContainerOptions "obsidian-sync" 30;
       tw.containers.matrix = mkContainerOptions "matrix" 41;
       tw.containers.home-assistant = mkContainerOptions "home-assistant" 60;
+      tw.containers.airplane = mkContainerOptions "airplane" 70;
     };
 
   config = {
@@ -138,6 +139,13 @@
         };
         hostname = "home.timwaterhouse.com";
       };
+      airplane = {
+        cloudflare = {
+          tunnelId = "954f7273-9f5b-4fe5-b497-09ccb52fc294";
+          port = 8256;
+        };
+        hostname = "plane.timwaterhouse.com";
+      };
     };
   };
 
@@ -148,5 +156,6 @@
     ./obsidian-livesync.nix
     ./vaultwarden.nix
     ./home-assistant.nix
+    ./airplane.nix
   ];
 }
