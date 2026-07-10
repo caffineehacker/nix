@@ -41,21 +41,21 @@ in
           serialPort = "/dev/ttyACM0";
           # This needs to be manually created in the container
           secretsConfigFile = "/etc/zwave_secrets";
-          package = pkgs.zwave-js-server.overrideAttrs (prev: rec {
-            version = if (prev.version == "3.4.0") then "3.9.0" else throw "ZWAVE UPDATED";
-            src = pkgs.fetchFromGitHub {
-              owner = "zwave-js";
-              repo = "zwave-js-server";
-              rev = version;
-              hash = "sha256-PZmIpGcNxjZ5q7rnYj2SdtxCO7SyjWd5QFl+JT89KDU=";
-            };
-            npmDepsHash = "sha256-CIVGcz8K0kTfcJXaTO7SClt72AhRx1rZUXQgTm+aFdk=";
-            npmDeps = pkgs.fetchNpmDeps {
-              inherit src;
-              name = "${prev.pname}-${version}-npm-deps";
-              hash = npmDepsHash;
-            };
-          });
+          # package = pkgs.zwave-js-server.overrideAttrs (prev: rec {
+          #   version = if (prev.version == "3.4.0") then "3.9.0" else throw "ZWAVE UPDATED";
+          #   src = pkgs.fetchFromGitHub {
+          #     owner = "zwave-js";
+          #     repo = "zwave-js-server";
+          #     rev = version;
+          #     hash = "sha256-PZmIpGcNxjZ5q7rnYj2SdtxCO7SyjWd5QFl+JT89KDU=";
+          #   };
+          #   npmDepsHash = "sha256-CIVGcz8K0kTfcJXaTO7SClt72AhRx1rZUXQgTm+aFdk=";
+          #   npmDeps = pkgs.fetchNpmDeps {
+          #     inherit src;
+          #     name = "${prev.pname}-${version}-npm-deps";
+          #     hash = npmDepsHash;
+          #   };
+          # });
         };
 
         services.zwave-js-ui = {
