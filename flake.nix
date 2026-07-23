@@ -94,6 +94,17 @@
                   #       };
                   #     });
                   # })
+                  # Apply https://github.com/NixOS/nixpkgs/pull/540742 so we can build
+                  (final: prev: {
+                    file = prev.file.overrideAttrs
+                      (finalAttrs: prevAttrs: {
+                        postPatch = if prevAttrs.postPatch or false then throw "REMOVE OVERRIDE" else ''
+                          substituteInPlace src/landlock.c --replace-fail \
+                            "LANDLOCK_ACCESS_FS_READ_FILE | LANDLOCK_ACCESS_FS_READ_DIR" \
+                            "LANDLOCK_ACCESS_FS_READ_FILE | LANDLOCK_ACCESS_FS_READ_DIR | LANDLOCK_ACCESS_FS_EXECUTE"
+                        '';
+                      });
+                  })
                 ];
               })
               ./machines/framework
