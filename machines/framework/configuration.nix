@@ -54,9 +54,9 @@ in
               });
             })
           ];
-          kdePackages = prev.kdePackages.overrideScope (kdeFinal: kdePrev: {
-            # This brings in pyside6 which rebuilds qtwebengine. It's hard to just get that one dependency to be the unoptimized version so opt to just not optimize kguiaddons
-            kguiaddons = nixpkgs-unoptimized.pkgs.kdePackages.kguiaddons;
+          python3Packages = prev.python3Packages.overrideScope (pyFinal: pyPrev: {
+            # This causes qtwebengine to rebuild which takes too long. See https://github.com/NixOS/nixpkgs/issues/330736 for why it causes that.
+            pyside6 = nixpkgs-unoptimized.pkgs.python3Packages.pyside6;
           });
         } else {
           # x86 overrides
