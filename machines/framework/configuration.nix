@@ -54,6 +54,10 @@ in
               });
             })
           ];
+          kdePackages = prev.kdePackages.overrideScope (kdeFinal: kdePrev: {
+            # This brings in pyside6 which rebuilds qtwebengine. It's hard to just get that one dependency to be the unoptimized version so opt to just not optimize kguiaddons
+            kguiaddons = nixpkgs-unoptimized.pkgs.kdePackages.kguiaddons;
+          });
         } else {
           # x86 overrides
           # Tests fail due to timing sensitivity - 04/29/2026
