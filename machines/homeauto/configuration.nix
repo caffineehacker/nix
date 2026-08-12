@@ -21,14 +21,15 @@
     wireless.enable = true;
   };
 
+  services.journald.extraConfig = "
+    RuntimeMaxUse=128M
+    SystemMaxUse=100M
+  ";
+
   time.timeZone = "America/Los_Angeles";
 
   tw.services.ssh.enable = true;
   users.users.root.openssh.authorizedKeys.keys = config.users.users.tim.openssh.authorizedKeys.keys;
-  systemd.network = {
-    enable = true;
-    wait-online.anyInterface = true;
-  };
 
   tw.users.tim.enable = true;
 
