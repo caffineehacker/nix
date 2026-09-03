@@ -238,7 +238,6 @@ in
               server_port = cfg.wireguard.port;
               trusted_proxies = [ "::1" "10.100.0.60" "10.100.0.1" ];
               use_x_forwarded_for = true;
-              ip_ban_enabled = true;
               login_attempts_threshold = 5;
             };
             lovelace = {
