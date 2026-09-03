@@ -13,6 +13,9 @@ in
         enable = true;
         settings = {
           hostname = cfg.hostname;
+          pictrs = {
+            image_mode = "None";
+          };
         };
         database = {
           createLocally = true;
