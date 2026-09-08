@@ -1,7 +1,5 @@
 { lib
-, pkgs
 , config
-, inputs
 , ...
 }:
 let
@@ -20,7 +18,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    programs.regreet = {
+    services.displayManager.regreet = {
       enable = true;
       settings = {
         "widget.clock" = {
