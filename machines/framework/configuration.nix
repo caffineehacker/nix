@@ -109,6 +109,8 @@ in
           "simde"
           # Test failures - 3/1/2026
           "valkey"
+          # Fails a fuzzing test - 09/17/2026
+          "ada"
         ]) //
         (useUnoptimized-i686 prev [ ]))
     ];
