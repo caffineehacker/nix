@@ -21,12 +21,10 @@
     programs.dms-shell = {
       enable = true;
       systemd.enable = false;
-      enableSystemMonitoring = true;
       enableVPN = false;
       enableDynamicTheming = true;
       enableAudioWavelength = false;
       enableCalendarEvents = false;
-      enableClipboardPaste = true;
     };
 
     home-manager = {
@@ -218,7 +216,7 @@
                 (mkSBind "L" "function ()
                   hl.dsp.exec_cmd(\"${pkgs.swaylock}/bin/swaylock\")
                   hl.timer(function()
-                    hl.dispatch(hl.dsp.dpms({ a-ction = \"disable\" }))
+                    hl.dispatch(hl.dsp.dpms({ action = \"disable\" }))
                   end, {timeout = 500, type = \"oneshot\"})
                 end
                   ")
