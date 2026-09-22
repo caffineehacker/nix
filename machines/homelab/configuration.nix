@@ -41,11 +41,6 @@
     };
   };
 
-  services.journald.extraConfig = "
-    RuntimeMaxUse=128M
-    SystemMaxUse=100M
-  ";
-
   tw.services.ssh.enable = true;
 
   networking.hostName = "homelab";

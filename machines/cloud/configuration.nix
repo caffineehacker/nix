@@ -32,11 +32,6 @@
     };
   };
 
-  services.journald.extraConfig = "
-    RuntimeMaxUse=128M
-    SystemMaxUse=100M
-  ";
-
   security.acme = {
     acceptTerms = true;
     defaults.email = "tim@timwaterhouse.com";

@@ -21,11 +21,6 @@
     wireless.enable = true;
   };
 
-  services.journald.extraConfig = "
-    RuntimeMaxUse=128M
-    SystemMaxUse=100M
-  ";
-
   time.timeZone = "America/Los_Angeles";
 
   tw.services.ssh.enable = true;

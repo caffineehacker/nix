@@ -52,10 +52,5 @@
     services.resolved.enable = true;
 
     boot.isNspawnContainer = true;
-
-    services.journald.extraConfig = "
-      RuntimeMaxUse=128M
-      SystemMaxUse=100M
-    ";
   };
 }
