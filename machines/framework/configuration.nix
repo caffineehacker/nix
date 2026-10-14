@@ -111,6 +111,20 @@ in
           "valkey"
           # Fails a fuzzing test - 09/17/2026
           "ada"
+          # If we don't do this then we can't safely override python packages without possibly mixing python runtimes
+          "python3"
+          "python314"
+          # Segfaults in builds and tests that depend on this - 10/8/2026
+          "zopfli"
+          # Odd test failures - 10/8/2026
+          "tinysparql"
+          # Fails to convert an XML file?? - 10/8/2026
+          "networkmanager"
+          # Seems to be used by builds that are failing - 10/8/2026
+          "blueprint-compiler"
+          "glib"
+          "gobject-introspection"
+          "gjs"
         ]) //
         (useUnoptimized-i686 prev [ ]))
     ];

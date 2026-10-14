@@ -21,10 +21,6 @@
     programs.dms-shell = {
       enable = true;
       systemd.enable = false;
-      enableVPN = false;
-      enableDynamicTheming = true;
-      enableAudioWavelength = false;
-      enableCalendarEvents = false;
     };
 
     home-manager = {
