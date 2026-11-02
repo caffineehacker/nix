@@ -32,7 +32,12 @@ in
     };
     system = "x86_64-linux";
   };
-  nixpkgs.config.rocmSupport = true;
+  nixpkgs.config = {
+    rocmSupport = true;
+    problems.handlers = {
+      "gtk+".broken = "warn"; # or "ignore"
+    };
+  };
   nixpkgs.overlays =
     let
       useUnoptimized-x64 = prev: pkgs: if (prev.stdenv.system == "x86_64-linux") then (lib.lists.foldr (a: b: (lib.attrsets.setAttrByPath [ a ] (lib.attrsets.getAttrFromPath [ a ] nixpkgs-unoptimized.pkgs)) // b) { } pkgs) else { };
@@ -125,6 +130,8 @@ in
           "glib"
           "gobject-introspection"
           "gjs"
+          # Test failure due to floating point math - 10/23/2026
+          "libjpeg_turbo"
         ]) //
         (useUnoptimized-i686 prev [ ]))
     ];
@@ -139,7 +146,6 @@ in
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.systemd-boot.memtest86.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.initrd.systemd.enable = true;
   boot.kernelPackages = kernelPkgs;
   boot.extraModulePackages = [
     kernelPkgs.framework-laptop-kmod

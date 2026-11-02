@@ -7,7 +7,6 @@
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
-  # boot.initrd.systemd.enable = true;
   # boot.kernelParams = [
   #   "zswap.enabled=1"
   #   "zswap.compressor=lz4"
