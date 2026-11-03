@@ -34,9 +34,6 @@ in
   };
   nixpkgs.config = {
     rocmSupport = true;
-    problems.handlers = {
-      "gtk+".broken = "warn"; # or "ignore"
-    };
   };
   nixpkgs.overlays =
     let
