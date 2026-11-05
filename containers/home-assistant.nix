@@ -24,17 +24,25 @@ in
           };
           wantedBy = [ "zwave-js.service" ];
           script = ''
-            chmod a+rw /dev/ttyACM0
+            chgrp dialout /dev/ttyACM0
+            chmod 0660 /dev/ttyACM0
           '';
         };
 
         system.activationScripts.changeTtyMods = {
           text = ''
-            chmod a+rw /dev/ttyACM0
+            chgrp dialout /dev/ttyACM0
+            chmod 0660 /dev/ttyACM0
           '';
         };
 
-        networking.firewall.allowedTCPPorts = [ 8091 cfg.wireguard.port ];
+        networking.nameservers = [ "192.168.1.1" ];
+        environment.etc."systemd/resolved.conf.d/single-label.conf".text = ''
+          [Resolve]
+          DNS=192.168.1.1
+          ResolveUnicastSingleLabel=yes
+        '';
+        networking.firewall.allowedTCPPorts = [ cfg.wireguard.port ];
 
         services.zwave-js = {
           enable = true;

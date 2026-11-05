@@ -9,7 +9,7 @@ in
 {
   options = {
     tw.services.waydroid.enable = lib.mkOption {
-      default = true;
+      default = false;
       example = true;
       description = ''
         Enable waydroid services

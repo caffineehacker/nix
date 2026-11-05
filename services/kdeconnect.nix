@@ -3,12 +3,12 @@
 , ...
 }:
 let
-  cfg = config.tw.services.ssh;
+  cfg = config.tw.services.kdeconnect;
 in
 {
   options = {
     tw.services.kdeconnect.enable = lib.mkOption {
-      default = true;
+      default = false;
       example = true;
       description = ''
         Enable the KDE connect

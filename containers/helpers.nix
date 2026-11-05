@@ -8,12 +8,13 @@
         localAddress = cfg.containerIp;
 
         extraFlags =
-          if cfg.cloudflare.enable then [
+          lib.optionals cfg.cloudflare.enable [
             # Load the cloudflare secret
             "--load-credential=tunnel.json:${cfg.cloudflare.tunnelFile}"
-          ] else if cfg.wireguard.enable then [
+          ]
+          ++ lib.optionals cfg.wireguard.enable [
             "--load-credential=network.wireguard.private.10-wg0:${cfg.wireguard.privateKeyFile}"
-          ] else [ ];
+          ];
       };
     };
   };

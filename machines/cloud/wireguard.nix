@@ -40,6 +40,11 @@
   };
   networking.firewall = {
     allowedUDPPorts = [ 51820 ];
+    # Prevent WireGuard container peers (e.g. matrix and home-assistant) from routing to each other through cloud
+    extraCommands = ''
+      iptables -C FORWARD -i wgserver -o wgserver -j DROP 2>/dev/null || iptables -I FORWARD -i wgserver -o wgserver -j DROP
+      ip6tables -C FORWARD -i wgserver -o wgserver -j DROP 2>/dev/null || ip6tables -I FORWARD -i wgserver -o wgserver -j DROP
+    '';
   };
 
   environment.systemPackages = with pkgs; [ wireguard-tools ];

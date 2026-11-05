@@ -43,6 +43,11 @@
   tw.services.ssh.enable = true;
 
   networking.hostName = "homelab";
+  networking.nameservers = [ "192.168.1.1" ];
+  environment.etc."systemd/resolved.conf.d/single-label.conf".text = ''
+    [Resolve]
+    ResolveUnicastSingleLabel=yes
+  '';
   systemd.network.enable = true;
   networking.networkmanager.enable = false;
   networking.useNetworkd = true;
