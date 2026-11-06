@@ -171,13 +171,13 @@ in
             };
             "automation nix" =
               let
-                heatPumpWithDisabledAtTime = name: baseTopic: time:
+                heatPumpWithDisabledAtTime = { name, baseTopic, time, turnOffHeat ? false }:
                   let
                     entityId = "climate." + (lib.strings.removePrefix "heatpump/" baseTopic);
                   in
                   [
                     {
-                      alias = "${name} Heat Down";
+                      alias = "${name} ${if turnOffHeat then "Heat Off" else "Heat Down"}";
                       description = "";
                       triggers = [
                         {
@@ -193,7 +193,15 @@ in
                         }
                       ];
                       actions = [
-                        {
+                        (if turnOffHeat then {
+                          action = "climate.set_hvac_mode";
+                          target = {
+                            entity_id = entityId;
+                          };
+                          data = {
+                            hvac_mode = "off";
+                          };
+                        } else {
                           action = "climate.set_temperature";
                           target = {
                             entity_id = entityId;
@@ -201,7 +209,7 @@ in
                           data = {
                             temperature = 61;
                           };
-                        }
+                        })
                       ];
                     }
                     {
@@ -261,13 +269,13 @@ in
                       ];
                     }
                   ];
-                heatPumpWithDisabledEvening = name: baseTopic: heatPumpWithDisabledAtTime name baseTopic "22:00:00";
+                heatPumpWithDisabledEvening = name: baseTopic: heatPumpWithDisabledAtTime { inherit name baseTopic; time = "22:00:00"; };
               in
               lib.lists.flatten [
                 (heatPumpWithDisabledEvening "Dining Room Heat Pump" "heatpump/hpdiningroom")
                 (heatPumpWithDisabledEvening "Family Room" "heatpump/familyroom")
-                (heatPumpWithDisabledAtTime "Tim's Office" "heatpump/timsoffice" "17:00:00")
-                (heatPumpWithDisabledAtTime "Bedroom" "heatpump/hpmasterbdrm" "07:00:00")
+                (heatPumpWithDisabledAtTime { name = "Tim's Office"; baseTopic = "heatpump/timsoffice"; time = "17:00:00"; turnOffHeat = true; })
+                (heatPumpWithDisabledAtTime { name = "Bedroom"; baseTopic = "heatpump/hpmasterbdrm"; time = "07:00:00"; })
               ];
             homeassistant = { };
             http = {
