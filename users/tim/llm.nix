@@ -5,5 +5,11 @@
       package = pkgs.ollama-rocm;
       rocmOverrideGfx = "11.0.2";
     };
+
+    home-manager.users.tim = {
+      home.packages = with pkgs; [
+        antigravity-hub
+      ];
+    };
   };
 }
