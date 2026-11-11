@@ -1,41 +1,107 @@
-diff --git a/pkgs/development/tools/misc/binutils/default.nix b/pkgs/development/tools/misc/binutils/default.nix
-index c707d0daec89..3f3dbd64c7df 100644
+--- a/pkgs/build-support/bintools-wrapper/default.nix
++++ b/pkgs/build-support/bintools-wrapper/default.nix
+@@ -440,6 +440,22 @@
+         "${bintools_bin}/bin/${targetPrefix}ranlib"
+     ''
+ 
++    + optionalString (
++      isGNU
++      && (targetPlatform.gcc.lto or false)
++      && (targetPlatform == hostPlatform)
++      && !(bintools.passthru.isFromBootstrapFiles or bintools.passthru.isFromMinBootstrap or false)
++      && !(lib.strings.hasInfix "bootstrap" (toString runtimeShell))
++    ) ''
++      cat <<'EOF' > $out/nix-support/post-link-hook
++      if [[ -z "''${NIX_LINK_TYPE_${suffixSalt}:-}" && -e "''${linkerOutput:-}" ]]; then
++        if (( "''${relocatable:-0}" )) || [[ " ''${params[*]:-} " == *" -r "* || " ''${params[*]:-} " == *" --relocatable "* ]]; then
++          "${bintools_bin}/bin/${targetPrefix}objcopy" -R '.gnu.lto_*' -R '.gnu.debuglto_*' "$linkerOutput" 2>/dev/null || true
++        fi
++      fi
++      EOF
++    ''
++
+     ##
+     ## Extra custom steps
+     ##
+--- a/pkgs/build-support/cc-wrapper/default.nix
++++ b/pkgs/build-support/cc-wrapper/default.nix
+@@ -378,6 +378,16 @@
+     # TODO: Specify CPU + AltiVec preference?
+     ++ optional (
+       (targetPlatform.isPower64 && targetPlatform.isBigEndian) && isClang && !(targetPlatform ? gcc.cpu)
+-    ) "-mno-altivec";
++    ) "-mno-altivec"
++    ++ optionals (
++      isGNU
++      && (targetPlatform.gcc.lto or false)
++      && (targetPlatform == hostPlatform)
++      && !(lib.strings.hasInfix "bootstrap" name)
++      && !(cc.passthru.isFromBootstrapFiles or cc.passthru.isFromMinBootstrap or cc.passthru.isXgcc or false)
++    ) [
++      "-flto=auto"
++      "-ffat-lto-objects"
++    ];
+ 
+   defaultHardeningFlags = bintools.defaultHardeningFlags or [ ];
+@@ -1013,6 +1023,20 @@
+         substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
+       ''
+     )
++
++    + optionalString (
++      isGNU
++      && (targetPlatform.gcc.lto or false)
++      && (targetPlatform == hostPlatform)
++      && !(lib.strings.hasInfix "bootstrap" name)
++      && !(cc.passthru.isFromBootstrapFiles or cc.passthru.isFromMinBootstrap or cc.passthru.isXgcc or false)
++    ) ''
++      cat <<'EOF' >> $out/nix-support/add-local-cc-cflags-before.sh
++      if [[ -n "''${GOCACHE:-}" || -n "''${GOTOOLCHAIN:-}" || " ''${params[*]:-} " == *"/tmp/go-build"* || " ''${params[*]:-} " == *"_cgo_"* ]]; then
++        extraBefore+=(-fno-lto)
++      fi
++      EOF
++    ''
+ 
+     ##
+     ## Extra custom steps
 --- a/pkgs/development/tools/misc/binutils/default.nix
 +++ b/pkgs/development/tools/misc/binutils/default.nix
-@@ -51,6 +51,8 @@ let
+@@ -40,6 +40,8 @@
    #INFO: The targetPrefix prepended to binary names to allow multiple binuntils
    # on the PATH to both be usable.
    targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
 +
 +  gcc_lto_plugin_path = "${stdenv.cc.cc}/libexec/gcc/${stdenv.targetPlatform.config}/${stdenv.cc.cc.version or "UNKNOWN"}/liblto_plugin.so";
- in
  
- stdenv.mkDerivation (finalAttrs: {
-@@ -240,6 +242,12 @@ stdenv.mkDerivation (finalAttrs: {
-   postInstall = lib.optionalString (hostPlatform.config != targetPlatform.config) ''
-     ln -s $out/${hostPlatform.config}/${targetPlatform.config}/lib/*     $out/lib/
-     ln -s $out/${hostPlatform.config}/${targetPlatform.config}/include/* $dev/include/
-+  '' + lib.optionalString (stdenv.cc.stdenv.hostPlatform == stdenv.hostPlatform
-+        && stdenv.cc.stdenv.targetPlatform == stdenv.targetPlatform && !(lib.strings.hasInfix "bootstrap" stdenv.name)) ''
-+    if [ -e ${gcc_lto_plugin_path} ]; then
-+      mkdir -p $out/lib/bfd-plugins
-+      ln -s ${gcc_lto_plugin_path} $out/lib/bfd-plugins/
-+    fi
-   '';
+   # gas is disabled for some targets via noconfigdirs in configure.
+   targetHasGas = !stdenv.targetPlatform.isDarwin;
+@@ -335,5 +337,17 @@
+     + lib.optionalString (withAllTargets && targetHasGas) ''
+       ln -s $out/bin/${stdenv.targetPlatform.config}-as $out/bin/as
++    ''
++    + lib.optionalString (
++      stdenv.cc.cc != null
++      && !(stdenv.cc.cc.passthru.isFromBootstrapFiles or stdenv.cc.cc.passthru.isFromMinBootstrap or stdenv.cc.cc.passthru.isXgcc or false)
++      && stdenv.cc.stdenv.hostPlatform == stdenv.hostPlatform
++      && stdenv.cc.stdenv.targetPlatform == stdenv.targetPlatform
++      && (stdenv.targetPlatform.gcc.lto or false)
++    ) ''
++      if [ -e ${gcc_lto_plugin_path} ]; then
++        mkdir -p ''${!outputLib}/lib/bfd-plugins
++        ln -s ${gcc_lto_plugin_path} ''${!outputLib}/lib/bfd-plugins/
++      fi
+     '';
  
    passthru = {
-diff --git a/pkgs/stdenv/linux/make-bootstrap-tools.nix b/pkgs/stdenv/linux/make-bootstrap-tools.nix
-index 874330331bb8..fffe7a582f2a 100644
---- a/pkgs/stdenv/linux/make-bootstrap-tools.nix
-+++ b/pkgs/stdenv/linux/make-bootstrap-tools.nix
-@@ -177,6 +177,10 @@ in with pkgs; rec {
-           cp ${bootBinutils.out}/bin/$i $out/bin
-         done
-         cp -r '${lib.getLib binutils.bintools}'/lib/* "$out/lib/"
-+        chmod -R u+w $out/lib
-+        # remove link to gcc's lto plugin in binutils. Does not exist
-+        # for cross-gcc.
-+        rm -f "$out/lib/bfd-plugins/liblto_plugin.so"
+--- a/pkgs/stdenv/linux/stdenv-bootstrap-tools.nix
++++ b/pkgs/stdenv/linux/stdenv-bootstrap-tools.nix
+@@ -166,5 +166,9 @@
+       cp ${bootBinutils.out}/bin/$i $out/bin
+     done
+     cp -r '${lib.getLib binutils.bintools}'/lib/* "$out/lib/"
++    chmod -R u+w $out/lib
++    # remove link to gcc's lto plugin in binutils. Does not exist
++    # for cross-gcc.
++    rm -f "$out/lib/bfd-plugins/liblto_plugin.so"
  
-         chmod -R u+w $out
- 
+     chmod -R u+w $out

@@ -59,19 +59,16 @@
         framework =
           let
             system = "x86_64-linux";
-            # originPkgs = inputs.nixpkgs.legacyPackages.${system};
-            # nixpkgs = originPkgs.applyPatches {
-            #   name = "nixpkgs-patched";
-            #   src = inputs.nixpkgs;
-            #   # Binutils patch allows LTO when linking - Adapted from https://github.com/NixOS/nixpkgs/pull/188544
-            #   # Static link patch fixes the adapter for static linking to use the right linking variable. This is my own patch.
-            #   patches = [ 
-            #     ./binutils_first.patch
-            #     # ./static_link.patch
-            #   ];
-            # };
-            # nixosSystem = import (nixpkgs + "/nixos/lib/eval-config.nix");
-            nixosSystem = inputs.nixpkgs.lib.nixosSystem;
+            originPkgs = inputs.nixpkgs.legacyPackages.${system};
+            nixpkgs = originPkgs.applyPatches {
+              name = "nixpkgs-patched";
+              src = inputs.nixpkgs;
+              # Binutils patch allows LTO when linking - Adapted from https://github.com/NixOS/nixpkgs/pull/188544
+              patches = [
+                ./binutils_first.patch
+              ];
+            };
+            nixosSystem = import (nixpkgs + "/nixos/lib/eval-config.nix");
           in
           nixosSystem {
             inherit system;
